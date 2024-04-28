@@ -78,6 +78,7 @@ const english = {
     send_reports: "Send Error Reports",
     send_reports_desc: "Send errors to Statping for debugging",
     project_name: "Status Page Name",
+    project_logo: "Status Page Logo",
     description: "Description",
     domain: "Domain",
     enable_cdn: "Enable CDN",

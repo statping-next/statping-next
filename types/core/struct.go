@@ -22,6 +22,7 @@ func New(version, commit string) {
 // global variable to interact with the attributes to the application, such as services.
 type Core struct {
 	Name          string          `gorm:"not null;column:name" json:"name,omitempty"`
+	Logo          string          `gorm:"column:logo" json:"logo,omitempty"`
 	Description   string          `gorm:"not null;column:description" json:"description,omitempty"`
 	ConfigFile    string          `gorm:"column:config" json:"-"`
 	ApiSecret     string          `gorm:"column:api_secret" json:"api_secret" scope:"admin"`

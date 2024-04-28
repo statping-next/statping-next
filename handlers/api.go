@@ -79,6 +79,9 @@ func apiCoreHandler(w http.ResponseWriter, r *http.Request) {
 	if c.Name != "" {
 		app.Name = c.Name
 	}
+	if c.Logo != "" {
+		app.Logo = c.Logo
+	}
 	if c.Description != app.Description {
 		app.Description = c.Description
 	}

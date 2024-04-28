@@ -28,6 +28,7 @@ func processSetupHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	project := r.PostForm.Get("project")
+	logo := r.PostForm.Get("logo")
 	description := r.PostForm.Get("description")
 	domain := r.PostForm.Get("domain")
 	sendNews, _ := strconv.ParseBool(r.PostForm.Get("newsletter"))
@@ -80,6 +81,7 @@ func processSetupHandler(w http.ResponseWriter, r *http.Request) {
 
 	c := &core.Core{
 		Name:         project,
+		Logo:         logo,
 		Description:  description,
 		ApiSecret:    utils.Params.GetString("API_SECRET"),
 		Domain:       domain,

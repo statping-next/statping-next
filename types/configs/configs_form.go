@@ -19,6 +19,7 @@ func LoadConfigForm(r *http.Request) (*DbConfig, error) {
 	dbConn := g("db_connection")
 	dbPort := utils.ToInt(g("db_port"))
 	project := g("project")
+	logo := g("logo")
 	username := g("username")
 	password := g("password")
 	description := g("description")
@@ -40,6 +41,7 @@ func LoadConfigForm(r *http.Request) (*DbConfig, error) {
 	p.Set("DB_PASS", dbPass)
 	p.Set("DB_DATABASE", dbDatabase)
 	p.Set("NAME", project)
+	p.Set("LOGO", logo)
 	p.Set("DESCRIPTION", description)
 	p.Set("LANGUAGE", language)
 	p.Set("ALLOW_REPORTS", reports)
@@ -55,6 +57,7 @@ func LoadConfigForm(r *http.Request) (*DbConfig, error) {
 		DbData:       dbDatabase,
 		DbPort:       int(dbPort),
 		Project:      project,
+		Logo:         logo,
 		Description:  description,
 		Domain:       domain,
 		Username:     username,

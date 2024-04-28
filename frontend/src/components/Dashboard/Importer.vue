@@ -24,6 +24,7 @@
     </h3>
 
     <div class="row mb-2"><span class="col-4">Name</span><span class="col-8 text-right font-weight-bold">{{file.core.name}}</span></div>
+    <div class="row mb-2"><span class="col-4">Logo</span><span class="col-8 text-right font-weight-bold">{{file.core.logo}}</span></div>
     <div class="row mb-2"><span class="col-4">Description</span><span class="col-8 text-right font-weight-bold">{{file.core.description}}</span></div>
     <div class="row mb-2"><span class="col-4">Domain</span><span class="col-8 text-right font-weight-bold">{{file.core.domain}}</span></div>
 

@@ -83,6 +83,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label class="text-capitalize">{{ $t('project_logo') }}</label>
+                            <input @keyup="canSubmit" v-model="setup.logo" id="project" type="text" class="form-control" placeholder="https://example.com/logo.png" required>
+                        </div>
+
+                        <div class="form-group">
                             <label class="text-capitalize">{{ $t('description') }}</label>
                             <input @keyup="canSubmit" v-model="setup.description" id="description" type="text" class="form-control" placeholder="Monitors all of my work services">
                         </div>

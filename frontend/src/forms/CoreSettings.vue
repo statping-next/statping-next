@@ -9,6 +9,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label>{{ $t('project_logo') }}</label>
+                    <input v-model="core.logo" type="text" class="form-control" placeholder="https://example.com/logo.png" id="logo">
+                </div>
+
+                <div class="form-group">
                     <label>{{ $t('description') }}</label>
                     <input v-model="core.description" type="text" class="form-control" placeholder="Great Uptime" id="description">
                 </div>

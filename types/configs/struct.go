@@ -16,6 +16,7 @@ type DbConfig struct {
 	Language          string `yaml:"language,omitempty" json:"language"`
 	AllowReports      bool   `yaml:"allow_reports,omitempty" json:"allow_reports"`
 	Project           string `yaml:"-" json:"-"`
+	Logo              string `yaml:"-" json:"-"`
 	Description       string `yaml:"-" json:"-"`
 	Domain            string `yaml:"-" json:"-"`
 	Username          string `yaml:"-" json:"-"`
