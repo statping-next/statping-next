@@ -15,7 +15,7 @@
             </span>
 
             <span class="mt-2 font-3">
-                <router-link to="/" class="text-black-50 text-decoration-none">{{core.name}}</router-link> - <span class="text-muted">{{service.name}}</span>
+                <router-link to="/" class="text-decoration-none">{{core.name}}</router-link> - <span class="text-muted">{{service.name}}</span>
                 <span class="badge float-right d-none d-md-block text-uppercase" :class="{'bg-success': service.online, 'bg-danger': !service.online}">
                     {{service.online ? $t('online') : $t('offline')}}
                 </span>
@@ -25,7 +25,7 @@
 
             <MessageBlock v-if="loaded" v-for="message in messagesInRange" v-bind:key="message.id" :message="message"/>
 
-            <div class="card text-black-50 bg-white mt-3">
+            <div class="card mt-3">
                 <div class="card-header text-capitalize">Timeframe</div>
                 <div class="card-body pb-4">
                     <div class="row">
@@ -58,7 +58,7 @@
                 </div>
             </div>
 
-            <div class="card text-black-50 bg-white mt-3 mb-3">
+            <div class="card mt-3 mb-3">
                 <div class="card-header text-capitalize">Service Latency</div>
                 <div v-if="loaded" class="card-body">
                     <div class="row">
@@ -77,7 +77,7 @@
 
             </div>
 
-            <div class="card text-black-50 bg-white mb-3">
+            <div class="card mb-3">
                 <div class="card-header text-capitalize">Service Failures</div>
                 <div class="card-body">
                     <div class="service-chart-heatmap mt-5 mb-4">

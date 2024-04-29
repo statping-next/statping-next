@@ -3,7 +3,7 @@
         <h2>{{service.name}} Checkins</h2>
         <p class="mb-3">Tell your service to send a routine HTTP request to a Statping Checkin.</p>
 
-        <div v-for="(checkin, i) in checkins" class="card text-black-50 bg-white mt-3">
+        <div v-for="(checkin, i) in checkins" class="card mt-3">
             <div class="card-header text-capitalize">
                 {{checkin.name}}
                 <button @click="deleteCheckin(checkin)" class="btn btn-sm small btn-danger float-right text-uppercase">Delete</button>
@@ -20,7 +20,7 @@
                 <span class="small float-right mt-1 mr-3 d-none d-md-block">Requested {{ago(checkin.last_hit)}} ago</span>
                 <span class="small float-right mt-1 mr-3 d-none d-md-block">Request expected every {{checkin.interval}} minutes</span>
 
-                <div class="card text-black-50 bg-white mt-3">
+                <div class="card mt-3">
                     <div class="card-header text-capitalize">
                         <font-awesome-icon @click="expanded = !expanded" :icon="expanded ? 'minus' : 'plus'" class="mr-2 pointer"/>
                         {{checkin.name}} Records
@@ -32,7 +32,7 @@
                     </div>
                 </div>
 
-                <div class="card text-black-50 bg-white mt-3">
+                <div class="card mt-3">
                     <div class="card-header text-capitalize">
                         <font-awesome-icon @click="curl_expanded = !curl_expanded" :icon="curl_expanded ? 'minus' : 'plus'" class="mr-2 pointer"/>
                         Cronjob Task
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <div class="card text-black-50 bg-white mt-4">
+        <div class="card mt-4">
             <div class="card-header text-capitalize">Create Checkin</div>
             <div class="card-body">
             <form @submit.prevent="saveCheckin">
