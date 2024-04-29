@@ -1,7 +1,7 @@
 <template>
     <div class="card shadow mb-4" role="alert">
       <div class="card-body pb-2">
-        <h3 class="mb-3 font-weight-bold">{{message.title}}</h3>
+        <h3 class="mb-3 font-weight-bold">⚠️ {{message.title}}</h3>
         <span class="mb-2">{{message.description}}</span>
         <div class="col-12 mb-0">
           <div class="dates">
