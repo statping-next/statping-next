@@ -11,7 +11,7 @@
                 <span class="badge text-uppercase float-right" :class="{'bg-success': service.online, 'bg-danger': !service.online }">
                     {{service.online ? $t('online') : $t('offline')}}
                 </span>
-                <span class="text-center font-2 float-right" style="margin-right: 2em" :class="{'text-muted': service.online, 'text-danger': !service.online}">{{smallText(service)}}</span>
+                <span class="text-center font-2 float-right" style="margin-right: 2em" :class="{'text-muted': service.online, 'text-danger': !service.online}">{{smallText[service.id]}}</span>
 
             </div>
 
@@ -40,15 +40,16 @@ export default {
   computed: {
     services() {
       return this.$store.getters.servicesInGroup(this.group.id)
-    }
-  },
-  methods: {
-      smallText(s) {
-        const now = Date.now();
-        const lastSuccess = new Date(s.last_success).getTime();
+    },
+    smallText() {
+      const now = Date.now();
+      return this.services.reduce((acc, service) => {
+        const lastSuccess = new Date(service.last_success).getTime();
         const diffInSeconds = Math.floor((now - lastSuccess) / 1000);
-        return `last checked ${diffInSeconds} seconds ago`;
-      }
+        acc[service.id] = `last checked ${diffInSeconds} seconds ago`;
+        return acc;
+      }, {});
+    },
   }
 }
 </script>
