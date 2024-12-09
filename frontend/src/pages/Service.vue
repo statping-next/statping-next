@@ -80,7 +80,7 @@
             <div class="card mb-3">
                 <div class="card-header text-capitalize">Service Failures</div>
                 <div class="card-body">
-                    <div class="service-chart-heatmap mt-5 mb-4">
+                    <div class="service-chart-heatmap mt-2 mb-4">
                         <ServiceHeatmap :service="service"/>
                     </div>
                 </div>

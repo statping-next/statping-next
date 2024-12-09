@@ -32,6 +32,9 @@
                           show: false
                       },
                     },
+                  theme: {
+                    mode: "dark",
+                    },
                       colors: [ "#cb3d36" ],
                       enableShades: true,
                       shadeIntensity: 0.5,
