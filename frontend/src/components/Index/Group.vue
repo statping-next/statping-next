@@ -11,10 +11,7 @@
                 <span class="badge text-uppercase float-right" :class="{'bg-success': service.online, 'bg-danger': !service.online }">
                     {{service.online ? $t('online') : $t('offline')}}
                 </span>
-
-                <GroupServiceFailures :service="service"/>
-
-                <IncidentsBlock :service="service"/>
+                <span class="text-center font-2 float-right" style="margin-right: 2em" :class="{'text-muted': service.online, 'text-danger': !service.online}">{{smallText(service)}}</span>
 
             </div>
 
@@ -44,6 +41,14 @@ export default {
     services() {
       return this.$store.getters.servicesInGroup(this.group.id)
     }
+  },
+  methods: {
+      smallText(s) {
+        const now = Date.now();
+        const lastSuccess = new Date(s.last_success).getTime();
+        const diffInSeconds = Math.floor((now - lastSuccess) / 1000);
+        return `last checked ${diffInSeconds} seconds ago`;
+      }
   }
 }
 </script>
