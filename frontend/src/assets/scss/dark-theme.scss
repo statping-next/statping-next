@@ -89,6 +89,15 @@ body.dark-theme {
     background: rgba(255, 255, 255, 0.1) !important;
   }
 
+  .admin-btn {
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+  }
+
+  .admin-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+
   .footer {
     background-color: #05070A !important;
   }

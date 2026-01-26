@@ -10,6 +10,9 @@
                     <span v-if="darkTheme">☀️</span>
                     <span v-else>🌙</span>
                 </button>
+                <router-link to="/dashboard" class="btn btn-sm admin-btn" title="Admin Dashboard">
+                    <font-awesome-icon icon="cog" />
+                </router-link>
             </div>
         </div>
     </div>
@@ -70,7 +73,7 @@ export default {
 .sticky-header-content {
   max-width: 1012px;
   margin: 0 auto;
-  padding: 1em 1em;
+  padding: 1em;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -128,6 +131,26 @@ export default {
   /* Background set by theme classes */
 }
 
+.admin-btn {
+  background: transparent;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  line-height: 1;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Border and hover colors set by theme classes */
+}
+
+.admin-btn:hover {
+  transform: scale(1.1);
+  /* Background set by theme classes */
+}
+
 /* Mobile adjustments */
 @media (max-width: 767px) {
   .sticky-header-content {
@@ -145,6 +168,11 @@ export default {
   }
   
   .theme-toggle-btn {
+    padding: 8px 12px;
+    font-size: 18px;
+  }
+  
+  .admin-btn {
     padding: 8px 12px;
     font-size: 18px;
   }

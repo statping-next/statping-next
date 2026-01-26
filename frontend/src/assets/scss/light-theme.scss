@@ -80,6 +80,15 @@ body.light-theme {
     background: rgba(0, 0, 0, 0.05) !important;
   }
 
+  .admin-btn {
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: #2a2a2a !important;
+  }
+
+  .admin-btn:hover {
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+
   .footer .links {
     color: #b0b0b0;
   }
