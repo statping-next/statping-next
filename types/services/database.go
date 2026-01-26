@@ -37,7 +37,9 @@ func (s *Service) BeforeUpdate() error {
 }
 
 func (s *Service) AfterFind() {
-	db.Model(s).Related(&s.Incidents).Related(&s.Messages).Related(&s.Checkins).Related(&s.Incidents)
+	// Removed automatic loading of related data to improve performance
+	// Related data (Incidents, Messages, Checkins) should be loaded explicitly when needed
+	// This prevents N+1 query problems and significantly improves main page load times
 	metrics.Query("service", "find")
 }
 
@@ -91,6 +93,19 @@ func AllInOrder() []Service {
 	var services []Service
 	for _, service := range allServices {
 		service.UpdateStats()
+		services = append(services, *service)
+	}
+	sort.Sort(ServiceOrder(services))
+	return services
+}
+
+// AllInOrderLite returns services in order without calculating expensive stats
+// This is optimized for the main status page which only needs up/down status
+func AllInOrderLite() []Service {
+	var services []Service
+	for _, service := range allServices {
+		// Skip UpdateStats() - only load basic service data
+		// This avoids expensive queries for hits/failures counts, uptime percentages, etc.
 		services = append(services, *service)
 	}
 	sort.Sort(ServiceOrder(services))

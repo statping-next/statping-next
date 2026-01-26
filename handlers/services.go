@@ -281,7 +281,9 @@ func apiServiceDeleteHandler(w http.ResponseWriter, r *http.Request) {
 
 func apiAllServicesHandler(r *http.Request) interface{} {
 	var srvs []services.Service
-	for _, v := range services.AllInOrder() {
+	// Use lightweight version for better performance on main page
+	// AllInOrderLite() skips expensive UpdateStats() calls
+	for _, v := range services.AllInOrderLite() {
 		if !v.Public.Bool && !IsUser(r) {
 			continue
 		}

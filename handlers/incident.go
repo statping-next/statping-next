@@ -30,7 +30,9 @@ func apiServiceIncidentsHandler(w http.ResponseWriter, r *http.Request) {
 		sendErrorJson(err, w, r)
 		return
 	}
-	returnJson(service.Incidents, w, r)
+	// Load incidents explicitly since AfterFind hook no longer loads them automatically
+	serviceIncidents := incidents.FindByService(service.Id)
+	returnJson(serviceIncidents, w, r)
 }
 
 func apiIncidentUpdatesHandler(w http.ResponseWriter, r *http.Request) {

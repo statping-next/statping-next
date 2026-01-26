@@ -243,10 +243,13 @@ func SelectAllServices(start bool) (map[int64]*Service, error) {
 		return allServices, nil
 	}
 	for _, s := range all() {
-		s.Failures = s.AllFailures().LastAmount(limitedFailures)
+		// Skip loading failures and stats at startup for better performance
+		// These will be loaded on-demand when needed (e.g., in admin dashboard)
+		// s.Failures = s.AllFailures().LastAmount(limitedFailures)
 		s.prevOnline = true
-		// collect initial service stats
-		s.UpdateStats()
+		// Skip UpdateStats() at startup - it's expensive and not needed for basic service checking
+		// Stats will be calculated on-demand when viewing service details
+		// s.UpdateStats()
 		allServices[s.Id] = s
 		if start {
 			CheckinProcess(s)
