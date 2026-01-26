@@ -335,20 +335,14 @@
 
   .chart-container {
     position: relative;
-    height: 240px;
+    height: auto;
     width: 100%;
     overflow: hidden;
   }
 
   .service-chart-container {
     position: relative;
-    height: 400px;
-    width: 100%;
-  }
-
-  .service-chart-heatmap {
-    position: relative;
-    height: 180px;
+    height: auto;
     width: 100%;
   }
 
