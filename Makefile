@@ -7,6 +7,8 @@ GOVERSION=1.17.8
 NODE_VERSION=16.14.0
 XGO=xgo -go $(GOVERSION) --dest=build
 BUILDVERSION=-ldflags "-X main.VERSION=${VERSION} -X main.COMMIT=${COMMIT}"
+GOPATH_BIN=$(shell go env GOPATH)/bin
+RICE_BIN=$(GOPATH_BIN)/rice
 TRVIS_SECRET=O3/2KTOV8krv+yZ1EB/7D1RQRe6NdpFUEJNJkMS/ollYqmz3x2mCO7yIgIJKCKguLXZxjM6CxJcjlCrvUwibL+8BBp7xJe4XFIOrjkPvbbVPry4HkFZCf2GfcUK6o4AByQ+RYqsW2F17Fp9KLQ1rL3OT3eLTwCAGKx3tlY8y+an43zkmo5dN64V6sawx26fh6XTfww590ey+ltgQTjf8UPNup2wZmGvMo9Hwvh/bYR/47bR6PlBh6vhlKWyotKf2Fz1Bevbu0zc35pee5YlsrHR+oSF+/nNd/dOij34BhtqQikUR+zQVy9yty8SlmneVwD3yOENvlF+8roeKIXb6P6eZnSMHvelhWpAFTwDXq2N3d/FIgrQtLxsAFTI3nTHvZgs6OoTd6dA0wkhuIGLxaL3FOeztCdxP5J/CQ9GUcTvifh5ArGGwYxRxQU6rTgtebJcNtXFISP9CEUR6rwRtb6ax7h6f1SbjUGAdxt+r2LbEVEk4ZlwHvdJ2DtzJHT5DQtLrqq/CTUgJ8SJFMkrJMp/pPznKhzN4qvd8oQJXygSXX/gz92MvoX0xgpNeLsUdAn+PL9KketfR+QYosBz04d8k05E+aTqGaU7FUCHPTLwlOFvLD8Gbv0zsC/PWgSLXTBlcqLEz5PHwPVHTcVzspKj/IyYimXpCSbvu1YOIjyc=
 PUBLISH_BODY='{ "request": { "branch": "master", "message": "Homebrew update version v${VERSION}", "config": { "env": { "VERSION": "${VERSION}", "COMMIT": "$(TRAVIS_COMMIT)" } } } }'
 TRAVIS_BUILD_CMD='{ "request": { "branch": "master", "message": "Compile master for Statping v${VERSION}", "config": { "merge_mode": "replace", "language": "go", "go": 1.17, "install": true, "sudo": "required", "services": ["docker"], "env": { "secure": "${TRVIS_SECRET}" }, "before_deploy": ["git config --local user.name \"hunterlong\"", "git config --local user.email \"info@socialeck.com\"", "git tag v$(VERSION) --force"], "deploy": [{ "provider": "releases", "api_key": "$$GITHUB_TOKEN", "file_glob": true, "file": "build/*", "skip_cleanup": true, "on": { "branch": "master" } }], "before_script": ["rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install stable", "nvm install 16.14.0", "nvm use 16.14.0 --default", "npm install -g sass yarn cross-env", "pip install --user awscli"], "script": ["make release"], "after_success": [], "after_deploy": ["make post-release"] } } }'
@@ -74,9 +76,9 @@ test-api:
 	sleep 5000 && newman run dev/postman.json -e dev/postman_environment.json --delay-request 500
 
 test-deps:
-	go get golang.org/x/tools/cmd/cover
-	go get github.com/mattn/goveralls
-	go get github.com/GeertJohan/go.rice/rice
+	go install golang.org/x/tools/cmd/cover@latest
+	go install github.com/mattn/goveralls@latest
+	go install github.com/GeertJohan/go.rice/rice@latest
 	go get github.com/mattn/go-sqlite3
 	go install github.com/mattn/go-sqlite3
 	go install github.com/wellington/go-libsass
@@ -133,7 +135,7 @@ frontend-build:
 	@echo "Removing old frontend distributions..."
 	@rm -rf source/dist && rm -rf frontend/dist
 	@echo "yarn install and build static frontend"
-	cd frontend && yarn && yarn build
+	cd frontend && yarn && NODE_OPTIONS=--openssl-legacy-provider yarn build
 	@cp -r frontend/dist source/
 	@cp -r frontend/src/assets/scss source/dist/
 	@cp frontend/public/robots.txt source/dist/
@@ -145,12 +147,20 @@ yarn:
 
 # compile assets using SASS and Rice. compiles scss -> css, and run rice embed-go
 compile: frontend-build
+	@echo "Installing rice tool..."
+	@go install github.com/GeertJohan/go.rice/rice@latest
+	@if [ ! -f $(RICE_BIN) ]; then \
+		echo "Error: rice not found at $(RICE_BIN). Is GOPATH/bin in your PATH?"; \
+		exit 1; \
+	fi
 	rm -f source/rice-box.go
-	cd source && rice embed-go
+	cd source && $(RICE_BIN) embed-go
 	make generate
 
 embed:
-	cd source && rice embed-go
+	@echo "Installing rice tool..."
+	@go install github.com/GeertJohan/go.rice/rice@latest
+	cd source && $(RICE_BIN) embed-go
 
 install: build
 	mv $(BINARY_NAME) $(GOPATH)/bin/$(BINARY_NAME)
@@ -168,7 +178,7 @@ generate:
 build-all: clean compile build-folders build-linux build-linux-arm build-darwin build-win compress-folders
 
 build-deps:
-	apt install -y libc6-armel-cross libc6-dev-armel-cross binutils-arm-linux-gnueabi \
+	sudo apt install -y libc6-armel-cross libc6-dev-armel-cross binutils-arm-linux-gnueabi \
 	libncurses5-dev build-essential bison flex libssl-dev bc gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf \
 	gcc-arm-linux-gnueabi g++-arm-linux-gnueabi libsqlite3-dev gcc-mingw-w64 gcc-mingw-w64-x86-64
 
