@@ -1,5 +1,78 @@
 <template>
-    <apexchart v-if="ready" width="100%" height="180" type="heatmap" :options="plotOptions" :series="series" @dataPointSelection="onDataPointClick"></apexchart>
+    <div>
+        <div v-if="!ready" class="text-center py-4">
+            <font-awesome-icon icon="circle-notch" spin/>
+            <span class="ml-2">Loading...</span>
+        </div>
+        
+        <div v-if="ready" style="margin-bottom: 1rem;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.65rem; table-layout: fixed;">
+                <thead>
+                    <tr>
+                        <th style="background-color: rgba(0, 0, 0, 0.3); font-weight: bold; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.25rem; text-align: center; width: 80px;"></th>
+                        <th v-for="day in 31" :key="day" style="background-color: rgba(0, 0, 0, 0.2); font-weight: bold; font-size: 0.6rem; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.1rem; text-align: center;">{{ day }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(monthData, monthIndex) in monthsData" :key="monthIndex">
+                        <td style="background-color: rgba(0, 0, 0, 0.3); font-weight: bold; text-align: left; padding-left: 0.5rem; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.25rem; font-size: 0.65rem;">{{ monthData.monthName }}</td>
+                        <td 
+                            v-for="(dayData, dayIndex) in monthData.days" 
+                            :key="dayIndex"
+                            :style="{
+                                backgroundColor: dayData.color,
+                                color: '#ffffff',
+                                fontWeight: '500',
+                                cursor: dayData.isFuture ? 'not-allowed' : 'pointer',
+                                opacity: dayData.isFuture ? 0.6 : 1,
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                padding: '0.1rem',
+                                textAlign: 'center',
+                                fontSize: '0.65rem'
+                            }"
+                            @click="!dayData.isFuture && onDayClick(dayData)"
+                            :title="dayData.tooltip"
+                        >
+                            {{ dayData.displayValue }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Failure list popout -->
+        <div v-if="selectedDayFailures.length > 0" class="mt-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Failures on {{ selectedDayDate }}</h5>
+                    <button class="btn btn-sm btn-secondary" @click="closeFailureList">×</button>
+                </div>
+                <div class="card-body">
+                    <div v-if="selectedDayFailures.length === 0" class="text-muted">
+                        No failures found for this day.
+                    </div>
+                    <table v-else class="table table-sm table-dark">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Issue</th>
+                                <th>Error Code</th>
+                                <th>Ping Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(failure, index) in selectedDayFailures" :key="index">
+                                <td>{{ formatDate(failure.created_at) }}</td>
+                                <td>{{ failure.issue || 'N/A' }}</td>
+                                <td>{{ failure.error_code || 'N/A' }}</td>
+                                <td>{{ failure.ping_time ? failure.ping_time + 'ms' : 'N/A' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -14,237 +87,199 @@
           }
       },
       async created() {
-          await this.chartHeatmap()
+          await this.loadData()
       },
       data() {
           return {
               ready: false,
-              data: [],
-              dateMap: {}, // Map to store date info: key = "seriesIndex-dataPointIndex", value = date string
-              plotOptions: {
-                  chart: {
-                      selection: {
-                          enabled: false
-                      },
-                      zoom: {
-                          enabled: false
-                      },
-                      toolbar: {
-                          show: false
-                      },
-                      events: {
-                          dataPointSelection: (event, chartContext, config) => {
-                              // This will be handled by the @dataPointSelection event
-                          }
-                      }
-                    },
-                  theme: {
-                    mode: "dark",
-                    },
-                      colors: [ "#cb3d36" ],
-                      enableShades: true,
-                      shadeIntensity: 0.5,
-                      colorScale: {
-                          ranges: [ {
-                              from: -1,
-                              to: -1,
-                              color: '#666666',
-                              name: 'future',
-                          },
-                          {
-                              from: 0,
-                              to: 0,
-                              color: '#28a745',
-                              name: 'none',
-                          },
-                              {
-                                  from: 1,
-                                  to: 5,
-                                  color: '#ffc107',
-                                  name: 'low',
-                              },
-                              {
-                                  from: 6,
-                                  to: 10,
-                                  color: '#fd7e14',
-                                  name: 'medium',
-                              },
-                              {
-                                  from: 11,
-                                  to: 999,
-                                  color: '#dc3545',
-                                  name: 'high',
-                              }
-                          ]
-                      },
-                      dataLabels: {
-                          enabled: true,
-                          formatter: function(val) {
-                              if (val === -1 || val < 0) {
-                                  return 'F';
-                              }
-                              return val;
-                          },
-                          style: {
-                              colors: ['#ffffff']
-                          }
-                      },
-                  xaxis: {
-                      tickAmount: '1',
-                      tickPlacement: 'between',
-                      min: 1,
-                      max: 31,
-                      type: "numeric",
-                      labels: {
-                          show: true
-                      },
-                      tooltip: {
-                          enabled: false
-                      }
-                  },
-                  yaxis: {
-                      labels: {
-                          show: true
-                      },
-                  },
-                  tooltip: {
-                      theme: false,
-                      enabled: true,
-                      custom: ({series, seriesIndex, dataPointIndex, w}) => {
-                          const dateKey = `${seriesIndex}-${dataPointIndex}`;
-                          const dateStr = this.dateMap[dateKey];
-                          const dataPoint = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
-                          const failures = dataPoint ? (dataPoint.y || 0) : 0;
-                          const isFuture = dataPoint && dataPoint.y === -1;
-                          
-                          if (dateStr) {
-                              const date = this.parseISO(dateStr);
-                              const formattedDate = date.toLocaleDateString('en-us', { 
-                                  weekday: 'long', 
-                                  year: 'numeric', 
-                                  month: 'long', 
-                                  day: 'numeric' 
-                              });
-                              if (isFuture) {
-                                  return `<div style="padding: 12px 16px 12px 16px; background-color: rgba(0, 0, 0, 0.9); border-radius: 4px; color: #ffffff;">Future Date<br>${formattedDate}</div>`;
-                              }
-                              return `<div style="padding: 12px 16px 12px 16px; background-color: rgba(0, 0, 0, 0.9); border-radius: 4px; color: #ffffff;">${failures} ${failures === 1 ? 'Failure' : 'Failures'}<br>${formattedDate}</div>`;
-                          }
-                          
-                          // Fallback
-                          return `<div style="padding: 12px 16px 12px 16px; background-color: rgba(0, 0, 0, 0.9); border-radius: 4px; color: #ffffff;">${failures} ${failures === 1 ? 'Failure' : 'Failures'}</div>`;
-                      },
-                      fixed: {
-                          enabled: true,
-                          position: 'topLeft',
-                          offsetX: 0,
-                          offsetY: 0,
-                      }
-                  }
-                  },
-              series: [ {
-                  data: []
-              } ]
+              monthsData: [],
+              selectedDayFailures: [],
+              selectedDayDate: ''
           }
       },
       methods: {
-          async chartHeatmap() {
-            const monthData = []
-            let start = this.firstDayOfMonth(this.now())
-            this.dateMap = {} // Reset date map
+          async loadData() {
+              const monthsData = []
+              let start = this.firstDayOfMonth(this.now())
+              const now = this.now()
+              const today = this.beginningOf('day', now)
 
-            for (let i=0; i<3; i++) {
-                const monthInfo = await this.heatmapData(this.addMonths(start, -i), this.lastDayOfMonth(this.addMonths(start, -i)), i)
-                monthData.push(monthInfo)
-            }
+              for (let i = 0; i < 3; i++) {
+                  const monthStart = this.addMonths(start, -i)
+                  const monthEnd = this.lastDayOfMonth(monthStart)
+                  const monthInfo = await this.loadMonthData(monthStart, monthEnd, today)
+                  monthsData.push(monthInfo)
+              }
 
-            this.series = monthData
-            this.ready = true
+              // Reverse so oldest month is first
+              this.monthsData = monthsData.reverse()
+              this.ready = true
           },
-          async heatmapData(start, end, seriesIndex) {
-              const data = await Api.service_failures_data(this.service.id, this.toUnix(start), this.toUnix(end), "24h", true)
-              let dataArr = []
-              const now = this.now();
-              const today = this.beginningOf('day', now);
+          async loadMonthData(monthStart, monthEnd, today) {
+              const data = await Api.service_failures_data(
+                  this.service.id, 
+                  this.toUnix(monthStart), 
+                  this.toUnix(monthEnd), 
+                  "24h", 
+                  true
+              )
               
               // Create a map of existing data by day of month
-              const dataMap = {};
+              const dataMap = {}
               if (data) {
                   data.forEach((d) => {
-                      const date = this.parseISO(d.timeframe);
-                      const dayOfMonth = date.getDate();
+                      const date = this.parseISO(d.timeframe)
+                      const dayOfMonth = date.getDate()
                       dataMap[dayOfMonth] = {
                           amount: d.amount,
-                          date: d.timeframe
-                      };
-                  });
+                          date: d.timeframe,
+                          dateObj: date
+                      }
+                  })
               }
               
-              // Fill in all days of the month (1-31)
-              const daysInMonth = this.lastDayOfMonth(start).getDate();
-              let dataIndex = 0;
+              // Build days array for this month
+              const daysInMonth = this.lastDayOfMonth(monthStart).getDate()
+              const days = []
+              
               for (let day = 1; day <= daysInMonth; day++) {
-                  const testDate = new Date(start.getFullYear(), start.getMonth(), day);
-                  const dateStartOfDay = this.beginningOf('day', testDate);
-                  const isFuture = dateStartOfDay > today;
+                  const testDate = new Date(monthStart.getFullYear(), monthStart.getMonth(), day)
+                  const dateStartOfDay = this.beginningOf('day', testDate)
+                  const isFuture = dateStartOfDay > today
+                  
+                  let value, dateStr, dateObj
                   
                   if (dataMap[day]) {
-                      // We have data for this day
-                      const dateKey = `${seriesIndex}-${dataIndex}`;
-                      this.dateMap[dateKey] = dataMap[day].date;
-                      dataArr.push({
-                          x: day,
-                          y: isFuture ? -1 : dataMap[day].amount,
-                          isFuture: isFuture
-                      });
-                      dataIndex++;
+                      value = isFuture ? -1 : dataMap[day].amount
+                      dateStr = dataMap[day].date
+                      dateObj = dataMap[day].dateObj
                   } else {
-                      // No data for this day - fill it in
-                      const dateKey = `${seriesIndex}-${dataIndex}`;
-                      const dateStr = testDate.toISOString();
-                      this.dateMap[dateKey] = dateStr;
-                      dataArr.push({
-                          x: day,
-                          y: isFuture ? -1 : 0,
-                          isFuture: isFuture
-                      });
-                      dataIndex++;
+                      value = isFuture ? -1 : 0
+                      dateStr = testDate.toISOString()
+                      dateObj = testDate
                   }
+                  
+                  const color = this.getColorForValue(value)
+                  const displayValue = value === -1 ? 'F' : value
+                  
+                  const formattedDate = dateObj.toLocaleDateString('en-us', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                  })
+                  
+                  const tooltip = isFuture 
+                      ? `Future Date: ${formattedDate}`
+                      : `${value} ${value === 1 ? 'Failure' : 'Failures'}: ${formattedDate}`
+                  
+                  days.push({
+                      day: day,
+                      value: value,
+                      color: color,
+                      displayValue: displayValue,
+                      isFuture: isFuture,
+                      dateStr: dateStr,
+                      dateObj: dateObj,
+                      tooltip: tooltip
+                  })
               }
-
+              
+              // Fill remaining days up to 31 with empty cells
+              for (let day = daysInMonth + 1; day <= 31; day++) {
+                  days.push({
+                      day: day,
+                      value: null,
+                      color: 'transparent',
+                      displayValue: '',
+                      isFuture: false,
+                      dateStr: null,
+                      dateObj: null,
+                      tooltip: ''
+                  })
+              }
+              
               return {
-                  name: start.toLocaleString('en-us', { month: 'long'}), 
-                  data: dataArr,
-                  monthStart: start
+                  monthName: monthStart.toLocaleString('en-us', { month: 'long' }),
+                  monthStart: monthStart,
+                  days: days
               }
           },
-          onDataPointClick(event, chartContext, config) {
-              if (config.dataPointIndex !== undefined && config.seriesIndex !== undefined) {
-                  const dateKey = `${config.seriesIndex}-${config.dataPointIndex}`;
-                  const dateStr = this.dateMap[dateKey];
+          getColorForValue(value) {
+              if (value === null || value === undefined) {
+                  return 'transparent'
+              }
+              
+              const numValue = Number(value)
+              if (isNaN(numValue)) {
+                  return '#28a745' // default green
+              }
+              
+              if (numValue === -1) {
+                  return '#666666' // grey for future
+              } else if (numValue === 0) {
+                  return '#28a745' // green for no failures
+              } else if (numValue >= 1 && numValue <= 5) {
+                  return '#ffc107' // yellow for low
+              } else if (numValue >= 6 && numValue <= 10) {
+                  return '#fd7e14' // orange for medium
+              } else if (numValue >= 11) {
+                  return '#dc3545' // red for high
+              }
+              
+              return '#28a745' // default green
+          },
+          async onDayClick(dayData) {
+              if (!dayData.dateStr || dayData.isFuture) {
+                  return
+              }
+              
+              try {
+                  // Get the start and end of the selected day
+                  const dayStart = this.beginningOf('day', dayData.dateObj)
+                  const dayEnd = this.endOf('day', dayData.dateObj)
                   
-                  if (dateStr) {
-                      const date = this.parseISO(dateStr);
-                      const dateStartOfDay = this.beginningOf('day', date);
-                      const today = this.beginningOf('day', this.now());
-                      
-                      // Don't allow clicking on future days
-                      if (dateStartOfDay > today) {
-                          return;
-                      }
-                      
-                      const series = this.series[config.seriesIndex];
-                      this.$emit('day-selected', {
-                          date: date,
-                          month: series.name
-                      });
-                  }
+                  // Fetch failures for this specific day
+                  const failures = await Api.service_failures(
+                      this.service.id,
+                      this.toUnix(dayStart),
+                      this.toUnix(dayEnd)
+                  )
+                  
+                  this.selectedDayFailures = failures || []
+                  this.selectedDayDate = dayData.dateObj.toLocaleDateString('en-us', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                  })
+              } catch (error) {
+                  console.error('Error loading failures:', error)
+                  this.selectedDayFailures = []
+              }
+          },
+          closeFailureList() {
+              this.selectedDayFailures = []
+              this.selectedDayDate = ''
+          },
+          formatDate(dateStr) {
+              if (!dateStr) return 'N/A'
+              try {
+                  const date = this.parseISO(dateStr)
+                  return date.toLocaleString('en-us', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                  })
+              } catch (e) {
+                  return dateStr
               }
           }
       }
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 </style>
