@@ -54,14 +54,26 @@
                     <table v-else class="table table-sm table-dark">
                         <thead>
                             <tr>
-                                <th>Time</th>
-                                <th>Issue</th>
-                                <th>Error Code</th>
-                                <th>Ping Time</th>
+                                <th style="cursor: pointer; user-select: none;" @click="sortFailures('created_at')">
+                                    Time
+                                    <span v-if="sortColumn === 'created_at'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                </th>
+                                <th style="cursor: pointer; user-select: none;" @click="sortFailures('issue')">
+                                    Issue
+                                    <span v-if="sortColumn === 'issue'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                </th>
+                                <th style="cursor: pointer; user-select: none;" @click="sortFailures('error_code')">
+                                    Error Code
+                                    <span v-if="sortColumn === 'error_code'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                </th>
+                                <th style="cursor: pointer; user-select: none;" @click="sortFailures('ping_time')">
+                                    Ping Time
+                                    <span v-if="sortColumn === 'ping_time'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(failure, index) in selectedDayFailures" :key="index">
+                            <tr v-for="(failure, index) in sortedFailures" :key="index">
                                 <td>{{ formatDate(failure.created_at) }}</td>
                                 <td>{{ failure.issue || 'N/A' }}</td>
                                 <td>{{ failure.error_code || 'N/A' }}</td>
@@ -94,7 +106,46 @@
               ready: false,
               monthsData: [],
               selectedDayFailures: [],
-              selectedDayDate: ''
+              selectedDayDate: '',
+              sortColumn: 'created_at',
+              sortDirection: 'desc'
+          }
+      },
+      computed: {
+          sortedFailures() {
+              if (!this.selectedDayFailures || this.selectedDayFailures.length === 0) {
+                  return []
+              }
+              
+              const failures = [...this.selectedDayFailures]
+              const column = this.sortColumn
+              const direction = this.sortDirection
+              
+              return failures.sort((a, b) => {
+                  let aVal = a[column]
+                  let bVal = b[column]
+                  
+                  // Handle null/undefined values
+                  if (aVal === null || aVal === undefined) aVal = ''
+                  if (bVal === null || bVal === undefined) bVal = ''
+                  
+                  // For time field, parse as date
+                  if (column === 'created_at') {
+                      aVal = new Date(aVal).getTime()
+                      bVal = new Date(bVal).getTime()
+                  }
+                  
+                  // For numeric fields
+                  if (column === 'ping_time' || column === 'error_code') {
+                      aVal = Number(aVal) || 0
+                      bVal = Number(bVal) || 0
+                  }
+                  
+                  // Compare
+                  if (aVal < bVal) return direction === 'asc' ? -1 : 1
+                  if (aVal > bVal) return direction === 'asc' ? 1 : -1
+                  return 0
+              })
           }
       },
       methods: {
@@ -270,6 +321,18 @@
           closeFailureList() {
               this.selectedDayFailures = []
               this.selectedDayDate = ''
+              this.sortColumn = 'created_at'
+              this.sortDirection = 'desc'
+          },
+          sortFailures(column) {
+              if (this.sortColumn === column) {
+                  // Toggle direction if clicking the same column
+                  this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc'
+              } else {
+                  // New column, default to ascending (except time which defaults to descending)
+                  this.sortColumn = column
+                  this.sortDirection = column === 'created_at' ? 'desc' : 'asc'
+              }
           },
           formatDate(dateStr) {
               if (!dateStr) return 'N/A'
