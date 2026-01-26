@@ -81,10 +81,6 @@
                     <div class="row">
                       <AdvancedChart :group="group" :updated="updated_chart" :start="start_time.toString()" :end="end_time.toString()" :service="service"/>
                     </div>
-                  <div>
-                    <FailuresBarChart :service="service" :start="start_time.toString()" :end="end_time.toString()" :group="group"/>
-                  </div>
-
                 </div>
               <div v-else class="row mt-3 mb-3">
                 <div class="col-12 text-center">
@@ -98,7 +94,20 @@
                 <div class="card-header text-capitalize">Service Failures</div>
                 <div class="card-body">
                     <div class="service-chart-heatmap mt-2 mb-4">
-                        <ServiceHeatmap :service="service"/>
+                        <ServiceHeatmap :service="service" @day-selected="onDaySelected"/>
+                    </div>
+                    <div v-if="selectedDayFailures.length > 0" class="mt-4">
+                        <h5 class="mb-3">Failures for {{selectedDayDate}}</h5>
+                        <div class="list-group">
+                            <div v-for="(failure, index) in selectedDayFailures" :key="index" class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{failure.issue}}</h6>
+                                    <small class="text-muted">{{formatDate(failure.created_at)}}</small>
+                                </div>
+                                <p v-if="failure.error_code" class="mb-1 text-muted">Error Code: {{failure.error_code}}</p>
+                                <p v-if="failure.ping_time" class="mb-0 text-muted">Response Time: {{failure.ping_time}} µs</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -116,7 +125,6 @@
   const ServiceHeatmap = () => import(/* webpackChunkName: "service" */ '@/components/Service/ServiceHeatmap')
   const ServiceTopStats = () => import(/* webpackChunkName: "service" */ '@/components/Service/ServiceTopStats')
   const AdvancedChart = () => import(/* webpackChunkName: "service" */ '@/components/Service/AdvancedChart')
-  const FailuresBarChart = () => import(/* webpackChunkName: "service" */ '@/components/Service/FailuresBarChart')
 
   import flatPickr from 'vue-flatpickr-component';
   import 'flatpickr/dist/flatpickr.css';
@@ -150,7 +158,6 @@
 export default {
     name: 'Service',
     components: {
-      FailuresBarChart,
       AdvancedChart,
         ServiceTopStats,
         ServiceHeatmap,
@@ -376,6 +383,8 @@ export default {
             config: {
                 enableTime: true
             },
+            selectedDayFailures: [],
+            selectedDayDate: '',
         }
     },
     watch: {
@@ -572,6 +581,21 @@ export default {
       },
       async chartFailures(start=0, end=99999999999) {
         this.failures_data = await Api.service_failures_data(this.service.id, this.params.start, this.params.end, this.group, true)
+      },
+      async onDaySelected(dayData) {
+        // dayData contains: { date: Date, month: string }
+        const dayStart = this.startOf('day', dayData.date)
+        const dayEnd = this.endOf('day', dayData.date)
+        const startUnix = this.toUnix(dayStart)
+        const endUnix = this.toUnix(dayEnd)
+        
+        this.selectedDayDate = this.format(dayData.date, 'EEEE, MMMM do, yyyy')
+        this.selectedDayFailures = await Api.service_failures(this.service.id, startUnix, endUnix, 999, 0)
+      },
+      formatDate(dateStr) {
+        if (!dateStr) return '';
+        const date = this.parseISO(dateStr);
+        return this.format(date, 'MMM do, yyyy h:mm a');
       }
     }
 }
