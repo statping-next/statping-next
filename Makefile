@@ -25,6 +25,14 @@ test: clean compile
 build: clean
 	CGO_ENABLED=1 go build -a -ldflags "-s -w -X main.VERSION=${VERSION} -X main.COMMIT=${COMMIT}" -o statping --tags "netgo osusergo" ./cmd
 
+binary: clean
+	@echo "Complete clean build with frontend, rice embedding, and Go compilation..."
+	@rm -f source/rice-box.go
+	@rm -rf frontend/dist source/dist
+	@$(MAKE) compile
+	@$(MAKE) build
+	@echo "Binary build complete! Binary is at ./statping"
+
 go-build: clean
 	rm -rf source/dist
 	rm -rf source/rice-box.go
