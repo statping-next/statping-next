@@ -71,7 +71,8 @@ body.dark-theme {
   }
 
   /* Sticky Header - override scoped styles */
-  .sticky-header.active {
+  .sticky-header.active,
+  .sticky-header.admin-mode {
     background-color: #14161A !important;
     /* No shadow - blends seamlessly with container */
     box-shadow: none !important;
@@ -113,6 +114,30 @@ body.dark-theme {
 
   .admin-btn:hover {
     background: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .logout-btn,
+  .back-btn {
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+  }
+
+  .logout-btn:hover,
+  .back-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .sticky-nav .nav-link {
+    color: #ffffff !important;
+  }
+
+  .sticky-nav .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .sticky-nav .nav-link.active {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
   }
 
   .footer {

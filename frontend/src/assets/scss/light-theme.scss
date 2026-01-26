@@ -46,7 +46,7 @@ body.light-theme {
   }
 
   .list-group-item {
-    background-color: #f5f5f5;
+    background-color: #f8f8f8;
   }
 
   .list-group-item:HOVER, .list-group-item-action:hover {
@@ -62,7 +62,8 @@ body.light-theme {
   }
 
   /* Sticky Header - override scoped styles */
-  .sticky-header.active {
+  .sticky-header.active,
+  .sticky-header.admin-mode {
     background-color: #ffffff !important;
     /* No shadow - blends seamlessly with container */
     box-shadow: none !important;
@@ -104,6 +105,30 @@ body.light-theme {
 
   .admin-btn:hover {
     background: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  .logout-btn,
+  .back-btn {
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: #2a2a2a !important;
+  }
+
+  .logout-btn:hover,
+  .back-btn:hover {
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  .sticky-nav .nav-link {
+    color: #2a2a2a !important;
+  }
+
+  .sticky-nav .nav-link:hover {
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  .sticky-nav .nav-link.active {
+    background: rgba(0, 0, 0, 0.1) !important;
+    color: #2a2a2a !important;
   }
 
   .footer .links {

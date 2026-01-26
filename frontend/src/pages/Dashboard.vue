@@ -1,21 +1,23 @@
 <template>
-    <div class="container col-md-7 col-sm-12 mt-md-5">
+    <div class="container col-md-7 col-sm-12">
+      <StickyHeader :visible="true" :admin-mode="true"/>
       <div v-if="modal" class="modal-backdrop"></div>
       <Modal/>
-        <TopNav :admin="admin"/>
+      <div style="padding-top: 70px;">
         <router-view :admin="admin"/>
+      </div>
     </div>
 </template>
 
 <script>
   import Modal from "@/components/Elements/Modal";
-  const TopNav = () => import(/* webpackChunkName: "dashboard" */ '@/components/Dashboard/TopNav')
+  const StickyHeader = () => import(/* webpackChunkName: "index" */ '@/components/StickyHeader')
 
   export default {
   name: 'Dashboard',
   components: {
     Modal,
-    TopNav,
+    StickyHeader,
   },
   data () {
       return {
