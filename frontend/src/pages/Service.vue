@@ -10,16 +10,33 @@
       </div>
 
         <div v-if="ready && service" class="col-12 mb-4">
-            <span class="mt-3 mb-3 text-white d-md-none btn d-block d-md-none text-uppercase" :class="{'bg-success': service.online, 'bg-danger': !service.online}">
-                {{service.online ? $t('online') : $t('offline')}}
-            </span>
+            <!-- Home link -->
+            <div class="mt-2 mb-3">
+                <router-link to="/" class="text-decoration-none font-3">Home</router-link>
+            </div>
 
-            <span class="mt-2 font-3">
-                <router-link to="/" class="text-decoration-none">{{core.name}}</router-link> - <span class="text-muted">{{service.name}}</span>
-                <span class="badge float-right d-none d-md-block text-uppercase" :class="{'bg-success': service.online, 'bg-danger': !service.online}">
-                    {{service.online ? $t('online') : $t('offline')}}
-                </span>
-            </span>
+            <!-- Service title - centered header -->
+            <div class="text-center mb-4">
+                <h2 class="font-8 font-weight-bold">{{service.name}}</h2>
+            </div>
+
+            <!-- Status and time info - similar format to ServiceTopStats -->
+            <div class="row stats_area mb-4">
+                <div class="col-4">
+                    <span class="font-5 d-block font-weight-bold text-uppercase" :class="{'text-success': service.online, 'text-danger': !service.online}">
+                        {{service.online ? $t('online') : $t('offline')}}
+                    </span>
+                    <span class="font-1 subtitle">Status</span>
+                </div>
+                <div class="col-4">
+                    <span class="font-5 d-block font-weight-bold">{{statusDurationText}}</span>
+                    <span class="font-1 subtitle">{{statusDurationLabel}}</span>
+                </div>
+                <div class="col-4">
+                    <span class="font-5 d-block font-weight-bold">{{lastCheckedText}}</span>
+                    <span class="font-1 subtitle">Last Checked</span>
+                </div>
+            </div>
 
             <ServiceTopStats v-if="loaded" :service="service"/>
 
@@ -385,6 +402,99 @@ export default {
       },
       messagesInRange() {
         return this.$store.getters.serviceMessages(this.service.id).filter(m => this.inRange(m))
+      },
+      statusDurationText() {
+        if (!this.service) return '';
+        const now = Date.now();
+        
+        // Helper function to safely parse a date string
+        const parseDate = (dateStr) => {
+          if (!dateStr) return null;
+          if (dateStr === '0001-01-01T00:00:00Z' || dateStr === '' || dateStr === null) {
+            return null;
+          }
+          const date = new Date(dateStr);
+          if (isNaN(date.getTime()) || date.getFullYear() < 1970) {
+            return null;
+          }
+          return date.getTime();
+        };
+
+        if (this.service.online) {
+          // For online services: show "up for" = time since last error/down check
+          const lastError = parseDate(this.service.last_error);
+          if (lastError && lastError > 0) {
+            const upForSeconds = Math.floor((now - lastError) / 1000);
+            if (upForSeconds > 0 && upForSeconds < 315360000) {
+              return `${upForSeconds} seconds`;
+            }
+          }
+          // If no last_error, use last_success as fallback
+          const lastSuccess = parseDate(this.service.last_success);
+          if (lastSuccess && lastSuccess > 0) {
+            const upForSeconds = Math.floor((now - lastSuccess) / 1000);
+            if (upForSeconds > 0 && upForSeconds < 315360000) {
+              return `${upForSeconds} seconds`;
+            }
+          }
+          return 'N/A';
+        } else {
+          // For offline services: show "down for" = time since downtime started
+          const downtimeStarted = parseDate(this.service.downtime_started);
+          if (downtimeStarted && downtimeStarted > 0) {
+            const downForSeconds = Math.floor((now - downtimeStarted) / 1000);
+            if (downForSeconds > 0 && downForSeconds < 315360000) {
+              return `${downForSeconds} seconds`;
+            }
+          }
+          // Fallback to last_success if downtime_started not available
+          const lastSuccess = parseDate(this.service.last_success);
+          if (lastSuccess && lastSuccess > 0) {
+            const downForSeconds = Math.floor((now - lastSuccess) / 1000);
+            if (downForSeconds > 0 && downForSeconds < 315360000) {
+              return `${downForSeconds} seconds`;
+            }
+          }
+          return 'N/A';
+        }
+      },
+      statusDurationLabel() {
+        if (!this.service) return '';
+        return this.service.online ? 'Up For' : 'Down For';
+      },
+      lastCheckedText() {
+        if (!this.service) return 'N/A';
+        const now = Date.now();
+        
+        // Helper function to safely parse a date string
+        const parseDate = (dateStr) => {
+          if (!dateStr) return null;
+          if (dateStr === '0001-01-01T00:00:00Z' || dateStr === '' || dateStr === null) {
+            return null;
+          }
+          const date = new Date(dateStr);
+          if (isNaN(date.getTime()) || date.getFullYear() < 1970) {
+            return null;
+          }
+          return date.getTime();
+        };
+
+        const lastCheck = parseDate(this.service.last_check);
+        if (lastCheck && lastCheck > 0) {
+          const diffInSeconds = Math.floor((now - lastCheck) / 1000);
+          if (diffInSeconds > 0 && diffInSeconds < 315360000) {
+            return `${diffInSeconds} seconds`;
+          }
+        }
+        // Fallback to last_success if last_check is not available
+        const lastSuccess = parseDate(this.service.last_success);
+        if (lastSuccess && lastSuccess > 0) {
+          const diffInSeconds = Math.floor((now - lastSuccess) / 1000);
+          if (diffInSeconds > 0 && diffInSeconds < 315360000) {
+            return `${diffInSeconds} seconds`;
+          }
+        }
+        return 'Never';
       },
     },
     created() {
