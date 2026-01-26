@@ -23,15 +23,15 @@
                                 backgroundColor: dayData.color,
                                 color: '#ffffff',
                                 fontWeight: '500',
-                                cursor: dayData.isFuture ? 'not-allowed' : 'pointer',
+                                cursor: (dayData.isFuture || !canViewFailures) ? 'not-allowed' : 'pointer',
                                 opacity: dayData.isFuture ? 0.6 : 1,
                                 border: '1px solid rgba(255, 255, 255, 0.1)',
                                 padding: '0.1rem',
                                 textAlign: 'center',
                                 fontSize: '0.65rem'
                             }"
-                            @click="!dayData.isFuture && onDayClick(dayData)"
-                            :title="dayData.tooltip"
+                            @click="!dayData.isFuture && canViewFailures && onDayClick(dayData)"
+                            :title="dayData.isFuture ? dayData.tooltip : (canViewFailures ? dayData.tooltip : 'Login required to view failure details')"
                         >
                             {{ dayData.displayValue }}
                         </td>
@@ -41,7 +41,7 @@
         </div>
 
         <!-- Failure list popout -->
-        <div v-if="selectedDayFailures.length > 0" class="mt-4">
+        <div v-if="selectedDayFailures.length > 0 && canViewFailures" class="mt-4">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Failures on {{ selectedDayDate }}</h5>
@@ -146,6 +146,14 @@
                   if (aVal > bVal) return direction === 'asc' ? 1 : -1
                   return 0
               })
+          },
+          canViewFailures() {
+              // Check if user is logged in
+              const isLoggedIn = this.$store.getters.loggedIn || this.$store.getters.user || this.$store.getters.admin
+              // Check if setting allows unauthenticated users to view failures
+              const core = this.$store.getters.core
+              const allowUnauthenticated = core && core.show_failures_to_unauthenticated
+              return isLoggedIn || allowUnauthenticated
           }
       },
       methods: {
@@ -290,6 +298,10 @@
               return '#28a745' // default green
           },
           async onDayClick(dayData) {
+              // Check if user can view failures
+              if (!this.canViewFailures) {
+                  return
+              }
               if (!dayData.dateStr || dayData.isFuture) {
                   return
               }

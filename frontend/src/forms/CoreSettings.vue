@@ -67,6 +67,19 @@
                 </div>
 
                 <div class="form-group row mt-3">
+                    <label class="col-sm-10 col-form-label">Show failure details to unauthenticated users?</label>
+                    <div class="col-sm-2 float-right">
+                        <span @click="core.show_failures_to_unauthenticated = !!core.show_failures_to_unauthenticated" class="switch" id="show_failures_to_unauthenticated">
+                        <input v-model="core.show_failures_to_unauthenticated" type="checkbox" name="show_failures_to_unauthenticated" class="switch" id="switch-show-failures" :checked="core.show_failures_to_unauthenticated">
+                        <label for="switch-show-failures"></label>
+                      </span>
+                    </div>
+                    <div class="col-12">
+                        <small class="form-text text-muted">By default failure details are only visible to authenticated users. Enable this to allow all visitors to view failure details. WARNING: Will expose check endpoints from error messages!</small>
+                    </div>
+                </div>
+
+                <div class="form-group row mt-3">
                     <label class="col-sm-10 col-form-label">{{ $t('send_reports') }}</label>
                     <div class="col-sm-2 float-right">
                         <span @click="core.allow_reports = !!core.allow_reports" class="switch" id="allow_report">

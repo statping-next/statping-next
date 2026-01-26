@@ -109,6 +109,7 @@ func apiCoreHandler(w http.ResponseWriter, r *http.Request) {
 	if c.DefaultRefreshRate != app.DefaultRefreshRate {
 		app.DefaultRefreshRate = c.DefaultRefreshRate
 	}
+	app.ShowFailuresToUnauthenticated = null.NewNullBool(c.ShowFailuresToUnauthenticated.Bool)
 
 	if err := app.Update(); err != nil {
 		sendErrorJson(err, w, r)

@@ -38,6 +38,7 @@ type Core struct {
 	AllowReports  null.NullBool   `gorm:"column:allow_reports;default:false" json:"allow_reports,omitempty"`
 	DefaultTheme  string          `gorm:"column:default_theme" json:"default_theme,omitempty"`
 	DefaultRefreshRate int        `gorm:"column:default_refresh_rate;default:15" json:"default_refresh_rate,omitempty"`
+	ShowFailuresToUnauthenticated null.NullBool `gorm:"column:show_failures_to_unauthenticated;default:false" json:"show_failures_to_unauthenticated,omitempty"`
 	CreatedAt     time.Time       `gorm:"column:created_at" json:"created_at"`
 	UpdatedAt     time.Time       `gorm:"column:updated_at" json:"updated_at"`
 	Started       time.Time       `gorm:"-" json:"started_on"`
