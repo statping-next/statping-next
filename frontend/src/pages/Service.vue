@@ -1,5 +1,7 @@
 <template>
     <div class="container col-md-7 col-sm-12">
+      <StickyHeader :visible="true"/>
+      
       <div v-if="!ready" class="row mt-5">
         <div class="col-12 text-center">
           <font-awesome-icon icon="circle-notch" size="3x" spin/>
@@ -9,11 +11,7 @@
         </div>
       </div>
 
-        <div v-if="ready && service" class="col-12 mb-4">
-            <!-- Home link -->
-            <div class="mt-2 mb-3">
-                <router-link to="/" class="text-decoration-none font-3">Home</router-link>
-            </div>
+        <div v-if="ready && service" class="col-12 mb-4" style="padding-top: 70px;">
 
             <!-- Service title - centered header -->
             <div class="text-center mb-4">
@@ -125,6 +123,7 @@
   const ServiceHeatmap = () => import(/* webpackChunkName: "service" */ '@/components/Service/ServiceHeatmap')
   const ServiceTopStats = () => import(/* webpackChunkName: "service" */ '@/components/Service/ServiceTopStats')
   const AdvancedChart = () => import(/* webpackChunkName: "service" */ '@/components/Service/AdvancedChart')
+  const StickyHeader = () => import(/* webpackChunkName: "index" */ '@/components/StickyHeader')
 
   import flatPickr from 'vue-flatpickr-component';
   import 'flatpickr/dist/flatpickr.css';
@@ -164,7 +163,8 @@ export default {
         ServiceFailures,
         MessageBlock,
         Checkin,
-        flatPickr
+        flatPickr,
+        StickyHeader
     },
     data() {
         return {

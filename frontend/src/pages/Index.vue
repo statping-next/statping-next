@@ -1,6 +1,7 @@
 <template>
     <div class="container col-md-7 col-sm-12 sm-container">
 
+      <StickyHeader :visible="showStickyHeader"/>
       <Header/>
 
       <div v-if="!loaded" class="row mt-5 mb-5">
@@ -40,6 +41,7 @@ import Api from "@/API";
 
 const Group = () => import(/* webpackChunkName: "index" */ '@/components/Index/Group')
 const Header = () => import(/* webpackChunkName: "index" */ '@/components/Index/Header')
+const StickyHeader = () => import(/* webpackChunkName: "index" */ '@/components/StickyHeader')
 const MessageBlock = () => import(/* webpackChunkName: "index" */ '@/components/Index/MessageBlock')
 const ServiceBlock = () => import(/* webpackChunkName: "index" */ '@/components/Service/ServiceBlock')
 const GroupServiceFailures = () => import(/* webpackChunkName: "index" */ '@/components/Index/GroupServiceFailures')
@@ -55,11 +57,13 @@ export default {
       MessageBlock,
       MessagesIcon,
       Group,
-      Header
+      Header,
+      StickyHeader
     },
     data() {
         return {
             logged_in: false,
+            showStickyHeader: false,
         }
     },
     computed: {
@@ -114,7 +118,17 @@ export default {
         },
         inRange(message) {
             return this.isBetween(this.now(), message.start_on, message.start_on === message.end_on ? this.maxDate().toISOString() : message.end_on)
+        },
+        handleScroll() {
+            // Show sticky header when logo would be fully covered (around 140px)
+            this.showStickyHeader = window.scrollY > 140
         }
+    },
+    mounted() {
+        window.addEventListener('scroll', this.handleScroll)
+    },
+    beforeDestroy() {
+        window.removeEventListener('scroll', this.handleScroll)
     }
 }
 </script>

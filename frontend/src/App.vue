@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <ThemeToggle v-if="$route.path !== '/setup'"/>
     <router-view/>
     <Footer v-if="$route.path !== '/setup'"/>
   </div>
@@ -8,13 +7,11 @@
 
 <script>
   const Footer = () => import(/* webpackChunkName: "index" */ "./components/Index/Footer");
-  const ThemeToggle = () => import(/* webpackChunkName: "index" */ "./components/ThemeToggle");
 
   export default {
     name: 'app',
     components: {
-      Footer,
-      ThemeToggle
+      Footer
     },
     data() {
       return {
