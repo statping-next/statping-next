@@ -1,5 +1,5 @@
 <template>
-    <div class="sticky-header" :class="{ 'active': visible }">
+    <div class="sticky-header" :class="{ 'active': visible }" :style="headerStyle">
         <div class="sticky-header-content">
             <router-link to="/" class="sticky-logo-link" :class="{ 'visible': visible }">
                 <img v-if="core.logo" :src="core.logo" :alt="core.name" class="sticky-logo">
@@ -12,8 +12,8 @@
                     <span v-else class="refresh-badge off">OFF</span>
                 </button>
                 <button @click="toggleTheme" class="btn btn-sm theme-toggle-btn" :title="darkTheme ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
-                    <span v-if="darkTheme">☀️</span>
-                    <span v-else>🌙</span>
+                    <font-awesome-icon v-if="darkTheme" icon="sun" />
+                    <font-awesome-icon v-else icon="moon" />
                 </button>
                 <router-link to="/dashboard" class="btn btn-sm admin-btn" title="Admin Dashboard">
                     <font-awesome-icon icon="cog" />
@@ -32,6 +32,11 @@ export default {
       default: true
     }
   },
+  data() {
+    return {
+      containerWidth: null
+    }
+  },
   computed: {
     core() {
       return this.$store.getters.core
@@ -48,6 +53,14 @@ export default {
       } else {
         return `Auto-refresh: ${this.refreshInterval}s (Click to change)`
       }
+    },
+    headerStyle() {
+      if (this.containerWidth && window.innerWidth >= 768) {
+        return {
+          width: `${this.containerWidth}px`
+        }
+      }
+      return {}
     }
   },
   methods: {
@@ -56,6 +69,33 @@ export default {
     },
     cycleRefresh() {
       this.$store.dispatch('cycleRefreshInterval')
+    },
+    updateWidth() {
+      if (window.innerWidth < 768) {
+        this.containerWidth = null
+        return
+      }
+      const container = document.querySelector('.container.col-md-7')
+      if (container) {
+        this.containerWidth = container.offsetWidth
+      }
+    }
+  },
+  mounted() {
+    this.updateWidth()
+    window.addEventListener('resize', this.updateWidth)
+    this.$nextTick(() => {
+      this.updateWidth()
+    })
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.updateWidth)
+  },
+  watch: {
+    '$route'() {
+      this.$nextTick(() => {
+        this.updateWidth()
+      })
     }
   }
 }
@@ -67,12 +107,17 @@ export default {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 58.333333%; /* Match col-md-7 */
-  max-width: 1012px;
   z-index: 1000;
   background-color: transparent;
   box-shadow: none;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Width is set dynamically via JavaScript to match container.col-md-7 exactly */
+@media (min-width: 768px) {
+  .sticky-header {
+    /* Width set via :style binding */
+  }
 }
 
 @media (max-width: 767px) {
@@ -80,6 +125,11 @@ export default {
     width: 100%;
     left: 0;
     transform: none;
+    max-width: 100%;
+  }
+
+  .sticky-header-content {
+    width: 100%;
     max-width: 100%;
   }
 }
@@ -141,6 +191,10 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   line-height: 1;
+  min-width: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   /* Border and hover colors set by theme classes */
 }
 
@@ -161,6 +215,7 @@ export default {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-width: 40px;
   /* Border and hover colors set by theme classes */
 }
 
@@ -197,6 +252,7 @@ export default {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-width: 40px;
   /* Border and hover colors set by theme classes */
 }
 
