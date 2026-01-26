@@ -46,19 +46,31 @@ export default {
       return this.services.reduce((acc, service) => {
         // Use last_check (actual last check time) instead of last_success (last time it was online)
         const lastCheck = service.last_check ? new Date(service.last_check).getTime() : null;
+        let lastCheckedText = '';
+
         if (lastCheck) {
           const diffInSeconds = Math.floor((now - lastCheck) / 1000);
-          acc[service.id] = `last checked ${diffInSeconds} seconds ago`;
+          lastCheckedText = `last checked ${diffInSeconds} seconds ago`;
         } else {
           // Fallback if last_check is not available
           const lastSuccess = service.last_success ? new Date(service.last_success).getTime() : null;
           if (lastSuccess) {
             const diffInSeconds = Math.floor((now - lastSuccess) / 1000);
-            acc[service.id] = `last checked ${diffInSeconds} seconds ago`;
+            lastCheckedText = `last checked ${diffInSeconds} seconds ago`;
           } else {
-            acc[service.id] = 'never checked';
+            lastCheckedText = 'never checked';
           }
         }
+
+        // For offline services, show "down for" duration before "last checked"
+        if (!service.online && service.last_error) {
+          const lastError = new Date(service.last_error).getTime();
+          const downForSeconds = Math.floor((now - lastError) / 1000);
+          acc[service.id] = `down for ${downForSeconds} seconds      ${lastCheckedText}`;
+        } else {
+          acc[service.id] = lastCheckedText;
+        }
+
         return acc;
       }, {});
     },
