@@ -2,11 +2,13 @@ package services
 
 import (
 	"fmt"
+	"sort"
+	"time"
+
 	"github.com/statping-ng/statping-ng/database"
 	"github.com/statping-ng/statping-ng/types/errors"
 	"github.com/statping-ng/statping-ng/types/metrics"
 	"github.com/statping-ng/statping-ng/utils"
-	"sort"
 )
 
 var (
@@ -101,9 +103,52 @@ func AllInOrder() []Service {
 
 // AllInOrderLite returns services in order without calculating expensive stats
 // This is optimized for the main status page which only needs up/down status
+// For offline services, it loads the downtime start time (first failure after last success)
 func AllInOrderLite() []Service {
 	var services []Service
 	for _, service := range allServices {
+		// For offline services, we need to know when downtime started
+		// If DowntimeStarted is not set (e.g., service was offline on startup),
+		// find the first failure after the last success
+		if !service.Online && service.DowntimeStarted.IsZero() {
+			// Get the last success time
+			lastHit := service.LastHit()
+			lastCheckinHit := service.AllCheckinHits().First()
+			var lastSuccessTime time.Time
+			if lastHit != nil {
+				lastSuccessTime = lastHit.CreatedAt
+			}
+			if lastCheckinHit != nil && lastCheckinHit.CreatedAt.After(lastSuccessTime) {
+				lastSuccessTime = lastCheckinHit.CreatedAt
+			}
+			
+			// Find failures after the last success and get the earliest one
+			if !lastSuccessTime.IsZero() {
+				failuresSince := service.FailuresSince(lastSuccessTime).List()
+				if len(failuresSince) > 0 {
+					// Find the earliest failure by time (not ID)
+					earliest := failuresSince[0]
+					for _, f := range failuresSince {
+						if f.CreatedAt.Before(earliest.CreatedAt) {
+							earliest = f
+						}
+					}
+					service.DowntimeStarted = earliest.CreatedAt
+				} else {
+					// If no failure found after last success, use the most recent failure
+					lastFailure := service.AllFailures().Last()
+					if lastFailure != nil {
+						service.DowntimeStarted = lastFailure.CreatedAt
+					}
+				}
+			} else {
+				// No success found, use the most recent failure as fallback
+				lastFailure := service.AllFailures().Last()
+				if lastFailure != nil {
+					service.DowntimeStarted = lastFailure.CreatedAt
+				}
+			}
+		}
 		// Skip UpdateStats() - only load basic service data
 		// This avoids expensive queries for hits/failures counts, uptime percentages, etc.
 		services = append(services, *service)

@@ -246,7 +246,57 @@ func SelectAllServices(start bool) (map[int64]*Service, error) {
 		// Skip loading failures and stats at startup for better performance
 		// These will be loaded on-demand when needed (e.g., in admin dashboard)
 		// s.Failures = s.AllFailures().LastAmount(limitedFailures)
-		s.prevOnline = true
+		// Set prevOnline based on current Online state, not always true
+		// This ensures DowntimeStarted is only set when service actually transitions from online to offline
+		s.prevOnline = s.Online
+		// Initialize LastCheck to current time if it's zero
+		// This ensures the frontend always has a valid "last checked" time
+		if s.LastCheck.IsZero() {
+			s.LastCheck = utils.Now()
+		}
+		
+		// For offline services, load DowntimeStarted from database so it persists across restarts
+		// This finds the first failure after the last success to determine when downtime started
+		if !s.Online && s.DowntimeStarted.IsZero() {
+			// Get the last success time
+			lastHit := s.LastHit()
+			lastCheckinHit := s.AllCheckinHits().First()
+			var lastSuccessTime time.Time
+			if lastHit != nil {
+				lastSuccessTime = lastHit.CreatedAt
+			}
+			if lastCheckinHit != nil && lastCheckinHit.CreatedAt.After(lastSuccessTime) {
+				lastSuccessTime = lastCheckinHit.CreatedAt
+			}
+			
+			// Find failures after the last success and get the earliest one
+			if !lastSuccessTime.IsZero() {
+				failuresSince := s.FailuresSince(lastSuccessTime).List()
+				if len(failuresSince) > 0 {
+					// Find the earliest failure by time (not ID)
+					earliest := failuresSince[0]
+					for _, f := range failuresSince {
+						if f.CreatedAt.Before(earliest.CreatedAt) {
+							earliest = f
+						}
+					}
+					s.DowntimeStarted = earliest.CreatedAt
+				} else {
+					// If no failure found after last success, use the most recent failure
+					lastFailure := s.AllFailures().Last()
+					if lastFailure != nil {
+						s.DowntimeStarted = lastFailure.CreatedAt
+					}
+				}
+			} else {
+				// No success found, use the most recent failure as fallback
+				lastFailure := s.AllFailures().Last()
+				if lastFailure != nil {
+					s.DowntimeStarted = lastFailure.CreatedAt
+				}
+			}
+		}
+		
 		// Skip UpdateStats() at startup - it's expensive and not needed for basic service checking
 		// Stats will be calculated on-demand when viewing service details
 		// s.UpdateStats()

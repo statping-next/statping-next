@@ -11,7 +11,10 @@
                 <span class="badge text-uppercase float-right" :class="{'bg-success': service.online, 'bg-danger': !service.online }">
                     {{service.online ? $t('online') : $t('offline')}}
                 </span>
-                <span class="text-center font-2 float-right" style="margin-right: 2em" :class="{'text-muted': service.online, 'text-danger': !service.online}">{{smallText[service.id]}}</span>
+                <span class="text-center font-2 float-right" style="margin-right: 2em">
+                  <span v-if="smallText[service.id].downFor" class="text-danger">{{smallText[service.id].downFor}}</span>
+                  <span :class="{'text-muted': service.online, 'text-white': !service.online}">{{smallText[service.id].lastChecked}}</span>
+                </span>
 
             </div>
 
@@ -44,31 +47,85 @@ export default {
     smallText() {
       const now = Date.now();
       return this.services.reduce((acc, service) => {
+        // Helper function to safely parse a date string
+        const parseDate = (dateStr) => {
+          if (!dateStr) return null;
+          // Handle zero time or invalid dates
+          if (dateStr === '0001-01-01T00:00:00Z' || dateStr === '' || dateStr === null) {
+            return null;
+          }
+          const date = new Date(dateStr);
+          // Check if date is valid (not NaN and not in the year 1)
+          if (isNaN(date.getTime()) || date.getFullYear() < 1970) {
+            return null;
+          }
+          return date.getTime();
+        };
+
         // Use last_check (actual last check time) instead of last_success (last time it was online)
-        const lastCheck = service.last_check ? new Date(service.last_check).getTime() : null;
+        const lastCheck = parseDate(service.last_check);
         let lastCheckedText = '';
 
-        if (lastCheck) {
+        if (lastCheck && lastCheck > 0) {
           const diffInSeconds = Math.floor((now - lastCheck) / 1000);
-          lastCheckedText = `last checked ${diffInSeconds} seconds ago`;
+          // Sanity check: if the difference is more than 10 years, something is wrong
+          if (diffInSeconds > 0 && diffInSeconds < 315360000) {
+            lastCheckedText = `last checked ${diffInSeconds} seconds ago`;
+          } else {
+            // Fallback to last_success if last_check is invalid
+            const lastSuccess = parseDate(service.last_success);
+            if (lastSuccess && lastSuccess > 0) {
+              const diffInSeconds = Math.floor((now - lastSuccess) / 1000);
+              if (diffInSeconds > 0 && diffInSeconds < 315360000) {
+                lastCheckedText = `last checked ${diffInSeconds} seconds ago`;
+              } else {
+                lastCheckedText = 'never checked';
+              }
+            } else {
+              lastCheckedText = 'never checked';
+            }
+          }
         } else {
           // Fallback if last_check is not available
-          const lastSuccess = service.last_success ? new Date(service.last_success).getTime() : null;
-          if (lastSuccess) {
+          const lastSuccess = parseDate(service.last_success);
+          if (lastSuccess && lastSuccess > 0) {
             const diffInSeconds = Math.floor((now - lastSuccess) / 1000);
-            lastCheckedText = `last checked ${diffInSeconds} seconds ago`;
+            if (diffInSeconds > 0 && diffInSeconds < 315360000) {
+              lastCheckedText = `last checked ${diffInSeconds} seconds ago`;
+            } else {
+              lastCheckedText = 'never checked';
+            }
           } else {
             lastCheckedText = 'never checked';
           }
         }
 
         // For offline services, show "down for" duration before "last checked"
-        if (!service.online && service.last_error) {
-          const lastError = new Date(service.last_error).getTime();
-          const downForSeconds = Math.floor((now - lastError) / 1000);
-          acc[service.id] = `down for ${downForSeconds} seconds      ${lastCheckedText}`;
+        // "down for" = time since downtime started (first failure that started the downtime)
+        // "last checked" = time since most recent check (regardless of status)
+        // Check if service is offline (handle both boolean false and string "false")
+        const isOffline = service.online === false || service.online === 'false' || service.online === 0;
+        const downtimeStarted = parseDate(service.downtime_started);
+        
+        if (isOffline && downtimeStarted && downtimeStarted > 0) {
+          const downForSeconds = Math.floor((now - downtimeStarted) / 1000);
+          // Sanity check for downForSeconds too
+          if (downForSeconds > 0 && downForSeconds < 315360000) {
+            acc[service.id] = {
+              downFor: `down for ${downForSeconds} seconds      `,
+              lastChecked: lastCheckedText
+            };
+          } else {
+            acc[service.id] = {
+              downFor: '',
+              lastChecked: lastCheckedText
+            };
+          }
         } else {
-          acc[service.id] = lastCheckedText;
+          acc[service.id] = {
+            downFor: '',
+            lastChecked: lastCheckedText
+          };
         }
 
         return acc;

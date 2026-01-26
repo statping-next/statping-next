@@ -631,6 +631,8 @@ func CheckHttp(s *Service, record bool) (*Service, error) {
 func RecordSuccess(s *Service) {
 	s.LastOnline = utils.Now()
 	s.Online = true
+	// Clear downtime started timestamp since service is now online
+	s.DowntimeStarted = time.Time{}
 	hit := &hits.Hit{
 		Service:   s.Id,
 		Latency:   s.Latency,
@@ -653,6 +655,8 @@ func RecordSuccess(s *Service) {
 func RecordCheckinSuccess(s *Service, checkin *checkins.Checkin, hit *checkins.CheckinHit, latency int64) {
 	s.LastOnline = hit.CreatedAt
 	s.Online = true
+	// Clear downtime started timestamp since service is now online
+	s.DowntimeStarted = time.Time{}
 	log.WithFields(utils.ToFields(hit, s)).Infoln(
 		fmt.Sprintf("Service #%d '%v' Successful Checkin: Difference to expected checkin: %s | Interval: %d seconds", s.Id, s.Name, utils.HumanMicro(latency), s.Interval))
 	s.LastLookupTime = latency
@@ -665,6 +669,13 @@ func RecordCheckinSuccess(s *Service, checkin *checkins.Checkin, hit *checkins.C
 // RecordFailure will create a new 'Failure' record in the database for a offline service
 func RecordFailure(s *Service, issue, reason string) {
 	s.LastOffline = utils.Now()
+	
+	// Only set DowntimeStarted if it hasn't been set yet (is zero)
+	// This ensures we don't reset the downtime start time on subsequent failures
+	// The downtime start time should only be set once when the service first goes down
+	if s.DowntimeStarted.IsZero() {
+		s.DowntimeStarted = utils.Now()
+	}
 
 	fail := &failures.Failure{
 		Service:   s.Id,
