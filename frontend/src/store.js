@@ -33,6 +33,7 @@ export default new Vuex.Store({
     user: false,
     loggedIn: false,
     darkTheme: localStorage.getItem('darkTheme') === 'true' || false,
+    refreshInterval: parseInt(localStorage.getItem('refreshInterval')) || 15, // 0 = off, 15 = 15s, 60 = 60s
     modal: {
       visible: false,
       title: "Modal Header",
@@ -60,6 +61,7 @@ export default new Vuex.Store({
     loggedIn: state => state.loggedIn,
     modal: state => state.modal,
     darkTheme: state => state.darkTheme,
+    refreshInterval: state => state.refreshInterval,
 
     isAdmin: state => state.admin,
     isUser: state => state.user,
@@ -168,6 +170,10 @@ export default new Vuex.Store({
         document.body.classList.add('light-theme')
       }
     },
+    setRefreshInterval(state, interval) {
+      state.refreshInterval = interval
+      localStorage.setItem('refreshInterval', interval)
+    },
     setOAuth(state, oauth) {
       state.oauth = oauth
     },
@@ -193,6 +199,12 @@ export default new Vuex.Store({
     },
     toggleTheme(context) {
       context.commit('setDarkTheme', !context.state.darkTheme)
+    },
+    cycleRefreshInterval(context) {
+      const current = context.state.refreshInterval
+      // Cycle: 0 (off) -> 15 -> 60 -> 0
+      const next = current === 0 ? 15 : current === 15 ? 60 : 0
+      context.commit('setRefreshInterval', next)
     },
     async loadRequired(context) {
       const groups = await Api.groups()

@@ -17,11 +17,27 @@
       return {
         loaded: false,
         version: "",
+        refreshTimer: null
       }
     },
     computed: {
       core() {
         return this.$store.getters.core
+      },
+      refreshInterval() {
+        return this.$store.getters.refreshInterval
+      },
+      isAdmin() {
+        return this.$store.state.admin
+      }
+    },
+    watch: {
+      refreshInterval(newInterval, oldInterval) {
+        this.setupRefreshTimer()
+      },
+      '$route'(to, from) {
+        // Restart timer when route changes
+        this.setupRefreshTimer()
       }
     },
     created() {
@@ -51,12 +67,42 @@
         this.loaded = true
       }
     },
+    methods: {
+      setupRefreshTimer() {
+        // Clear existing timer
+        if (this.refreshTimer) {
+          clearInterval(this.refreshTimer)
+          this.refreshTimer = null
+        }
+
+        // Set up new timer if interval is active
+        if (this.refreshInterval > 0 && this.$route.path !== '/setup') {
+          this.refreshTimer = setInterval(() => {
+            // Refresh data based on admin status
+            if (this.isAdmin) {
+              this.$store.dispatch('loadAdmin')
+            } else {
+              this.$store.dispatch('loadRequired')
+            }
+          }, this.refreshInterval * 1000)
+        }
+      }
+    },
     async mounted() {
       if (this.$route.path !== '/setup') {
         if (this.$store.state.admin) {
           this.logged_in = true
           // await this.$store.dispatch('loadAdmin')
         }
+      }
+      // Set up initial refresh timer
+      this.setupRefreshTimer()
+    },
+    beforeDestroy() {
+      // Clean up timer on component destroy
+      if (this.refreshTimer) {
+        clearInterval(this.refreshTimer)
+        this.refreshTimer = null
       }
     }
   }

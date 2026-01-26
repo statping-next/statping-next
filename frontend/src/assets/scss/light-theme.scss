@@ -80,6 +80,22 @@ body.light-theme {
     background: rgba(0, 0, 0, 0.05) !important;
   }
 
+  .refresh-btn {
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: #2a2a2a !important;
+  }
+
+  .refresh-btn:hover {
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  .refresh-badge {
+    color: #2a2a2a !important;
+    -webkit-text-stroke: 3px #ffffff;
+    text-stroke: 3px #ffffff;
+    paint-order: stroke fill;
+  }
+
   .admin-btn {
     border: 1px solid rgba(0, 0, 0, 0.1) !important;
     color: #2a2a2a !important;

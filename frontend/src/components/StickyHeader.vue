@@ -6,6 +6,11 @@
                 <span v-else class="sticky-title">{{core.name}}</span>
             </router-link>
             <div class="sticky-controls">
+                <button @click="cycleRefresh" class="btn btn-sm refresh-btn" :title="refreshTitle">
+                    <font-awesome-icon icon="sync-alt" />
+                    <span v-if="refreshInterval > 0" class="refresh-badge">{{refreshInterval}}s</span>
+                    <span v-else class="refresh-badge off">OFF</span>
+                </button>
                 <button @click="toggleTheme" class="btn btn-sm theme-toggle-btn" :title="darkTheme ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
                     <span v-if="darkTheme">☀️</span>
                     <span v-else>🌙</span>
@@ -33,11 +38,24 @@ export default {
     },
     darkTheme() {
       return this.$store.getters.darkTheme
+    },
+    refreshInterval() {
+      return this.$store.getters.refreshInterval
+    },
+    refreshTitle() {
+      if (this.refreshInterval === 0) {
+        return 'Auto-refresh: OFF (Click to enable)'
+      } else {
+        return `Auto-refresh: ${this.refreshInterval}s (Click to change)`
+      }
     }
   },
   methods: {
     toggleTheme() {
       this.$store.dispatch('toggleTheme')
+    },
+    cycleRefresh() {
+      this.$store.dispatch('cycleRefreshInterval')
     }
   }
 }
@@ -131,6 +149,42 @@ export default {
   /* Background set by theme classes */
 }
 
+.refresh-btn {
+  background: transparent;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  line-height: 1;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Border and hover colors set by theme classes */
+}
+
+.refresh-btn:hover {
+  transform: scale(1.1);
+  /* Background set by theme classes */
+}
+
+.refresh-badge {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 1;
+  pointer-events: none;
+  padding-right: 4px;
+  padding-bottom: 4px;
+}
+
+.refresh-badge.off {
+  font-size: 9px;
+}
+
 .admin-btn {
   background: transparent;
   border-radius: 8px;
@@ -158,20 +212,25 @@ export default {
     padding: 8px 15px;
     max-width: 100%;
   }
-  
+
   .sticky-logo {
     height: 35px;
   }
-  
+
   .sticky-controls {
     margin-right: 0;
   }
-  
+
   .theme-toggle-btn {
     padding: 8px 12px;
     font-size: 18px;
   }
-  
+
+  .refresh-btn {
+    padding: 8px 12px;
+    font-size: 18px;
+  }
+
   .admin-btn {
     padding: 8px 12px;
     font-size: 18px;
