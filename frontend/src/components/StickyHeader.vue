@@ -1,7 +1,7 @@
 <template>
-    <div class="sticky-header" :class="{ 'visible': visible }">
+    <div class="sticky-header" :class="{ 'active': visible }">
         <div class="sticky-header-content">
-            <router-link to="/" class="sticky-logo-link">
+            <router-link to="/" class="sticky-logo-link" :class="{ 'visible': visible }">
                 <img v-if="core.logo" :src="core.logo" :alt="core.name" class="sticky-logo">
                 <span v-else class="sticky-title">{{core.name}}</span>
             </router-link>
@@ -47,14 +47,14 @@ export default {
   left: 0;
   right: 0;
   z-index: 1000;
-  background-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transform: translateY(-100%);
-  transition: transform 0.3s ease;
+  background-color: transparent;
+  box-shadow: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.sticky-header.visible {
-  transform: translateY(0);
+.sticky-header.active {
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .sticky-header-content {
@@ -73,6 +73,16 @@ export default {
   text-decoration: none;
   color: inherit;
   margin-left: 0;
+  opacity: 0;
+  transform: translate(20px, 20px);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sticky-logo-link.visible {
+  opacity: 1;
+  transform: translate(0, 0);
+  pointer-events: auto;
 }
 
 .sticky-logo {
@@ -110,6 +120,11 @@ export default {
 
 /* Dark theme */
 .dark-theme .sticky-header {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.dark-theme .sticky-header.active {
   background-color: #05070a;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
