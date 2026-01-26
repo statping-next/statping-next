@@ -10,12 +10,16 @@ export default {
   name: 'MessagesIcon',
     props: {
         messages: {
-            type: Object,
-            required: true,
+            type: [Array, Object],
+            required: false,
+            default: () => []
         }
     },
     methods: {
         activeMessages(msgs) {
+            if (!msgs || !Array.isArray(msgs)) {
+                return 0
+            }
             return msgs.filter(m => this.isAfter(this.now(), m.start_on) && this.isBefore(this.now(), m.end_on)).length
         }
     }

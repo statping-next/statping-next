@@ -79,7 +79,11 @@ export default {
           return this.$store.getters.core
         },
         messages() {
-            return this.$store.getters.messages.filter(m => this.inRange(m) && m.service === 0)
+            const msgs = this.$store.getters.messages
+            if (!msgs || !Array.isArray(msgs)) {
+                return []
+            }
+            return msgs.filter(m => this.inRange(m) && m.service === 0)
         },
         groups() {
             return this.$store.getters.groupsInOrder

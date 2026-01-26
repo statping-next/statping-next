@@ -62,7 +62,12 @@ export default new Vuex.Store({
     isAdmin: state => state.admin,
     isUser: state => state.user,
 
-    globalMessages: state => state.messages.filter(s => !s.service || s.service === 0),
+    globalMessages: state => {
+      if (!state.messages || !Array.isArray(state.messages)) {
+        return []
+      }
+      return state.messages.filter(s => !s.service || s.service === 0)
+    },
     servicesInOrder: state => state.services.sort((a, b) => a.order_id - b.order_id),
     servicesNoGroup: state => state.services.filter(g => g.group_id === 0).sort((a, b) => a.order_id - b.order_id),
     groupsInOrder: state => state.groups.sort((a, b) => a.order_id - b.order_id),
@@ -85,6 +90,9 @@ export default new Vuex.Store({
       return state.services.filter(s => s.group_id === id).sort((a, b) => a.order_id - b.order_id)
     },
     serviceMessages: (state) => (id) => {
+      if (!state.messages || !Array.isArray(state.messages)) {
+        return []
+      }
       return state.messages.filter(s => s.service === id)
     },
     onlineServices: (state) => (online) => {
