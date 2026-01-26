@@ -24,6 +24,15 @@
         return this.$store.getters.core
       }
     },
+    created() {
+      // Apply theme immediately on app creation
+      const darkTheme = localStorage.getItem('darkTheme') === 'true'
+      if (darkTheme) {
+        document.body.classList.add('dark-theme')
+      } else {
+        document.body.classList.add('light-theme')
+      }
+    },
     async beforeMount() {
       await this.$store.dispatch('loadCore')
 

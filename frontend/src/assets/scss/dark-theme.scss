@@ -37,7 +37,7 @@ body.dark-theme {
   }
 
   .card {
-    background-color: #15171A;
+    background-color: #0f1114;
   }
 
   .card-body H4 A, .card-title A {
@@ -53,7 +53,7 @@ body.dark-theme {
   }
 
   .list-group-item {
-    background-color: #15171A;
+    background-color: #0f1114;
   }
 
   .list-group-item:HOVER, .list-group-item-action:hover {
@@ -65,7 +65,28 @@ body.dark-theme {
   }
 
   .container, .login_container {
-    background-color: #05070A;
+    background-color: #14161A;
+    /* Lightening drop shadow (inverse of darkening) - sides only */
+    box-shadow: -0.5rem 0 1rem rgba(255, 255, 255, 0.08), 0.5rem 0 1rem rgba(255, 255, 255, 0.08) !important;
+  }
+
+  /* Sticky Header - override scoped styles */
+  .sticky-header.active {
+    background-color: #14161A !important;
+    /* No shadow - blends seamlessly with container */
+    box-shadow: none !important;
+  }
+
+  .sticky-title {
+    color: #ffffff !important;
+  }
+
+  .theme-toggle-btn {
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .theme-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
   }
 
   .footer {
@@ -193,7 +214,7 @@ body.dark-theme {
     }
 
     .card {
-      background-color: #15171A;
+      background-color: #0f1114;
     }
   }
 }

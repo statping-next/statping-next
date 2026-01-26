@@ -44,27 +44,37 @@ export default {
 .sticky-header {
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 58.333333%; /* Match col-md-7 */
+  max-width: 1012px;
   z-index: 1000;
   background-color: transparent;
   box-shadow: none;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+@media (max-width: 767px) {
+  .sticky-header {
+    width: 100%;
+    left: 0;
+    transform: none;
+    max-width: 100%;
+  }
+}
+
 .sticky-header.active {
-  background-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* Background and shadow set by theme classes */
 }
 
 .sticky-header-content {
   max-width: 1012px;
   margin: 0 auto;
-  padding: 10px 15px;
+  padding: 1em 1em;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 58.333333%; /* Match col-md-7 */
+  width: 100%;
 }
 
 .sticky-logo-link {
@@ -93,52 +103,29 @@ export default {
 .sticky-title {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #4e4e4e;
+  /* Color set by theme classes */
 }
 
 .sticky-controls {
   display: flex;
   gap: 10px;
-  margin-right: 1em;
+  margin-right: 0;
 }
 
 .theme-toggle-btn {
   background: transparent;
-  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   padding: 6px 10px;
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
   line-height: 1;
+  /* Border and hover colors set by theme classes */
 }
 
 .theme-toggle-btn:hover {
-  background: rgba(0, 0, 0, 0.05);
   transform: scale(1.1);
-}
-
-/* Dark theme */
-.dark-theme .sticky-header {
-  background-color: transparent;
-  box-shadow: none;
-}
-
-.dark-theme .sticky-header.active {
-  background-color: #05070a;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-}
-
-.dark-theme .sticky-title {
-  color: #ffffff;
-}
-
-.dark-theme .theme-toggle-btn {
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.dark-theme .theme-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  /* Background set by theme classes */
 }
 
 /* Mobile adjustments */
@@ -146,6 +133,7 @@ export default {
   .sticky-header-content {
     width: 100%;
     padding: 8px 15px;
+    max-width: 100%;
   }
   
   .sticky-logo {

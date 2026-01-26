@@ -161,9 +161,11 @@ export default new Vuex.Store({
       localStorage.setItem('darkTheme', darkTheme)
       // Apply theme to body element
       if (darkTheme) {
+        document.body.classList.remove('light-theme')
         document.body.classList.add('dark-theme')
       } else {
         document.body.classList.remove('dark-theme')
+        document.body.classList.add('light-theme')
       }
     },
     setOAuth(state, oauth) {
