@@ -41,6 +41,11 @@ func ServiceCheckQueue(s *Service, record bool) {
 	s.Start()
 	s.Checkpoint = utils.Now()
 	s.SleepDuration = (time.Duration(s.Id) * 100) * time.Millisecond
+	// Initialize LastCheck to current time so it's never zero
+	// This ensures the frontend always has a valid "last checked" time
+	if s.LastCheck.IsZero() {
+		s.LastCheck = utils.Now()
+	}
 
 CheckLoop:
 	for {

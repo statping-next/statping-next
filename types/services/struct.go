@@ -54,7 +54,7 @@ type Service struct {
 	LastStatusCode      int                   `gorm:"-" json:"status_code" yaml:"-"`
 	LastLookupTime      int64                 `gorm:"-" json:"-" yaml:"-"`
 	LastLatency         int64                 `gorm:"-" json:"-" yaml:"-"`
-	LastCheck           time.Time             `gorm:"-" json:"-" yaml:"-"`
+	LastCheck           time.Time             `gorm:"-" json:"last_check" yaml:"-"`
 	LastOnline          time.Time             `gorm:"-" json:"last_success" yaml:"-"`
 	LastOffline         time.Time             `gorm:"-" json:"last_error" yaml:"-"`
 	Stats               *Stats                `gorm:"-" json:"stats,omitempty" yaml:"-"`
