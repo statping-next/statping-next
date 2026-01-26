@@ -56,6 +56,16 @@
                     </select>
                 </div>
 
+                <div class="form-group">
+                    <label>Default Refresh Rate</label>
+                    <select v-model="core.default_refresh_rate" class="form-control">
+                        <option :value="15">15 seconds</option>
+                        <option :value="60">60 seconds</option>
+                        <option :value="0">Off</option>
+                    </select>
+                    <small class="form-text text-muted">Default auto-refresh interval for new users. Users can override this in their browser.</small>
+                </div>
+
                 <div class="form-group row mt-3">
                     <label class="col-sm-10 col-form-label">{{ $t('send_reports') }}</label>
                     <div class="col-sm-2 float-right">

@@ -193,9 +193,30 @@ export default new Vuex.Store({
       context.commit('setAdmin', token)
       context.commit('setCore', core)
       context.commit('setUser', token !== undefined)
-      // Apply saved theme on load
-      const darkTheme = localStorage.getItem('darkTheme') === 'true'
+
+      // Apply theme: use localStorage if set, otherwise use core default
+      const savedTheme = localStorage.getItem('darkTheme')
+      let darkTheme = false
+      if (savedTheme !== null) {
+        // User has a saved preference
+        darkTheme = savedTheme === 'true'
+      } else if (core.default_theme) {
+        // Use instance default if no user preference
+        darkTheme = core.default_theme === 'dark'
+      }
       context.commit('setDarkTheme', darkTheme)
+
+      // Apply refresh rate: use localStorage if set, otherwise use core default
+      const savedRefresh = localStorage.getItem('refreshInterval')
+      let refreshInterval = 15
+      if (savedRefresh !== null) {
+        // User has a saved preference
+        refreshInterval = parseInt(savedRefresh) || 15
+      } else if (core.default_refresh_rate !== undefined) {
+        // Use instance default if no user preference
+        refreshInterval = core.default_refresh_rate || 15
+      }
+      context.commit('setRefreshInterval', refreshInterval)
     },
     toggleTheme(context) {
       context.commit('setDarkTheme', !context.state.darkTheme)

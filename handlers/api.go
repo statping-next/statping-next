@@ -101,6 +101,14 @@ func apiCoreHandler(w http.ResponseWriter, r *http.Request) {
 	utils.Params.Set("LANGUAGE", app.Language)
 	app.UseCdn = null.NewNullBool(c.UseCdn.Bool)
 	app.AllowReports = null.NewNullBool(c.AllowReports.Bool)
+	// Always update DefaultTheme (can be empty string for system default)
+	if c.DefaultTheme != app.DefaultTheme {
+		app.DefaultTheme = c.DefaultTheme
+	}
+	// Always update DefaultRefreshRate (can be 0 for off)
+	if c.DefaultRefreshRate != app.DefaultRefreshRate {
+		app.DefaultRefreshRate = c.DefaultRefreshRate
+	}
 
 	if err := app.Update(); err != nil {
 		sendErrorJson(err, w, r)

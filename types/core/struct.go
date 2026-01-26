@@ -36,6 +36,8 @@ type Core struct {
 	MigrationId   int64           `gorm:"column:migration_id" json:"migration_id,omitempty"`
 	UseCdn        null.NullBool   `gorm:"column:use_cdn;default:false" json:"using_cdn,omitempty"`
 	AllowReports  null.NullBool   `gorm:"column:allow_reports;default:false" json:"allow_reports,omitempty"`
+	DefaultTheme  string          `gorm:"column:default_theme" json:"default_theme,omitempty"`
+	DefaultRefreshRate int        `gorm:"column:default_refresh_rate;default:15" json:"default_refresh_rate,omitempty"`
 	CreatedAt     time.Time       `gorm:"column:created_at" json:"created_at"`
 	UpdatedAt     time.Time       `gorm:"column:updated_at" json:"updated_at"`
 	Started       time.Time       `gorm:"-" json:"started_on"`

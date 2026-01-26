@@ -1,5 +1,20 @@
 <template>
     <div class="card mb-5">
+        <div class="card-header">Default Theme</div>
+        <div class="card-body">
+            <div class="form-group">
+                <label>Default Theme for New Users</label>
+                <select v-model="core.default_theme" @change="saveDefaultTheme" class="form-control">
+                    <option value="">System Default (Light)</option>
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                </select>
+                <small class="form-text text-muted">This theme will be used as the default for users who haven't set a preference. Users can override this in their browser.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-5">
         <div class="card-header">{{$t('theme_editor')}}</div>
         <div class="card-body">
         <div v-if="error" class="alert alert-danger mt-3" style="white-space: pre-line;">
@@ -89,7 +104,7 @@ import('codemirror/mode/css/css.js')
               error: null,
               directory: null,
               tab: "vars",
-              loaded: false,
+              loaded: true,
               pending: false,
               cmOptions: {
                   height: 700,
@@ -107,6 +122,11 @@ import('codemirror/mode/css/css.js')
           this.changeTab('vars')
       },
       methods: {
+        async saveDefaultTheme() {
+          const c = this.core
+          await Api.core_save(c)
+          this.$store.commit('setCore', c)
+        },
         visible(isVisible, entry) {
           if (isVisible) {
             this.$refs.vars.codemirror.refresh()
