@@ -116,25 +116,33 @@
               this.ready = true
           },
           async loadMonthData(monthStart, monthEnd, today) {
-              const data = await Api.service_failures_data(
-                  this.service.id, 
-                  this.toUnix(monthStart), 
-                  this.toUnix(monthEnd), 
-                  "24h", 
-                  true
+              // Fetch individual failures instead of pre-aggregated data
+              // This ensures consistency between display and click handler
+              const failures = await Api.service_failures(
+                  this.service.id,
+                  this.toUnix(monthStart),
+                  this.toUnix(monthEnd),
+                  999999,
+                  0
               )
               
-              // Create a map of existing data by day of month
+              // Group failures by day of month in local timezone
               const dataMap = {}
-              if (data) {
-                  data.forEach((d) => {
-                      const date = this.parseISO(d.timeframe)
+              if (failures && failures.length > 0) {
+                  failures.forEach((failure) => {
+                      const date = this.parseISO(failure.created_at)
                       const dayOfMonth = date.getDate()
-                      dataMap[dayOfMonth] = {
-                          amount: d.amount,
-                          date: d.timeframe,
-                          dateObj: date
+                      
+                      if (!dataMap[dayOfMonth]) {
+                          dataMap[dayOfMonth] = {
+                              amount: 0,
+                              date: date.toISOString(),
+                              dateObj: date,
+                              failures: []
+                          }
                       }
+                      dataMap[dayOfMonth].amount++
+                      dataMap[dayOfMonth].failures.push(failure)
                   })
               }
               
@@ -143,6 +151,7 @@
               const days = []
               
               for (let day = 1; day <= daysInMonth; day++) {
+                  // Create date in local timezone for display
                   const testDate = new Date(monthStart.getFullYear(), monthStart.getMonth(), day)
                   const dateStartOfDay = this.beginningOf('day', testDate)
                   const isFuture = dateStartOfDay > today
@@ -235,7 +244,7 @@
               }
               
               try {
-                  // Get the start and end of the selected day
+                  // Get the start and end of the selected day in local timezone
                   const dayStart = this.beginningOf('day', dayData.dateObj)
                   const dayEnd = this.endOf('day', dayData.dateObj)
                   
