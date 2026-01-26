@@ -136,7 +136,10 @@ A {
   /* No transition - instant color change to prevent any perceived movement */
   transform: none !important;
   margin: 0 !important;
-  padding: inherit !important;
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important;
   position: relative !important;
   z-index: 0 !important;
   border: inherit !important;
@@ -156,12 +159,16 @@ a.list-group-item-action:hover {
   /* Explicitly prevent any movement or transforms */
   transform: none !important;
   margin: 0 !important;
-  padding: inherit !important;
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important;
   position: relative !important;
   z-index: 0 !important;
   box-shadow: none !important;
   border: inherit !important;
   outline: none !important;
+  width: auto !important;
   /* Override Bootstrap's default z-index: 1 */
   will-change: auto !important;
   backface-visibility: visible !important;
@@ -177,16 +184,20 @@ a.list-group-item-action,
 .list-group a.list-group-item-action {
   color: inherit;
   z-index: 0 !important;
-  
+
   &:hover,
   &:focus {
     color: inherit;
     /* Prevent any movement */
     transform: none !important;
     margin: 0 !important;
-    padding: inherit !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
     position: relative !important;
     z-index: 0 !important;
+    width: auto !important;
     box-shadow: none !important;
     border: inherit !important;
     outline: none !important;

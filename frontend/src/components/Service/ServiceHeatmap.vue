@@ -4,7 +4,7 @@
             <font-awesome-icon icon="circle-notch" spin/>
             <span class="ml-2">Loading...</span>
         </div>
-        
+
         <div v-if="ready" style="margin-bottom: 1rem;">
             <table style="width: 100%; border-collapse: collapse; font-size: 0.65rem; table-layout: fixed;">
                 <thead>
@@ -39,7 +39,7 @@
                 </tbody>
             </table>
         </div>
-        
+
         <!-- Failure list popout -->
         <div v-if="selectedDayFailures.length > 0" class="mt-4">
             <div class="card">
@@ -116,31 +116,31 @@
               if (!this.selectedDayFailures || this.selectedDayFailures.length === 0) {
                   return []
               }
-              
+
               const failures = [...this.selectedDayFailures]
               const column = this.sortColumn
               const direction = this.sortDirection
-              
+
               return failures.sort((a, b) => {
                   let aVal = a[column]
                   let bVal = b[column]
-                  
+
                   // Handle null/undefined values
                   if (aVal === null || aVal === undefined) aVal = ''
                   if (bVal === null || bVal === undefined) bVal = ''
-                  
+
                   // For time field, parse as date
                   if (column === 'created_at') {
                       aVal = new Date(aVal).getTime()
                       bVal = new Date(bVal).getTime()
                   }
-                  
+
                   // For numeric fields
                   if (column === 'ping_time' || column === 'error_code') {
                       aVal = Number(aVal) || 0
                       bVal = Number(bVal) || 0
                   }
-                  
+
                   // Compare
                   if (aVal < bVal) return direction === 'asc' ? -1 : 1
                   if (aVal > bVal) return direction === 'asc' ? 1 : -1
@@ -176,14 +176,14 @@
                   999999,
                   0
               )
-              
+
               // Group failures by day of month in local timezone
               const dataMap = {}
               if (failures && failures.length > 0) {
                   failures.forEach((failure) => {
                       const date = this.parseISO(failure.created_at)
                       const dayOfMonth = date.getDate()
-                      
+
                       if (!dataMap[dayOfMonth]) {
                           dataMap[dayOfMonth] = {
                               amount: 0,
@@ -196,19 +196,19 @@
                       dataMap[dayOfMonth].failures.push(failure)
                   })
               }
-              
+
               // Build days array for this month
               const daysInMonth = this.lastDayOfMonth(monthStart).getDate()
               const days = []
-              
+
               for (let day = 1; day <= daysInMonth; day++) {
                   // Create date in local timezone for display
                   const testDate = new Date(monthStart.getFullYear(), monthStart.getMonth(), day)
                   const dateStartOfDay = this.beginningOf('day', testDate)
                   const isFuture = dateStartOfDay > today
-                  
+
                   let value, dateStr, dateObj
-                  
+
                   if (dataMap[day]) {
                       value = isFuture ? -1 : dataMap[day].amount
                       dateStr = dataMap[day].date
@@ -218,21 +218,21 @@
                       dateStr = testDate.toISOString()
                       dateObj = testDate
                   }
-                  
+
                   const color = this.getColorForValue(value)
                   const displayValue = value === -1 ? 'F' : value
-                  
+
                   const formattedDate = dateObj.toLocaleDateString('en-us', {
                       weekday: 'long',
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
                   })
-                  
+
                   const tooltip = isFuture 
                       ? `Future Date: ${formattedDate}`
                       : `${value} ${value === 1 ? 'Failure' : 'Failures'}: ${formattedDate}`
-                  
+
                   days.push({
                       day: day,
                       value: value,
@@ -244,7 +244,7 @@
                       tooltip: tooltip
                   })
               }
-              
+
               // Fill remaining days up to 31 with empty cells
               for (let day = daysInMonth + 1; day <= 31; day++) {
                   days.push({
@@ -258,7 +258,7 @@
                       tooltip: ''
                   })
               }
-              
+
               return {
                   monthName: monthStart.toLocaleString('en-us', { month: 'long' }),
                   monthStart: monthStart,
@@ -269,12 +269,12 @@
               if (value === null || value === undefined) {
                   return 'transparent'
               }
-              
+
               const numValue = Number(value)
               if (isNaN(numValue)) {
                   return '#28a745' // default green
               }
-              
+
               if (numValue === -1) {
                   return '#666666' // grey for future
               } else if (numValue === 0) {
@@ -286,26 +286,26 @@
               } else if (numValue >= 11) {
                   return '#dc3545' // red for high
               }
-              
+
               return '#28a745' // default green
           },
           async onDayClick(dayData) {
               if (!dayData.dateStr || dayData.isFuture) {
                   return
               }
-              
+
               try {
                   // Get the start and end of the selected day in local timezone
                   const dayStart = this.beginningOf('day', dayData.dateObj)
                   const dayEnd = this.endOf('day', dayData.dateObj)
-                  
+
                   // Fetch failures for this specific day
                   const failures = await Api.service_failures(
                       this.service.id,
                       this.toUnix(dayStart),
                       this.toUnix(dayEnd)
                   )
-                  
+
                   this.selectedDayFailures = failures || []
                   this.selectedDayDate = dayData.dateObj.toLocaleDateString('en-us', {
                       weekday: 'long',

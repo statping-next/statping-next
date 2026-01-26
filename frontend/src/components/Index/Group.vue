@@ -108,7 +108,7 @@ export default {
         // Check if service is offline (handle both boolean false and string "false")
         const isOffline = service.online === false || service.online === 'false' || service.online === 0;
         const downtimeStarted = parseDate(service.downtime_started);
-        
+
         if (isOffline && downtimeStarted && downtimeStarted > 0) {
           const downForSeconds = Math.floor((now - downtimeStarted) / 1000);
           // Sanity check for downForSeconds too

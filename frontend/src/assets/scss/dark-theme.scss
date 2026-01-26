@@ -1,11 +1,18 @@
 /* Dark Theme */
 body.dark-theme {
-  background-color: #05070A;
+  background-color: #05070A !important;
   color: #ffffff;
+  min-height: 100vh;
 
   HTML, BODY {
-    background-color: #05070A;
+    background-color: #05070A !important;
     color: #ffffff;
+    min-height: 100vh;
+  }
+
+  #app {
+    background-color: #05070A !important;
+    min-height: 100vh;
   }
 
   A {
@@ -59,6 +66,10 @@ body.dark-theme {
 
   .container, .login_container {
     background-color: #05070A;
+  }
+
+  .footer {
+    background-color: #05070A !important;
   }
 
   .footer .links {

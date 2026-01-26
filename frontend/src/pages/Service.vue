@@ -415,7 +415,7 @@ export default {
       statusDurationText() {
         if (!this.service) return '';
         const now = Date.now();
-        
+
         // Helper function to safely parse a date string
         const parseDate = (dateStr) => {
           if (!dateStr) return null;
@@ -474,7 +474,7 @@ export default {
       lastCheckedText() {
         if (!this.service) return 'N/A';
         const now = Date.now();
-        
+
         // Helper function to safely parse a date string
         const parseDate = (dateStr) => {
           if (!dateStr) return null;
@@ -588,7 +588,7 @@ export default {
         const dayEnd = this.endOf('day', dayData.date)
         const startUnix = this.toUnix(dayStart)
         const endUnix = this.toUnix(dayEnd)
-        
+
         this.selectedDayDate = this.format(dayData.date, 'EEEE, MMMM do, yyyy')
         this.selectedDayFailures = await Api.service_failures(this.service.id, startUnix, endUnix, 999, 0)
       },
