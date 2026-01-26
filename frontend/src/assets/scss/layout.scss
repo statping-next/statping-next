@@ -132,21 +132,64 @@ A {
 .list-group-item {
   min-height: 1pt;
   background-color: $group-list-background;
+  /* No transition - instant color change to prevent any perceived movement */
+  transform: none !important;
+  margin: 0 !important;
+  padding: inherit !important;
+  position: relative !important;
+  z-index: 0 !important;
+  border: inherit !important;
+  outline: none !important;
+  box-shadow: none !important;
+  /* Prevent any layout shifts */
+  will-change: auto !important;
+  backface-visibility: visible !important;
 }
 
-.list-group-item:HOVER {
+.list-group-item:HOVER,
+.list-group-item-action:hover,
+.list-group-item-action:focus,
+a.list-group-item:hover,
+a.list-group-item-action:hover {
   background-color: lighten($group-list-background, 5%) !important;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px 1px;
-  -webkit-transition-duration: 300ms;
-  -moz-transition-duration: 300ms;
-  -o-transition-duration: 300ms;
-  transition-duration: 300ms;
-  margin-top: -1px;
-  margin-bottom: 1px;
+  /* Explicitly prevent any movement or transforms */
+  transform: none !important;
+  margin: 0 !important;
+  padding: inherit !important;
+  position: relative !important;
+  z-index: 0 !important;
+  box-shadow: none !important;
+  border: inherit !important;
+  outline: none !important;
+  /* Override Bootstrap's default z-index: 1 */
+  will-change: auto !important;
+  backface-visibility: visible !important;
 }
 
 .list-group-item A {
   color: $group-list-title;
+}
+
+/* When list-group-item itself is a link - more specific to override Bootstrap */
+a.list-group-item,
+a.list-group-item-action,
+.list-group a.list-group-item-action {
+  color: inherit;
+  z-index: 0 !important;
+  
+  &:hover,
+  &:focus {
+    color: inherit;
+    /* Prevent any movement */
+    transform: none !important;
+    margin: 0 !important;
+    padding: inherit !important;
+    position: relative !important;
+    z-index: 0 !important;
+    box-shadow: none !important;
+    border: inherit !important;
+    outline: none !important;
+  }
 }
 
 .chart_list_tooltip {
