@@ -32,6 +32,7 @@ export default new Vuex.Store({
     admin: false,
     user: false,
     loggedIn: false,
+    darkTheme: localStorage.getItem('darkTheme') === 'true' || false,
     modal: {
       visible: false,
       title: "Modal Header",
@@ -58,6 +59,7 @@ export default new Vuex.Store({
     checkins: state => state.checkins,
     loggedIn: state => state.loggedIn,
     modal: state => state.modal,
+    darkTheme: state => state.darkTheme,
 
     isAdmin: state => state.admin,
     isUser: state => state.user,
@@ -154,6 +156,16 @@ export default new Vuex.Store({
     setUser(state, user) {
       state.user = user
     },
+    setDarkTheme(state, darkTheme) {
+      state.darkTheme = darkTheme
+      localStorage.setItem('darkTheme', darkTheme)
+      // Apply theme to body element
+      if (darkTheme) {
+        document.body.classList.add('dark-theme')
+      } else {
+        document.body.classList.remove('dark-theme')
+      }
+    },
     setOAuth(state, oauth) {
       state.oauth = oauth
     },
@@ -173,6 +185,12 @@ export default new Vuex.Store({
       context.commit('setAdmin', token)
       context.commit('setCore', core)
       context.commit('setUser', token !== undefined)
+      // Apply saved theme on load
+      const darkTheme = localStorage.getItem('darkTheme') === 'true'
+      context.commit('setDarkTheme', darkTheme)
+    },
+    toggleTheme(context) {
+      context.commit('setDarkTheme', !context.state.darkTheme)
     },
     async loadRequired(context) {
       const groups = await Api.groups()

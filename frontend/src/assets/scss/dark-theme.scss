@@ -1,0 +1,188 @@
+/* Dark Theme */
+body.dark-theme {
+  background-color: #05070A;
+  color: #ffffff;
+
+  HTML, BODY {
+    background-color: #05070A;
+    color: #ffffff;
+  }
+
+  A {
+    color: #ffffff;
+  }
+
+  .text-muted {
+    color: white !important;
+  }
+
+  .navbar {
+    color: #ffffff;
+    background-color: #15171A;
+  }
+
+  .table {
+    color: #ffffff;
+  }
+
+  .nav-link {
+    color: #ffffff;
+  }
+
+  .card {
+    background-color: #15171A;
+  }
+
+  .card-body H4 A, .card-title A {
+    color: #ffffff;
+  }
+
+  .dashboard_card {
+    background-color: #15171A;
+  }
+
+  .dashboard_card:HOVER {
+    background-color: #1a1c20 !important;
+  }
+
+  .list-group-item {
+    background-color: #15171A;
+  }
+
+  .list-group-item:HOVER, .list-group-item-action:hover {
+    background-color: #202328 !important;
+  }
+
+  .list-group-item A {
+    color: #ffffff;
+  }
+
+  .container, .login_container {
+    background-color: #05070A;
+  }
+
+  .footer .links {
+    color: #ffffff;
+  }
+
+  .footer .statping {
+    color: white;
+  }
+
+  .dates {
+    color: #8c8c8c;
+  }
+
+  .dates strong {
+    color: #cccccc;
+  }
+
+  .bg-light {
+    background-color: #15171A !important;
+  }
+
+  .text-black-50 {
+    color: #ffffff;
+  }
+
+  .header-title {
+    color: #ffffff;
+  }
+
+  .header-desc {
+    color: #ffffff;
+  }
+
+  .lg_number {
+    color: #ffffff;
+  }
+
+  .lower_canvas {
+    background-color: #15171A !important;
+  }
+
+  .lower_canvas SPAN {
+    color: #ffffff;
+  }
+
+  .subtitle {
+    color: #ffffff;
+  }
+
+  .badge {
+    color: white;
+  }
+
+  .no-decoration {
+    color: white;
+  }
+
+  .icon-text {
+    color: white;
+  }
+
+  .form-control {
+    background-color: #15171A;
+    color: #ffffff;
+  }
+
+  .form-control:FOCUS {
+    background-color: #1e2125 !important;
+    color: #ffffff;
+  }
+
+  .form-control[readonly] {
+    background-color: #192433 !important;
+    color: white !important;
+  }
+
+  .nav-pills A {
+    color: #ffffff;
+  }
+
+  .apexcharts-menu-open {
+    background-color: #101b35;
+  }
+
+  .apexcharts-text tspan {
+    fill: #ffffff;
+  }
+
+  .apexcharts-title-text {
+    fill: #ffffff !important;
+  }
+
+  .apexcharts-subtitle-text {
+    fill: #ffffff !important;
+  }
+
+  /* Service page specific */
+  .service-chart-container {
+    background-color: transparent;
+  }
+
+  /* Table theming */
+  .table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.075);
+  }
+
+  .table thead th {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .table td {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Mobile specific */
+  @media (max-width: 767px) {
+    HTML, BODY {
+      background-color: #05070A;
+    }
+
+    .card {
+      background-color: #15171A;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-    <div class="container col-md-7 col-sm-12 mt-md-5">
+    <div class="container col-md-7 col-sm-12">
       <div v-if="!ready" class="row mt-5">
         <div class="col-12 text-center">
           <font-awesome-icon icon="circle-notch" size="3x" spin/>

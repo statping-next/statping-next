@@ -51,7 +51,7 @@
                     <div v-if="selectedDayFailures.length === 0" class="text-muted">
                         No failures found for this day.
                     </div>
-                    <table v-else class="table table-sm table-dark">
+                    <table v-else class="table table-sm table-hover">
                         <thead>
                             <tr>
                                 <th style="cursor: pointer; user-select: none;" @click="sortFailures('created_at')">
