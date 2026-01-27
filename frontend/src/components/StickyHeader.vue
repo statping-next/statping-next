@@ -4,7 +4,7 @@
             <!-- Left side: Logo (always on left) -->
             <div class="sticky-header-left">
                 <router-link to="/" class="sticky-logo-link" :class="{ 'visible': visible || adminMode }">
-                    <img v-if="core.logo" :src="core.logo" :alt="core.name" class="sticky-logo">
+                    <img v-if="currentLogo" :src="currentLogo" :alt="core.name" class="sticky-logo">
                     <span v-else class="sticky-title">{{core.name}}</span>
                 </router-link>
             </div>
@@ -103,6 +103,27 @@ export default {
         }
       }
       return {}
+    },
+    currentLogo() {
+      // Use theme-specific logo if available
+      if (this.darkTheme) {
+        // Dark theme: use dark logo if set, otherwise fallback to light logo
+        if (this.core.logo_dark) {
+          return this.core.logo_dark
+        } else if (this.core.logo_light) {
+          return this.core.logo_light
+        }
+      } else {
+        // Light theme: use light logo if set
+        if (this.core.logo_light) {
+          return this.core.logo_light
+        }
+      }
+      // Fallback to legacy logo field for backward compatibility
+      if (this.core.logo) {
+        return this.core.logo
+      }
+      return null
     }
   },
   methods: {

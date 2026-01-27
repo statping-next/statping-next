@@ -18,7 +18,7 @@
 </div>
 
 <div class="text-center small text-dim" v-pre>
-Automatically generated from Statping's Wiki on 2026-01-26 23:55:26.659201617 &#43;0000 UTC
+Automatically generated from Statping's Wiki on 2026-01-27 01:23:58.646637762 &#43;0000 UTC
 </div>
 
 </div>

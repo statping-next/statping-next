@@ -10,7 +10,9 @@
 
                 <div class="form-group">
                     <label>{{ $t('project_logo') }}</label>
-                    <input v-model="core.logo" type="text" class="form-control" placeholder="https://example.com/logo.png" id="logo">
+                    <div class="form-control-plaintext">
+                        <small class="text-muted">Configure your logo in <a href="#" @click.prevent="goToThemeSettings">the Themes settings</a></small>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -128,6 +130,35 @@
           },
           selectAll() {
               this.$refs.input.select();
+          },
+          goToThemeSettings() {
+              // Navigate to Settings page and switch to Theme tab
+              // Use $root to find the Settings component or traverse parent tree
+              let parent = this.$parent
+              let found = false
+              while (parent && !found) {
+                  if (parent.$options && parent.$options.name === 'Settings') {
+                      found = true
+                      if (parent.changeTab) {
+                          // Create a mock event object that changeTab expects
+                          const mockEvent = {
+                              target: {
+                                  id: 'v-pills-style-tab'
+                              }
+                          }
+                          parent.changeTab(mockEvent)
+                          // Also trigger click on the actual tab link to ensure Bootstrap updates
+                          this.$nextTick(() => {
+                              const tabLink = document.getElementById('v-pills-style-tab')
+                              if (tabLink) {
+                                  tabLink.click()
+                              }
+                          })
+                      }
+                      break
+                  }
+                  parent = parent.$parent
+              }
           }
       }
   }

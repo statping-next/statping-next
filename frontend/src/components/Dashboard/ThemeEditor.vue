@@ -1,20 +1,37 @@
 <template>
-    <div class="card mb-5">
-        <div class="card-header">Default Theme</div>
-        <div class="card-body">
-            <div class="form-group">
-                <label>Default Theme for New Users</label>
-                <select v-model="core.default_theme" @change="saveDefaultTheme" class="form-control">
-                    <option value="">System Default (Light)</option>
-                    <option value="light">Light</option>
-                    <option value="dark">Dark</option>
-                </select>
-                <small class="form-text text-muted">This theme will be used as the default for users who haven't set a preference. Users can override this in their browser.</small>
+    <div>
+        <div class="card mb-5">
+            <div class="card-header">Default Theme</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Default Theme for New Users</label>
+                    <select v-model="core.default_theme" @change="saveDefaultTheme" class="form-control">
+                        <option value="">System Default (Light)</option>
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                    </select>
+                    <small class="form-text text-muted">This theme will be used as the default for users who haven't set a preference. Users can override this in their browser.</small>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="card mb-5">
+        <div class="card mb-5">
+            <div class="card-header">Logo Configuration</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Logo (Light Theme)</label>
+                    <input v-model="core.logo_light" @change="saveLogo" type="text" class="form-control" placeholder="https://example.com/logo.png" id="logo_light">
+                    <small class="form-text text-muted">Primary logo URL. This will be used for light theme and as fallback for dark theme if no dark logo is set.</small>
+                </div>
+                <div class="form-group">
+                    <label>Dark Theme Logo (Optional)</label>
+                    <input v-model="core.logo_dark" @change="saveLogo" type="text" class="form-control" placeholder="https://example.com/logo-dark.png" id="logo_dark">
+                    <small class="form-text text-muted">Optional logo URL for dark theme. If not set, the light theme logo will be used.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-5">
         <div class="card-header">{{$t('theme_editor')}}</div>
         <div class="card-body">
         <div v-if="error" class="alert alert-danger mt-3" style="white-space: pre-line;">
@@ -67,6 +84,7 @@
                     <button id="delete_assets" @click.prevent="deleteAssets" class="btn btn-danger btn-block confirm-btn" :disabled="pending">Delete Local Assets</button>
                 </div>
             </div>
+        </div>
         </div>
     </div>
 </template>
@@ -123,6 +141,11 @@ import('codemirror/mode/css/css.js')
       },
       methods: {
         async saveDefaultTheme() {
+          const c = this.core
+          await Api.core_save(c)
+          this.$store.commit('setCore', c)
+        },
+        async saveLogo() {
           const c = this.core
           await Api.core_save(c)
           this.$store.commit('setCore', c)

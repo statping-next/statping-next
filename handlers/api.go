@@ -83,6 +83,13 @@ func apiCoreHandler(w http.ResponseWriter, r *http.Request) {
 	if c.Logo != app.Logo {
 		app.Logo = c.Logo
 	}
+	// Update theme-specific logos
+	if c.LogoLight != app.LogoLight {
+		app.LogoLight = c.LogoLight
+	}
+	if c.LogoDark != app.LogoDark {
+		app.LogoDark = c.LogoDark
+	}
 	if c.Description != app.Description {
 		app.Description = c.Description
 	}

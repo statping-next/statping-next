@@ -18,30 +18,30 @@
 
                     <h6 class="text-muted">{{ $t('main_settings') }}</h6>
 
-                    <a @click.prevent="changeTab" class="nav-link" v-bind:class="{active: liClass('v-pills-home-tab')}" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">
+                    <a @click.prevent="changeTab" class="nav-link" v-bind:class="{active: liClass('v-pills-home-tab')}" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home-tab" role="tab" aria-controls="v-pills-home-tab" aria-selected="true">
                         <font-awesome-icon icon="cog" class="mr-2"/> {{ $t('settings') }}
                     </a>
-                    <a @click.prevent="changeTab" class="nav-link" v-bind:class="{active: liClass('v-pills-style-tab')}" id="v-pills-style-tab" data-toggle="pill" href="#v-pills-style" role="tab" aria-controls="v-pills-style" aria-selected="false">
+                    <a @click.prevent="changeTab" class="nav-link" v-bind:class="{active: liClass('v-pills-style-tab')}" id="v-pills-style-tab" data-toggle="pill" href="#v-pills-style-tab" role="tab" aria-controls="v-pills-style-tab" aria-selected="false">
                         <font-awesome-icon icon="image" class="mr-2"/> {{ $t('theme') }}
                     </a>
-                  <a @click.prevent="changeTab" class="nav-link" v-bind:class="{active: liClass('v-pills-oauth-tab')}" id="v-pills-oauth-tab" data-toggle="pill" href="#v-pills-oauth" role="tab" aria-controls="v-pills-oauth" aria-selected="false">
+                  <a @click.prevent="changeTab" class="nav-link" v-bind:class="{active: liClass('v-pills-oauth-tab')}" id="v-pills-oauth-tab" data-toggle="pill" href="#v-pills-oauth-tab" role="tab" aria-controls="v-pills-oauth-tab" aria-selected="false">
                     <font-awesome-icon icon="key" class="mr-2"/> {{ $t('authentication') }}
                   </a>
-                  <a @click.prevent="changeTab" class="nav-link" v-bind:class="{active: liClass('v-pills-import-tab')}" id="v-pills-import-tab" data-toggle="pill" href="#v-pills-import" role="tab" aria-controls="v-pills-import" aria-selected="false">
+                  <a @click.prevent="changeTab" class="nav-link" v-bind:class="{active: liClass('v-pills-import-tab')}" id="v-pills-import-tab" data-toggle="pill" href="#v-pills-import-tab" role="tab" aria-controls="v-pills-import-tab" aria-selected="false">
                     <font-awesome-icon icon="cloud-download-alt" class="mr-2"/> {{ $t('import') }}
                   </a>
-                  <a @click.prevent="changeTab" class="nav-link" v-bind:class="{active: liClass('v-pills-configs-tab')}" id="v-pills-configs-tab" data-toggle="pill" href="#v-pills-configs" role="tab" aria-controls="v-pills-configs" aria-selected="false">
+                  <a @click.prevent="changeTab" class="nav-link" v-bind:class="{active: liClass('v-pills-configs-tab')}" id="v-pills-configs-tab" data-toggle="pill" href="#v-pills-configs-tab" role="tab" aria-controls="v-pills-configs-tab" aria-selected="false">
                     <font-awesome-icon icon="cogs" class="mr-2"/> {{ $t('configs') }}
                   </a>
 
                     <h6 class="mt-4 text-muted">{{$t('notifiers')}}</h6>
 
                     <div id="notifiers_tabs">
-                        <a v-for="(notifier, index) in notifiers" v-bind:key="`${notifier.method}`" @click.prevent="changeTab" class="nav-link text-capitalize" v-bind:class="{active: liClass(`v-pills-${notifier.method.toLowerCase()}-tab`)}" v-bind:id="`v-pills-${notifier.method.toLowerCase()}-tab`" data-toggle="pill" v-bind:href="`#v-pills-${notifier.method.toLowerCase()}`" role="tab" v-bind:aria-controls="`v-pills-${notifier.method.toLowerCase()}`" aria-selected="false">
+                        <a v-for="(notifier, index) in notifiers" v-bind:key="`${notifier.method}`" @click.prevent="changeTab" class="nav-link text-capitalize" v-bind:class="{active: liClass(`v-pills-${notifier.method.toLowerCase()}-tab`)}" v-bind:id="`v-pills-${notifier.method.toLowerCase()}-tab`" data-toggle="pill" v-bind:href="`#v-pills-${notifier.method.toLowerCase()}-tab`" role="tab" v-bind:aria-controls="`v-pills-${notifier.method.toLowerCase()}-tab`" aria-selected="false">
                             <font-awesome-icon :icon="iconName(notifier.icon)" class="mr-2"/> {{notifier.title}}
                             <span v-if="notifier.enabled" class="badge badge-pill float-right mt-1" :class="{'badge-success': !liClass(`v-pills-${notifier.method.toLowerCase()}-tab`), 'badge-light': liClass(`v-pills-${notifier.method.toLowerCase()}-tab`), 'text-dark': liClass(`v-pills-${notifier.method.toLowerCase()}-tab`)}">ON</span>
                         </a>
-                        <a @click.prevent="changeTab" class="nav-link text-capitalize" v-bind:class="{active: liClass(`v-pills-notifier-docs-tab`)}" v-bind:id="`v-pills-notifier-docs-tab`" data-toggle="pill" v-bind:href="`#v-pills-notifier-docs`" role="tab" v-bind:aria-controls="`v-pills-notifier-docs`" aria-selected="false">
+                        <a @click.prevent="changeTab" class="nav-link text-capitalize" v-bind:class="{active: liClass(`v-pills-notifier-docs-tab`)}" v-bind:id="`v-pills-notifier-docs-tab`" data-toggle="pill" v-bind:href="`#v-pills-notifier-docs-tab`" role="tab" v-bind:aria-controls="`v-pills-notifier-docs-tab`" aria-selected="false">
                             <font-awesome-icon icon="question" class="mr-2"/> {{$t('variables')}}
                         </a>
                     </div>
@@ -77,60 +77,61 @@
 
             </div>
             <div class="col-md-9 col-sm-12">
+                <!-- Core Settings Tab -->
+                <div v-if="tab === 'v-pills-home-tab'">
+                    <CoreSettings/>
 
-                <div class="tab-content" id="v-pills-tabContent">
-                    <div class="tab-pane fade" v-bind:class="{active: liClass('v-pills-home-tab'), show: liClass('v-pills-home-tab')}" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-
-                        <CoreSettings/>
-
-                        <div class="card mt-3">
-                            <div class="card-header">API {{$t('settings')}}</div>
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">API {{$t('secret')}}</label>
-                                    <div class="col-sm-9">
-                                        <div class="input-group">
-                                        <input v-model="core.api_secret" @focus="$event.target.select()" type="text" class="form-control select-input" id="api_secret" readonly>
-                                            <div class="input-group-append copy-btn">
-                                                <button @click="copy(core.api_secret)" class="btn btn-outline-secondary" type="button">{{$t('copy')}}</button>
-                                            </div>
+                    <div class="card mt-3">
+                        <div class="card-header">API {{$t('settings')}}</div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">API {{$t('secret')}}</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                    <input v-model="core.api_secret" @focus="$event.target.select()" type="text" class="form-control select-input" id="api_secret" readonly>
+                                        <div class="input-group-append copy-btn">
+                                            <button @click="copy(core.api_secret)" class="btn btn-outline-secondary" type="button">{{$t('copy')}}</button>
                                         </div>
-                                        <small class="form-text text-muted">{{$t('regen_desc')}}</small>
-
                                     </div>
+                                    <small class="form-text text-muted">{{$t('regen_desc')}}</small>
+
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <button id="regenkeys" @click="renewApiKeys" class="btn btn-sm btn-danger float-right">{{$t('regen_api')}}</button>
-                            </div>
                         </div>
-
+                        <div class="card-footer">
+                            <button id="regenkeys" @click="renewApiKeys" class="btn btn-sm btn-danger float-right">{{$t('regen_api')}}</button>
+                        </div>
                     </div>
+                </div>
 
-                    <div class="tab-pane fade" v-bind:class="{active: liClass('v-pills-style-tab'), show: liClass('v-pills-style-tab')}" id="v-pills-style" role="tabpanel" aria-labelledby="v-pills-style-tab">
-                        <ThemeEditor/>
-                    </div>
+                <!-- Theme Editor Tab -->
+                <div v-if="tab === 'v-pills-style-tab'">
+                    <ThemeEditor/>
+                </div>
 
-                  <div class="tab-pane fade" v-bind:class="{active: liClass('v-pills-oauth-tab'), show: liClass('v-pills-oauth-tab')}" id="v-pills-oauth" role="tabpanel" aria-labelledby="v-pills-oauth-tab">
+                <!-- OAuth Tab -->
+                <div v-if="tab === 'v-pills-oauth-tab'">
                     <OAuth/>
-                  </div>
+                </div>
 
-                  <div class="tab-pane fade" v-bind:class="{active: liClass('v-pills-configs-tab'), show: liClass('v-pills-configs-tab')}" id="v-pills-configs" role="tabpanel" aria-labelledby="v-pills-configs-tab">
+                <!-- Configs Tab -->
+                <div v-if="tab === 'v-pills-configs-tab'">
                     <Configs/>
-                  </div>
+                </div>
 
-                  <div class="tab-pane fade" v-bind:class="{active: liClass('v-pills-import-tab'), show: liClass('v-pills-import-tab')}" id="v-pills-import" role="tabpanel" aria-labelledby="v-pills-import-tab">
+                <!-- Import Tab -->
+                <div v-if="tab === 'v-pills-import-tab'">
                     <Importer/>
-                  </div>
+                </div>
 
-                    <div class="tab-pane fade" v-bind:class="{active: liClass(`v-pills-notifier-docs-tab`), show: liClass(`v-pills-notifier-docs-tab`)}" v-bind:id="`v-pills-notifier-docs-tab`" role="tabpanel" v-bind:aria-labelledby="`v-pills-notifier-docs-tab`">
-                        <Variables/>
-                    </div>
+                <!-- Variables Tab -->
+                <div v-if="tab === 'v-pills-notifier-docs-tab'">
+                    <Variables/>
+                </div>
 
-                    <div v-for="(notifier, index) in notifiers" v-bind:key="`${notifier.method}_${index}`" class="tab-pane fade" v-bind:class="{active: liClass(`v-pills-${notifier.method.toLowerCase()}-tab`), show: liClass(`v-pills-${notifier.method.toLowerCase()}-tab`)}" v-bind:id="`v-pills-${notifier.method.toLowerCase()}-tab`" role="tabpanel" v-bind:aria-labelledby="`v-pills-${notifier.method.toLowerCase()}-tab`">
-                        <Notifier :notifier="notifier"/>
-                    </div>
-
+                <!-- Notifier Tabs -->
+                <div v-for="(notifier, index) in notifiers" :key="`${notifier.method}_${index}`" v-if="tab === `v-pills-${notifier.method.toLowerCase()}-tab`">
+                    <Notifier :notifier="notifier"/>
                 </div>
             </div>
 
@@ -201,7 +202,15 @@
           }
         },
           changeTab(e) {
-              this.tab = e.target.id
+              // Get the tab ID from the clicked element - find the nav-link with an id
+              let target = e.target
+              // Traverse up to find the element with an id attribute
+              while (target && !target.id) {
+                  target = target.parentElement
+              }
+              if (target && target.id) {
+                  this.tab = target.id
+              }
           },
           liClass(id) {
               return this.tab === id
