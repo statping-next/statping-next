@@ -11,7 +11,10 @@
                 <div class="form-group">
                     <label>{{ $t('project_logo') }}</label>
                     <div class="form-control-plaintext">
-                        <small class="text-muted">Configure logos in <a href="#" @click.prevent="goToThemeSettings">Theme settings</a></small>
+                        <small class="text-muted">
+                            Configure logos and favicon in
+                            <a href="#" @click.prevent="goToThemeSettings">Theme settings</a>
+                        </small>
                     </div>
                 </div>
 

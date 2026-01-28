@@ -28,6 +28,11 @@
                     <input v-model="core.logo_dark" @change="saveLogo" type="text" class="form-control" placeholder="https://example.com/logo-dark.png" id="logo_dark">
                     <small class="form-text text-muted">Optional logo URL for dark theme.</small>
                 </div>
+                <div class="form-group">
+                    <label>Favicon URL (Optional)</label>
+                    <input v-model="core.favicon" @change="saveLogo" type="text" class="form-control" placeholder="https://example.com/favicon.ico" id="favicon">
+                    <small class="form-text text-muted">Custom favicon URL. This will be used for the browser tab icon.</small>
+                </div>
             </div>
         </div>
 

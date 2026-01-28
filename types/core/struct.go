@@ -25,6 +25,7 @@ type Core struct {
 	Logo          string          `gorm:"column:logo" json:"logo,omitempty"` // Light theme logo (kept for backward compatibility)
 	LogoLight     string          `gorm:"column:logo_light" json:"logo_light,omitempty"`
 	LogoDark      string          `gorm:"column:logo_dark" json:"logo_dark,omitempty"`
+	Favicon       string          `gorm:"column:favicon" json:"favicon,omitempty"`
 	Description   string          `gorm:"not null;column:description" json:"description,omitempty"`
 	ConfigFile    string          `gorm:"column:config" json:"-"`
 	ApiSecret     string          `gorm:"column:api_secret" json:"api_secret" scope:"admin"`

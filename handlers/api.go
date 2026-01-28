@@ -90,6 +90,10 @@ func apiCoreHandler(w http.ResponseWriter, r *http.Request) {
 	if c.LogoDark != app.LogoDark {
 		app.LogoDark = c.LogoDark
 	}
+	// Update favicon URL (allow empty string to clear it)
+	if c.Favicon != app.Favicon {
+		app.Favicon = c.Favicon
+	}
 	if c.Description != app.Description {
 		app.Description = c.Description
 	}

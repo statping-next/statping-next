@@ -4,6 +4,28 @@ import Api from "./API"
 
 Vue.use(Vuex)
 
+function applyBranding(core) {
+  if (!core) {
+    return
+  }
+
+  // Update document title based on project name
+  if (core.name) {
+    document.title = core.name
+  }
+
+  // Update favicon if a custom one is configured
+  if (core.favicon) {
+    let link = document.querySelector("link[rel='shortcut icon']") || document.querySelector("link[rel='icon']")
+    if (!link) {
+      link = document.createElement("link")
+      link.rel = "shortcut icon"
+      document.head.appendChild(link)
+    }
+    link.href = core.favicon
+  }
+}
+
 export const HAS_ALL_DATA = 'HAS_ALL_DATA'
 export const HAS_PUBLIC_DATA = 'HAS_PUBLIC_DATA'
 
@@ -124,6 +146,7 @@ export default new Vuex.Store({
     },
     setCore(state, core) {
       state.core = core
+      applyBranding(core)
     },
     setToken(state, token) {
       state.token = token
@@ -193,6 +216,9 @@ export default new Vuex.Store({
       context.commit('setAdmin', token)
       context.commit('setCore', core)
       context.commit('setUser', token !== undefined)
+
+      // Ensure branding is applied on initial load as well
+      applyBranding(core)
 
       // Apply theme: use localStorage if set, otherwise use core default
       const savedTheme = localStorage.getItem('darkTheme')
