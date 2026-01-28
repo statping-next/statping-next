@@ -72,14 +72,14 @@ export default {
           const diffInSeconds = Math.floor((now - lastCheck) / 1000);
           // Sanity check: if the difference is more than 10 years, something is wrong
           if (diffInSeconds > 0 && diffInSeconds < 315360000) {
-            lastCheckedText = `last checked ${diffInSeconds} seconds ago`;
+            lastCheckedText = `last checked ${this.formatDuration(diffInSeconds)} ago`;
           } else {
             // Fallback to last_success if last_check is invalid
             const lastSuccess = parseDate(service.last_success);
             if (lastSuccess && lastSuccess > 0) {
               const diffInSeconds = Math.floor((now - lastSuccess) / 1000);
               if (diffInSeconds > 0 && diffInSeconds < 315360000) {
-                lastCheckedText = `last checked ${diffInSeconds} seconds ago`;
+                lastCheckedText = `last checked ${this.formatDuration(diffInSeconds)} ago`;
               } else {
                 lastCheckedText = 'never checked';
               }
@@ -93,7 +93,7 @@ export default {
           if (lastSuccess && lastSuccess > 0) {
             const diffInSeconds = Math.floor((now - lastSuccess) / 1000);
             if (diffInSeconds > 0 && diffInSeconds < 315360000) {
-              lastCheckedText = `last checked ${diffInSeconds} seconds ago`;
+              lastCheckedText = `last checked ${this.formatDuration(diffInSeconds)} ago`;
             } else {
               lastCheckedText = 'never checked';
             }
@@ -114,7 +114,7 @@ export default {
           // Sanity check for downForSeconds too
           if (downForSeconds > 0 && downForSeconds < 315360000) {
             acc[service.id] = {
-              downFor: `down for ${downForSeconds} seconds`,
+              downFor: `down for ${this.formatDuration(downForSeconds)}`,
               lastChecked: lastCheckedText
             };
           } else {

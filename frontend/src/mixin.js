@@ -22,7 +22,42 @@ export default Vue.mixin({
       return startOfToday()
     },
     secondsHumanize(val) {
-      return `${val} ${this.$t('second', val)}`
+      return `${val} ${this.$tc('second', val)}`
+    },
+    formatDuration(seconds) {
+      // Format duration in seconds to human-readable format
+      // Below 300 seconds (5 minutes): show as seconds
+      // 300+ seconds: show as minutes, then hours, days, etc.
+      if (seconds < 300) {
+        return `${seconds} ${this.$tc('second', seconds)}`;
+      }
+
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+      const weeks = Math.floor(days / 7);
+      const months = Math.floor(days / 30);
+      const years = Math.floor(days / 365);
+
+      // Use the largest appropriate unit
+      // $tc() handles pluralization automatically based on the number
+      if (years > 0) {
+        return `${years} ${this.$tc('year', years)}`;
+      }
+      if (months > 0) {
+        return `${months} ${this.$tc('month', months)}`;
+      }
+      if (weeks > 0) {
+        return `${weeks} ${this.$tc('week', weeks)}`;
+      }
+      if (days > 0) {
+        return `${days} ${this.$tc('day', days)}`;
+      }
+      if (hours > 0) {
+        return `${hours} ${this.$tc('hour', hours)}`;
+      }
+      // minutes >= 5 (since seconds >= 300)
+      return `${minutes} ${this.$tc('minute', minutes)}`;
     },
     utc(val) {
       return new Date.UTC(val)

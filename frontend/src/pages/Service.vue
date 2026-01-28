@@ -435,7 +435,7 @@ export default {
           if (lastError && lastError > 0) {
             const upForSeconds = Math.floor((now - lastError) / 1000);
             if (upForSeconds > 0 && upForSeconds < 315360000) {
-              return `${upForSeconds} seconds`;
+              return this.formatDuration(upForSeconds);
             }
           }
           // If no last_error, use last_success as fallback
@@ -443,7 +443,7 @@ export default {
           if (lastSuccess && lastSuccess > 0) {
             const upForSeconds = Math.floor((now - lastSuccess) / 1000);
             if (upForSeconds > 0 && upForSeconds < 315360000) {
-              return `${upForSeconds} seconds`;
+              return this.formatDuration(upForSeconds);
             }
           }
           return 'N/A';
@@ -453,7 +453,7 @@ export default {
           if (downtimeStarted && downtimeStarted > 0) {
             const downForSeconds = Math.floor((now - downtimeStarted) / 1000);
             if (downForSeconds > 0 && downForSeconds < 315360000) {
-              return `${downForSeconds} seconds`;
+              return this.formatDuration(downForSeconds);
             }
           }
           // Fallback to last_success if downtime_started not available
@@ -461,7 +461,7 @@ export default {
           if (lastSuccess && lastSuccess > 0) {
             const downForSeconds = Math.floor((now - lastSuccess) / 1000);
             if (downForSeconds > 0 && downForSeconds < 315360000) {
-              return `${downForSeconds} seconds`;
+              return this.formatDuration(downForSeconds);
             }
           }
           return 'N/A';
@@ -492,7 +492,7 @@ export default {
         if (lastCheck && lastCheck > 0) {
           const diffInSeconds = Math.floor((now - lastCheck) / 1000);
           if (diffInSeconds > 0 && diffInSeconds < 315360000) {
-            return `${diffInSeconds} seconds`;
+            return this.formatDuration(diffInSeconds);
           }
         }
         // Fallback to last_success if last_check is not available
@@ -500,7 +500,7 @@ export default {
         if (lastSuccess && lastSuccess > 0) {
           const diffInSeconds = Math.floor((now - lastSuccess) / 1000);
           if (diffInSeconds > 0 && diffInSeconds < 315360000) {
-            return `${diffInSeconds} seconds`;
+            return this.formatDuration(diffInSeconds);
           }
         }
         return 'Never';

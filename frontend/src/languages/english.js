@@ -56,6 +56,8 @@ const english = {
     day: "Day | Days",
     hour: "Hour | Hours",
     minute: "Minute | Minutes",
+    second: "Second | Seconds",
+    year: "Year | Years",
     failures_24_hours: "Failures last 24 hours",
     no_services: "You currently don't have any services!",
     theme: "Theme",
