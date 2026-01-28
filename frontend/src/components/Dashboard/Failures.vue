@@ -71,7 +71,7 @@
             </tbody>
         </table>
 
-        <nav v-if="total > 4 && failures.length !== 0" class="mt-3">
+        <nav v-if="fails.length >= limit && failures.length !== 0" class="mt-3">
             <ul class="pagination justify-content-center">
                 <li class="page-item" :class="{'disabled': page===1}">
                     <a @click.prevent="gotoPage(page-1)" :disabled="page===1" class="page-link" href="#" aria-label="Previous">
@@ -82,17 +82,18 @@
                 <li v-for="n in maxPages" class="page-item" :class="{'active': page === n}">
                     <a @click.prevent="gotoPage(n)" class="page-link" href="#">{{n}}</a>
                 </li>
-                <li class="page-item" :class="{'disabled': page===Math.floor(total / limit)}">
-                    <a @click.prevent="gotoPage(page+1)" :disabled="page===Math.floor(total / limit)" class="page-link" href="#" aria-label="Next">
+                <li class="page-item" :class="{'disabled': fails.length < limit}">
+                    <a @click.prevent="gotoPage(page+1)" :disabled="fails.length < limit" class="page-link" href="#" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                         <span class="sr-only">Next</span>
                     </a>
                 </li>
             </ul>
-            <div class="text-center">
-                <span>{{total}} Failures</span>
-            </div>
         </nav>
+        <div v-if="failures.length > 0" class="text-center mt-3">
+            <span>{{failures.length}} {{failures.length === 1 ? 'Failure' : 'Failures'}} displayed</span>
+            <span v-if="search || show_checkins" class="text-muted ml-2">(filtered from {{fails.length}} in date range)</span>
+        </div>
 
     </div>
 </template>
@@ -116,14 +117,26 @@ export default {
           fails: [],
           limit: 64,
           offset: 0,
-          total: 0,
           page: 1,
           start_time: this.nowSubtract(216000).toISOString(),
           end_time: this.nowSubtract(0).toISOString(),
         }
     },
       watch: {
-        '$route': 'reloadTimes',
+        '$route': {
+          handler: 'reloadTimes',
+          immediate: false
+        },
+        search() {
+          // Reset to page 1 when search changes
+          this.page = 1
+          this.offset = 0
+        },
+        show_checkins() {
+          // Reset to page 1 when checkin filter changes
+          this.page = 1
+          this.offset = 0
+        }
       },
       computed: {
         failures() {
@@ -147,14 +160,12 @@ export default {
       },
       async created() {
         this.service = await Api.service(this.$route.params.id)
-        this.total = this.service.stats.failures
         await this.gotoPage(1)
       },
     methods: {
       async delete() {
         await Api.service_failures_delete(this.service)
         this.service = await Api.service(this.service.id)
-        this.total = 0
         await this.load()
       },
       async deleteFailures() {
@@ -171,6 +182,12 @@ export default {
       async gotoPage(page) {
         this.page = page;
         this.offset = (page-1) * this.limit;
+        await this.load()
+      },
+      async reloadTimes() {
+        // Reset to page 1 when route changes
+        this.page = 1
+        this.offset = 0
         await this.load()
       },
       async load() {
