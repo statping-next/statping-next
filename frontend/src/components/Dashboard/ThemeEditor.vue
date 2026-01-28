@@ -19,14 +19,14 @@
             <div class="card-header">Logo Configuration</div>
             <div class="card-body">
                 <div class="form-group">
-                    <label>Logo (Light Theme)</label>
+                    <label>Light Theme Logo</label>
                     <input v-model="core.logo_light" @change="saveLogo" type="text" class="form-control" placeholder="https://example.com/logo.png" id="logo_light">
-                    <small class="form-text text-muted">Primary logo URL. This will be used for light theme and as fallback for dark theme if no dark logo is set.</small>
+                    <small class="form-text text-muted">Primary logo URL for light theme; also used as fallback for dark theme if no dark logo is set.</small>
                 </div>
                 <div class="form-group">
                     <label>Dark Theme Logo (Optional)</label>
                     <input v-model="core.logo_dark" @change="saveLogo" type="text" class="form-control" placeholder="https://example.com/logo-dark.png" id="logo_dark">
-                    <small class="form-text text-muted">Optional logo URL for dark theme. If not set, the light theme logo will be used.</small>
+                    <small class="form-text text-muted">Optional logo URL for dark theme.</small>
                 </div>
             </div>
         </div>
