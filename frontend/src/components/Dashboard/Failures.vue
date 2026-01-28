@@ -12,19 +12,24 @@
                 </span>
             </div>
             <div class="card-body">
-                <form>
+                <form @submit.prevent="performSearch">
                     <div class="form-row">
                         <div class="col">
                             <label for="fromdate">From Date</label>
-                            <flatPickr id="fromdate" :disabled="loading" @on-change="load" v-model="start_time" :config="{ wrap: true, allowInput: true, enableTime: true, dateFormat: 'Z', altInput: true, altFormat: 'Y-m-d h:i K', maxDate: new Date() }" type="text" class="form-control text-left d-block" required />
+                            <flatPickr id="fromdate" :disabled="loading" v-model="start_time" :config="{ wrap: true, allowInput: true, enableTime: true, dateFormat: 'Z', altInput: true, altFormat: 'Y-m-d h:i K', maxDate: new Date() }" type="text" class="form-control text-left d-block" required />
                         </div>
                         <div class="col">
                             <label for="todate">To Date</label>
-                            <flatPickr id="todate" :disabled="loading" @on-change="load" v-model="end_time" :config="{ wrap: true, allowInput: true, enableTime: true, dateFormat: 'Z', altInput: true, altFormat: 'Y-m-d h:i K', maxDate: new Date() }" type="text" class="form-control text-left d-block" required />
+                            <flatPickr id="todate" :disabled="loading" v-model="end_time" :config="{ wrap: true, allowInput: true, enableTime: true, dateFormat: 'Z', altInput: true, altFormat: 'Y-m-d h:i K', maxDate: new Date() }" type="text" class="form-control text-left d-block" required />
                         </div>
                         <div class="col">
                             <label for="search">Search Terms</label>
-                            <input id="search" type="text" v-model="search" class="form-control">
+                            <div class="d-flex">
+                                <input id="search" type="text" v-model="search" class="form-control" @keyup.enter="performSearch">
+                                <button type="submit" class="btn btn-primary ml-2" :disabled="loading">
+                                    Search
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row mt-3">
@@ -186,6 +191,12 @@ export default {
       },
       async reloadTimes() {
         // Reset to page 1 when route changes
+        this.page = 1
+        this.offset = 0
+        await this.load()
+      },
+      async performSearch() {
+        // Reset to page 1 when performing a new search
         this.page = 1
         this.offset = 0
         await this.load()
