@@ -51,33 +51,23 @@
                     <div v-if="selectedDayFailures.length === 0" class="text-muted">
                         No failures found for this day.
                     </div>
-                    <table v-else class="table table-sm table-hover">
+                    <table v-else class="table">
                         <thead>
                             <tr>
-                                <th style="cursor: pointer; user-select: none;" @click="sortFailures('created_at')">
-                                    Time
-                                    <span v-if="sortColumn === 'created_at'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                </th>
-                                <th style="cursor: pointer; user-select: none;" @click="sortFailures('issue')">
-                                    Issue
-                                    <span v-if="sortColumn === 'issue'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                </th>
-                                <th style="cursor: pointer; user-select: none;" @click="sortFailures('error_code')">
-                                    Error Code
-                                    <span v-if="sortColumn === 'error_code'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                </th>
-                                <th style="cursor: pointer; user-select: none;" @click="sortFailures('ping_time')">
-                                    Ping Time
-                                    <span v-if="sortColumn === 'ping_time'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                                </th>
+                                <th scope="col">#</th>
+                                <th scope="col">Issue</th>
+                                <th scope="col">Status Code</th>
+                                <th scope="col">Ping</th>
+                                <th scope="col">Created</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(failure, index) in sortedFailures" :key="index">
-                                <td>{{ formatDate(failure.created_at) }}</td>
-                                <td>{{ failure.issue || 'N/A' }}</td>
-                                <td>{{ failure.error_code || 'N/A' }}</td>
-                                <td>{{ failure.ping_time ? failure.ping_time + 'ms' : 'N/A' }}</td>
+                            <tr v-for="(failure, index) in selectedDayFailures" :key="index">
+                                <th class="font-1" scope="row">{{failure.id}}</th>
+                                <td class="font-1">{{failure.issue}}</td>
+                                <td class="font-1">{{failure.error_code}}</td>
+                                <td class="font-1">{{humanTime(failure.ping || failure.ping_time)}}</td>
+                                <td class="font-1">{{ago(failure.created_at)}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -106,47 +96,10 @@
               ready: false,
               monthsData: [],
               selectedDayFailures: [],
-              selectedDayDate: '',
-              sortColumn: 'created_at',
-              sortDirection: 'desc'
+              selectedDayDate: ''
           }
       },
       computed: {
-          sortedFailures() {
-              if (!this.selectedDayFailures || this.selectedDayFailures.length === 0) {
-                  return []
-              }
-
-              const failures = [...this.selectedDayFailures]
-              const column = this.sortColumn
-              const direction = this.sortDirection
-
-              return failures.sort((a, b) => {
-                  let aVal = a[column]
-                  let bVal = b[column]
-
-                  // Handle null/undefined values
-                  if (aVal === null || aVal === undefined) aVal = ''
-                  if (bVal === null || bVal === undefined) bVal = ''
-
-                  // For time field, parse as date
-                  if (column === 'created_at') {
-                      aVal = new Date(aVal).getTime()
-                      bVal = new Date(bVal).getTime()
-                  }
-
-                  // For numeric fields
-                  if (column === 'ping_time' || column === 'error_code') {
-                      aVal = Number(aVal) || 0
-                      bVal = Number(bVal) || 0
-                  }
-
-                  // Compare
-                  if (aVal < bVal) return direction === 'asc' ? -1 : 1
-                  if (aVal > bVal) return direction === 'asc' ? 1 : -1
-                  return 0
-              })
-          },
           canViewFailures() {
               // Check if user is logged in
               const isLoggedIn = this.$store.getters.loggedIn || this.$store.getters.user || this.$store.getters.admin
@@ -333,33 +286,6 @@
           closeFailureList() {
               this.selectedDayFailures = []
               this.selectedDayDate = ''
-              this.sortColumn = 'created_at'
-              this.sortDirection = 'desc'
-          },
-          sortFailures(column) {
-              if (this.sortColumn === column) {
-                  // Toggle direction if clicking the same column
-                  this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc'
-              } else {
-                  // New column, default to ascending (except time which defaults to descending)
-                  this.sortColumn = column
-                  this.sortDirection = column === 'created_at' ? 'desc' : 'asc'
-              }
-          },
-          formatDate(dateStr) {
-              if (!dateStr) return 'N/A'
-              try {
-                  const date = this.parseISO(dateStr)
-                  return date.toLocaleString('en-us', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                  })
-              } catch (e) {
-                  return dateStr
-              }
           }
       }
   }
