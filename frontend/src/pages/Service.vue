@@ -40,6 +40,12 @@
 
             <MessageBlock v-if="loaded" v-for="message in messagesInRange" v-bind:key="message.id" :message="message"/>
 
+            <!-- Incidents for this service (if any), styled to fit detail page -->
+            <ServiceIncidents
+              v-if="loaded"
+              :service="service"
+            />
+
             <div class="card mt-3">
                 <div class="card-header text-capitalize">Timeframe</div>
                 <div class="card-body pb-4">
@@ -124,6 +130,7 @@
   const ServiceTopStats = () => import(/* webpackChunkName: "service" */ '@/components/Service/ServiceTopStats')
   const AdvancedChart = () => import(/* webpackChunkName: "service" */ '@/components/Service/AdvancedChart')
   const StickyHeader = () => import(/* webpackChunkName: "index" */ '@/components/StickyHeader')
+  const ServiceIncidents = () => import(/* webpackChunkName: "service" */ '@/components/Service/ServiceIncidents')
 
   import flatPickr from 'vue-flatpickr-component';
   import 'flatpickr/dist/flatpickr.css';
@@ -158,13 +165,14 @@ export default {
     name: 'Service',
     components: {
       AdvancedChart,
-        ServiceTopStats,
-        ServiceHeatmap,
-        ServiceFailures,
-        MessageBlock,
-        Checkin,
-        flatPickr,
-        StickyHeader
+      ServiceTopStats,
+      ServiceHeatmap,
+      ServiceFailures,
+      MessageBlock,
+      Checkin,
+      flatPickr,
+      StickyHeader,
+      ServiceIncidents,
     },
     data() {
         return {
