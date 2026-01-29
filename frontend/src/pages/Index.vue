@@ -18,7 +18,7 @@
       </div>
 
       <div class="col-12 full-col-12">
-          <div v-for="service in services_no_group" v-bind:key="service.id" class="list-group online_list mb-4">
+          <div v-for="service in services_no_group" v-bind:key="service.id" class="list-group online_list service-entry">
               <div class="list-group-item list-group-item-action">
                   <router-link class="no-decoration font-3" :to="serviceLink(service)">
                     {{service.name}}
@@ -132,3 +132,25 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.service-entry {
+  margin-bottom: 6px;
+}
+
+/* Treat service header + incident as a single hoverable row */
+.service-entry:hover .list-group-item {
+  background-color: #ffffff !important;
+}
+.dark-theme .service-entry:hover .list-group-item {
+  background-color: #202328 !important;
+}
+
+/* On hover, brighten the dark outer border but keep inner incident background */
+.service-entry:hover >>> .incident-nested {
+  border-color: #ffffff;
+}
+.dark-theme .service-entry:hover >>> .incident-nested {
+  border-color: #202328;
+}
+</style>

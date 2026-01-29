@@ -1,12 +1,12 @@
 <template>
-    <div class="col-12 mb-3 pb-2 border-bottom" role="alert">
+    <div class="col-12 mb-3 pb-2 border-bottom incident-update-row" role="alert">
         <span class="font-weight-bold text-capitalize" :class="{'text-success': update.type.toLowerCase()==='resolved', 'text-danger': update.type.toLowerCase()==='investigating', 'text-warning': update.type.toLowerCase()==='update'}">{{update.type}}</span>
         <span class="text-muted">- {{update.message}}
             <button v-if="admin" @click="delete_update(update)" type="button" class="close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </span>
-        <span class="d-block small">{{ago(update.created_at)}} ago</span>
+        <span class="d-block small incident-update-datetime">{{ niceDate(update.created_at) }} (about {{ ago(update.created_at) }} ago)</span>
     </div>
 </template>
 

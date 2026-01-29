@@ -1,25 +1,27 @@
 <template>
     <div v-if="services.length > 0" class="col-12 full-col-12">
         <h4 v-if="group.name !== 'Empty Group'" class="group_header mb-3 mt-4">{{group.name}}</h4>
-        <div class="list-group online_list mb-4">
-            <router-link v-for="(service, index) in services" v-bind:key="index" :to="serviceLink(service)" class="list-group-item list-group-item-action" style="display: flex; align-items: center; justify-content: space-between; text-decoration: none; height: 3.5rem; transform: none !important; margin: 0 !important; z-index: 0 !important; box-shadow: none !important; position: relative !important;">
-                <span class="no-decoration font-3" style="display: flex; align-items: center;">
-                  {{service.name}}
-                  <MessagesIcon :messages="service.messages"/>
-                </span>
-                <div style="display: flex; align-items: center; gap: 1em;">
-                  <span v-if="smallText[service.id].downFor" class="text-center font-2" style="display: flex; align-items: baseline;">
-                    <span v-if="smallText[service.id].downFor" class="text-danger">{{smallText[service.id].downFor}}</span>
-                  </span>
-                  <span class="text-center font-2" style="display: flex; align-items: baseline; margin-right: 1em;">
-                    <span :class="{'text-muted': service.online, 'text-white': !service.online}">{{smallText[service.id].lastChecked}}</span>
-                  </span>
-                  <span class="badge text-uppercase" :class="{'bg-success': service.online, 'bg-danger': !service.online }" style="min-width: 70px; text-align: center;">
-                      {{service.online ? $t('online') : $t('offline')}}
-                  </span>
-                </div>
-            </router-link>
-
+        <div v-for="(service, index) in services" v-bind:key="service.id" class="service-entry-wrapper">
+            <div class="list-group online_list">
+                <router-link :to="serviceLink(service)" class="list-group-item list-group-item-action" style="display: flex; align-items: center; justify-content: space-between; text-decoration: none; height: 3.5rem; transform: none !important; margin: 0 !important; z-index: 0 !important; box-shadow: none !important; position: relative !important;">
+                    <span class="no-decoration font-3" style="display: flex; align-items: center;">
+                      {{service.name}}
+                      <MessagesIcon :messages="service.messages"/>
+                    </span>
+                    <div style="display: flex; align-items: center; gap: 1em;">
+                      <span v-if="smallText[service.id].downFor" class="text-center font-2" style="display: flex; align-items: baseline;">
+                        <span v-if="smallText[service.id].downFor" class="text-danger">{{smallText[service.id].downFor}}</span>
+                      </span>
+                      <span class="text-center font-2" style="display: flex; align-items: baseline; margin-right: 1em;">
+                        <span :class="{'text-muted': service.online, 'text-white': !service.online}">{{smallText[service.id].lastChecked}}</span>
+                      </span>
+                      <span class="badge text-uppercase" :class="{'bg-success': service.online, 'bg-danger': !service.online }" style="min-width: 70px; text-align: center;">
+                          {{service.online ? $t('online') : $t('offline')}}
+                      </span>
+                    </div>
+                </router-link>
+            </div>
+            <IncidentsBlock :service="service"/>
         </div>
     </div>
 </template>
@@ -136,3 +138,28 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.service-entry-wrapper {
+  margin-bottom: 6px;
+}
+.service-entry-wrapper:last-child {
+  margin-bottom: 0;
+}
+
+/* Treat service header + incident as a single hoverable row */
+.service-entry-wrapper:hover .list-group-item {
+  background-color: #ffffff !important;
+}
+.dark-theme .service-entry-wrapper:hover .list-group-item {
+  background-color: #202328 !important;
+}
+
+/* On hover, brighten the dark outer border but keep inner incident background */
+.service-entry-wrapper:hover >>> .incident-nested {
+  border-color: #ffffff;
+}
+.dark-theme .service-entry-wrapper:hover >>> .incident-nested {
+  border-color: #202328;
+}
+</style>
