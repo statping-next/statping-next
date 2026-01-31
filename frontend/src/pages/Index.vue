@@ -13,6 +13,7 @@
         </div>
       </div>
 
+      <!-- Announcements always above incidents (global and per-service) -->
       <div class="col-12 full-col-12">
           <MessageBlock v-for="message in messages" v-bind:key="message.id" :message="message" />
           <GlobalIncidentBlock v-for="incident in globalIncidents" v-bind:key="incident.id" :incident="incident" />
@@ -27,6 +28,7 @@
                   </router-link>
                   <span class="badge float-right" :class="{'bg-success': service.online, 'bg-danger': !service.online }">{{service.online ? "ONLINE" : "OFFLINE"}}</span>
                   <GroupServiceFailures :service="service"/>
+                  <ServiceAnnouncements :service="service"/>
                   <IncidentsBlock :service="service"/>
               </div>
           </div>
@@ -48,12 +50,14 @@ const GlobalIncidentBlock = () => import(/* webpackChunkName: "index" */ '@/comp
 const ServiceBlock = () => import(/* webpackChunkName: "index" */ '@/components/Service/ServiceBlock')
 const GroupServiceFailures = () => import(/* webpackChunkName: "index" */ '@/components/Index/GroupServiceFailures')
 const IncidentsBlock = () => import(/* webpackChunkName: "index" */ '@/components/Index/IncidentsBlock')
+const ServiceAnnouncements = () => import(/* webpackChunkName: "index" */ '@/components/Index/ServiceAnnouncements')
 const MessagesIcon = () => import(/* webpackChunkName: "index" */ '@/components/Index/MessagesIcon')
 
 export default {
     name: 'Index',
     components: {
       IncidentsBlock,
+      ServiceAnnouncements,
       GroupServiceFailures,
       ServiceBlock,
       MessageBlock,
@@ -152,11 +156,13 @@ export default {
   background-color: #202328 !important;
 }
 
-/* On hover, brighten the dark outer border but keep inner incident background */
-.service-entry:hover >>> .incident-nested {
+/* On hover, brighten the dark outer border (announcements and incidents) */
+.service-entry:hover >>> .incident-nested,
+.service-entry:hover >>> .service-announcement-nested {
   border-color: #ffffff;
 }
-.dark-theme .service-entry:hover >>> .incident-nested {
+.dark-theme .service-entry:hover >>> .incident-nested,
+.dark-theme .service-entry:hover >>> .service-announcement-nested {
   border-color: #202328;
 }
 </style>

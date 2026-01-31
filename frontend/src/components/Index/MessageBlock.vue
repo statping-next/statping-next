@@ -27,6 +27,26 @@ export default {
 </script>
 
 <style scoped>
+/* Match service incidents layout: full width, same padding, hover */
+.global-incident-block {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.global-incident-block .card-body {
+  padding: 1rem 1.75rem 0.5rem;
+  box-sizing: border-box;
+}
+.global-incident-block:hover {
+  background-color: #f8f8f8;
+  box-shadow: 0 4px 12px 1px rgba(0, 0, 0, 0.12);
+}
+.dark-theme .global-incident-block:hover {
+  background-color: #1a1d21 !important;
+  box-shadow: 0 4px 12px 1px rgba(0, 0, 0, 0.35);
+}
+
 .global-incident-title {
   font-size: 1.25rem;
 }

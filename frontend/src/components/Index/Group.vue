@@ -21,6 +21,7 @@
                     </div>
                 </router-link>
             </div>
+            <ServiceAnnouncements :service="service"/>
             <IncidentsBlock :service="service"/>
         </div>
     </div>
@@ -29,12 +30,14 @@
 <script>
     const GroupServiceFailures = () => import(/* webpackChunkName: "index" */ './GroupServiceFailures');
     const IncidentsBlock = () => import(/* webpackChunkName: "index" */ './IncidentsBlock');
+    const ServiceAnnouncements = () => import(/* webpackChunkName: "index" */ './ServiceAnnouncements');
     const MessagesIcon = () => import(/* webpackChunkName: "index" */ '@/components/Index/MessagesIcon')
 
 export default {
   name: 'Group',
   components: {
       IncidentsBlock,
+      ServiceAnnouncements,
       GroupServiceFailures,
       MessagesIcon
   },
@@ -155,11 +158,13 @@ export default {
   background-color: #202328 !important;
 }
 
-/* On hover, brighten the dark outer border but keep inner incident background */
-.service-entry-wrapper:hover >>> .incident-nested {
+/* On hover, brighten the dark outer border (announcements and incidents) */
+.service-entry-wrapper:hover >>> .incident-nested,
+.service-entry-wrapper:hover >>> .service-announcement-nested {
   border-color: #ffffff;
 }
-.dark-theme .service-entry-wrapper:hover >>> .incident-nested {
+.dark-theme .service-entry-wrapper:hover >>> .incident-nested,
+.dark-theme .service-entry-wrapper:hover >>> .service-announcement-nested {
   border-color: #202328;
 }
 </style>
