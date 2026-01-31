@@ -1,11 +1,12 @@
 package handlers
 
 import (
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/statping-ng/statping-ng/types/errors"
 	"github.com/statping-ng/statping-ng/types/incidents"
 	"github.com/statping-ng/statping-ng/utils"
-	"net/http"
 )
 
 func findIncident(r *http.Request) (*incidents.Incident, int64, error) {
@@ -29,9 +30,14 @@ func apiAllIncidentsHandler(w http.ResponseWriter, r *http.Request) {
 	returnJson(all, w, r)
 }
 
-// apiAllIncidentsHandlerScoped returns all incidents for public/read (main page global incidents).
+// apiAllIncidentsHandlerScoped returns all incidents (including archived) for admin; non-archived for public.
+// ProcessAutoArchive runs for every request so delay=0 archives run whether the user is public or authenticated.
 func apiAllIncidentsHandlerScoped(r *http.Request) interface{} {
-	return incidents.AllWithUpdates()
+	incidents.ProcessAutoArchive()
+	if IsFullAuthenticated(r) {
+		return incidents.AllWithUpdates()
+	}
+	return incidents.AllPublic()
 }
 
 func apiServiceIncidentsHandler(w http.ResponseWriter, r *http.Request) {
@@ -40,8 +46,7 @@ func apiServiceIncidentsHandler(w http.ResponseWriter, r *http.Request) {
 		sendErrorJson(err, w, r)
 		return
 	}
-	// Load incidents explicitly since AfterFind hook no longer loads them automatically
-	serviceIncidents := incidents.FindByService(service.Id)
+	serviceIncidents := incidents.FindByServicePublic(service.Id)
 	returnJson(serviceIncidents, w, r)
 }
 
@@ -73,6 +78,8 @@ func apiCreateIncidentUpdateHandler(w http.ResponseWriter, r *http.Request) {
 		sendErrorJson(err, w, r)
 		return
 	}
+	// Run auto-archive so delay=0 (immediate) archives right after a Resolved update
+	incidents.ProcessAutoArchive()
 	sendJsonAction(update, "create", w, r)
 }
 
@@ -116,12 +123,61 @@ func apiIncidentUpdateHandler(w http.ResponseWriter, r *http.Request) {
 		sendErrorJson(err, w, r)
 		return
 	}
-	if err := DecodeJSON(r, &incident); err != nil {
+	var body struct {
+		Title                   *string `json:"title"`
+		Description             *string `json:"description"`
+		AutoArchiveEnabled      *bool   `json:"auto_archive_enabled"`
+		AutoArchiveDelayMinutes *int   `json:"auto_archive_delay_minutes"`
+	}
+	if err := DecodeJSON(r, &body); err != nil {
 		sendErrorJson(err, w, r)
 		return
 	}
+	if body.Title != nil {
+		incident.Title = *body.Title
+	}
+	if body.Description != nil {
+		incident.Description = *body.Description
+	}
+	if body.AutoArchiveEnabled != nil {
+		incident.AutoArchiveEnabled = *body.AutoArchiveEnabled
+	}
+	if body.AutoArchiveDelayMinutes != nil {
+		incident.AutoArchiveDelayMinutes = *body.AutoArchiveDelayMinutes
+	}
+	if err := incident.Update(); err != nil {
+		sendErrorJson(err, w, r)
+		return
+	}
+	sendJsonAction(incident, "update", w, r)
+}
 
-	sendJsonAction(incident.Updates, "update", w, r)
+func apiArchiveIncidentHandler(w http.ResponseWriter, r *http.Request) {
+	incident, _, err := findIncident(r)
+	if err != nil {
+		sendErrorJson(err, w, r)
+		return
+	}
+	var body struct {
+		Archived *bool `json:"archived"`
+	}
+	if err := DecodeJSON(r, &body); err != nil {
+		sendErrorJson(err, w, r)
+		return
+	}
+	if body.Archived != nil {
+		incident.Archived = *body.Archived
+		// When user explicitly unarchives, disable auto-archive so ProcessAutoArchive
+		// does not immediately re-archive it. User can re-enable in the edit modal.
+		if !*body.Archived {
+			incident.AutoArchiveEnabled = false
+		}
+	}
+	if err := incident.Update(); err != nil {
+		sendErrorJson(err, w, r)
+		return
+	}
+	sendJsonAction(incident, "update", w, r)
 }
 
 func apiDeleteIncidentHandler(w http.ResponseWriter, r *http.Request) {

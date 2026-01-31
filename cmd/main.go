@@ -10,11 +10,13 @@ import (
 	"github.com/statping-ng/statping-ng/types/configs"
 	"github.com/statping-ng/statping-ng/types/core"
 	"github.com/statping-ng/statping-ng/types/metrics"
+	"github.com/statping-ng/statping-ng/types/incidents"
 	"github.com/statping-ng/statping-ng/types/services"
 	"github.com/statping-ng/statping-ng/utils"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 var (
@@ -140,6 +142,18 @@ func mainProcess() error {
 	return nil
 }
 
+// runIncidentAutoArchive runs ProcessAutoArchive on the same interval as database cleanup.
+func runIncidentAutoArchive() {
+	interval := utils.Params.GetDuration("CLEANUP_INTERVAL")
+	if interval <= 0 {
+		interval = time.Hour
+	}
+	for {
+		time.Sleep(interval)
+		incidents.ProcessAutoArchive()
+	}
+}
+
 // InitApp will start the Statping instance with a valid database connection
 // This function will gather all services in database, add/init Notifiers,
 // and start the database cleanup routine
@@ -162,6 +176,8 @@ func InitApp() error {
 	services.CheckServices()
 	// start routine to delete old records (failures, hits)
 	go database.Maintenance()
+	// run incident auto-archive on interval (resolved + delay elapsed -> archived)
+	go runIncidentAutoArchive()
 	core.App.Setup = true
 	core.App.Started = utils.Now()
 	return nil

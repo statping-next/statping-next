@@ -95,11 +95,12 @@ export default new Vuex.Store({
       }
       return state.messages.filter(s => !s.service || s.service === 0)
     },
+    // Public view: only non-archived global incidents (like announcements hidden after end_on).
     globalIncidents: state => {
       if (!state.incidents || !Array.isArray(state.incidents)) {
         return []
       }
-      return state.incidents.filter(i => Number(i.service) === 0)
+      return state.incidents.filter(i => Number(i.service) === 0 && !i.archived)
     },
     servicesInOrder: state => state.services.sort((a, b) => a.order_id - b.order_id),
     servicesNoGroup: state => state.services.filter(g => g.group_id === 0).sort((a, b) => a.order_id - b.order_id),

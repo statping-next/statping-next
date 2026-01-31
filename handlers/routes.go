@@ -141,6 +141,7 @@ func Router() *mux.Router {
 	api.Handle("/api/services/{id}/incidents", http.HandlerFunc(apiServiceIncidentsHandler)).Methods("GET")
 	api.Handle("/api/services/{id}/incidents", authenticated(apiCreateIncidentHandler, false)).Methods("POST")
 	api.Handle("/api/incidents/{id}", authenticated(apiIncidentUpdateHandler, false)).Methods("POST")
+	api.Handle("/api/incidents/{id}/archive", authenticated(apiArchiveIncidentHandler, false)).Methods("POST")
 	api.Handle("/api/incidents/{id}", authenticated(apiDeleteIncidentHandler, false)).Methods("DELETE")
 
 	// API INCIDENTS UPDATES Routes

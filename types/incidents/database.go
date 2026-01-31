@@ -1,6 +1,9 @@
 package incidents
 
 import (
+	"strings"
+	"time"
+
 	"github.com/statping-ng/statping-ng/database"
 	"github.com/statping-ng/statping-ng/types/errors"
 	"github.com/statping-ng/statping-ng/types/metrics"
@@ -34,8 +37,13 @@ func (i *Incident) BeforeCreate() error {
 }
 
 func (i *Incident) AfterFind() {
-	db.Model(i).Related(&i.Updates).Order("id DESC")
+	loadUpdatesAsc(i)
 	metrics.Query("incident", "find")
+}
+
+// loadUpdatesAsc loads i.Updates ordered by id ASC (oldest-first) for display in public and dashboard.
+func loadUpdatesAsc(i *Incident) {
+	dbUpdate.Where("incident = ?", i.Id).Order("id ASC").Find(&i.Updates)
 }
 
 func (i *Incident) AfterCreate() {
@@ -105,11 +113,63 @@ func All() []*Incident {
 	return incidents
 }
 
-// AllWithUpdates returns all incidents with their updates loaded (for admin list).
+// AllWithUpdates returns all incidents (including archived) with their updates loaded (for admin).
 func AllWithUpdates() []*Incident {
 	incidents := All()
 	for _, i := range incidents {
-		db.Model(i).Related(&i.Updates).Order("id DESC")
+		loadUpdatesAsc(i)
+	}
+	return incidents
+}
+
+// ProcessAutoArchive marks incidents as archived when auto_archive_enabled, last update is "resolved", and the delay has passed.
+// Delay is from the last update's CreatedAt: archive when (lastUpdate.CreatedAt + delay) <= now.
+// A delay of 0 means immediate: archive as soon as the last update is "resolved".
+func ProcessAutoArchive() {
+	var list []*Incident
+	db.Where("auto_archive_enabled = ? AND archived = ?", true, false).Find(&list)
+	now := time.Now()
+	for _, i := range list {
+		loadUpdatesAsc(i)
+		if len(i.Updates) == 0 {
+			continue
+		}
+		last := i.Updates[len(i.Updates)-1] // latest update (slice is id ASC, last = newest)
+		if !strings.EqualFold(last.Type, "resolved") {
+			continue
+		}
+		// delay 0 = immediate; otherwise wait N minutes after the resolved update
+		delay := time.Duration(i.AutoArchiveDelayMinutes) * time.Minute
+		if i.AutoArchiveDelayMinutes <= 0 {
+			delay = 0
+		}
+		archiveAt := last.CreatedAt.Add(delay)
+		if archiveAt.After(now) {
+			continue // not yet time to archive
+		}
+		i.Archived = true
+		_ = i.Update()
+	}
+}
+
+// AllPublic returns non-archived incidents with updates (for public). Runs ProcessAutoArchive first.
+func AllPublic() []*Incident {
+	ProcessAutoArchive()
+	var incidents []*Incident
+	db.Where("archived = ?", false).Find(&incidents)
+	for _, i := range incidents {
+		loadUpdatesAsc(i)
+	}
+	return incidents
+}
+
+// FindByServicePublic returns non-archived incidents for a service (for public). Runs ProcessAutoArchive first.
+func FindByServicePublic(serviceId int64) []*Incident {
+	ProcessAutoArchive()
+	var incidents []*Incident
+	db.Where("service = ? AND archived = ?", serviceId, false).Find(&incidents)
+	for _, i := range incidents {
+		loadUpdatesAsc(i)
 	}
 	return incidents
 }
@@ -118,8 +178,18 @@ func (i *Incident) Create() error {
 	return db.Create(i).Error()
 }
 
+// Update persists the incident. Uses a map so zero values (0, false) are written to the DB.
 func (i *Incident) Update() error {
-	return db.Update(i).Error()
+	now := time.Now()
+	i.UpdatedAt = now
+	return db.Model(i).Updates(map[string]interface{}{
+		"title":                      i.Title,
+		"description":                i.Description,
+		"archived":                   i.Archived,
+		"auto_archive_enabled":       i.AutoArchiveEnabled,
+		"auto_archive_delay_minutes": i.AutoArchiveDelayMinutes,
+		"updated_at":                 now,
+	}).Error()
 }
 
 func (i *Incident) Delete() error {

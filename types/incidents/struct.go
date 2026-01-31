@@ -4,13 +4,16 @@ import "time"
 
 // Incident is the main struct for Incidents
 type Incident struct {
-	Id          int64             `gorm:"primary_key;column:id" json:"id"`
-	Title       string            `gorm:"column:title" json:"title,omitempty"`
-	Description string            `gorm:"column:description" json:"description,omitempty"`
-	ServiceId   int64             `gorm:"index;column:service" json:"service"`
-	CreatedAt   time.Time         `gorm:"column:created_at" json:"created_at" json:"created_at"`
-	UpdatedAt   time.Time         `gorm:"column:updated_at" json:"updated_at" json:"updated_at"`
-	Updates     []*IncidentUpdate `gorm:"foreignkey:incident;association_foreignkey:id" json:"updates,omitempty"`
+	Id                       int64             `gorm:"primary_key;column:id" json:"id"`
+	Title                    string            `gorm:"column:title" json:"title,omitempty"`
+	Description              string            `gorm:"column:description" json:"description,omitempty"`
+	ServiceId                int64             `gorm:"index;column:service" json:"service"`
+	Archived                 bool              `gorm:"column:archived" json:"archived"`
+	AutoArchiveEnabled       bool              `gorm:"column:auto_archive_enabled" json:"auto_archive_enabled"`
+	AutoArchiveDelayMinutes  int               `gorm:"column:auto_archive_delay_minutes" json:"auto_archive_delay_minutes"`
+	CreatedAt                time.Time         `gorm:"column:created_at" json:"created_at"`
+	UpdatedAt                time.Time         `gorm:"column:updated_at" json:"updated_at"`
+	Updates                  []*IncidentUpdate `gorm:"foreignkey:incident;association_foreignkey:id" json:"updates,omitempty"`
 }
 
 // IncidentUpdate contains updates based on a Incident
@@ -19,6 +22,6 @@ type IncidentUpdate struct {
 	IncidentId int64     `gorm:"index;column:incident" json:"-"`
 	Message    string    `gorm:"column:message" json:"message,omitempty"`
 	Type       string    `gorm:"column:type" json:"type,omitempty"`
-	CreatedAt  time.Time `gorm:"column:created_at" json:"created_at" json:"created_at"`
-	UpdatedAt  time.Time `gorm:"column:updated_at" json:"updated_at" json:"updated_at"`
+	CreatedAt  time.Time `gorm:"column:created_at" json:"created_at"`
+	UpdatedAt  time.Time `gorm:"column:updated_at" json:"updated_at"`
 }

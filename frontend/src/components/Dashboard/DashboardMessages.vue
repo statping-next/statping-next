@@ -76,11 +76,25 @@
 
         <div v-for="incident in filteredIncidents" :key="incident.id" class="card incident-card mb-4">
           <div class="card-header incident-card-header">
-            <span class="incident-title">Incident: {{ incident.title }}</span>
-            <span class="incident-service-name">({{ serviceName(serviceById(incident.service)) }})</span>
-            <button @click="deleteIncident(incident)" class="btn btn-sm btn-danger incident-delete-btn" :title="$t('incident_delete')">
-              <font-awesome-icon icon="times" />
-            </button>
+            <div class="d-flex align-items-center flex-wrap incident-header-left">
+              <span class="incident-title">Incident: {{ incident.title }}</span>
+              <span class="incident-service-name">({{ serviceName(serviceById(incident.service)) }})</span>
+              <span v-if="incident.archived" class="badge badge-secondary ml-2">{{ $t('incident_archived') }}</span>
+              <span class="ml-2 incident-auto-archive-icon" :title="incident.auto_archive_enabled ? $t('auto_archive_after_resolution') + (incident.auto_archive_delay_minutes ? ' (' + (incident.auto_archive_delay_minutes >= 60 ? Math.floor(incident.auto_archive_delay_minutes / 60) + 'h' : incident.auto_archive_delay_minutes + 'm') + ')' : ' (immediate)') : $t('auto_archive_disabled')">
+                <font-awesome-icon icon="clock" :class="{ 'incident-auto-archive-off': !incident.auto_archive_enabled }" />
+              </span>
+            </div>
+            <div v-if="$store.state.admin" class="btn-group incident-header-actions">
+              <button @click="toggleArchiveIncident(incident)" class="btn btn-sm btn-outline-secondary" :title="incident.archived ? $t('incident_unarchive') : $t('incident_archive')">
+                <font-awesome-icon :icon="incident.archived ? 'folder-open' : 'archive'" />
+              </button>
+              <button @click="editIncident(incident)" class="btn btn-sm btn-outline-secondary" :title="$t('incident_edit')">
+                <font-awesome-icon icon="edit" />
+              </button>
+              <button @click="deleteIncident(incident)" class="btn btn-sm btn-danger" :title="$t('incident_delete')">
+                <font-awesome-icon icon="times" />
+              </button>
+            </div>
           </div>
           <FormIncidentUpdates :incident="incident" @updated="onIncidentUpdated" />
           <div class="incident-meta">Created: {{ niceDate(incident.created_at) }} | Last Update: {{ niceDate(incident.updated_at) }}</div>
@@ -122,10 +136,75 @@
                 </div>
               </div>
               <div class="form-group row">
+                <div class="col-sm-8 offset-sm-4">
+                  <div class="custom-control custom-checkbox">
+                    <input id="new-auto-archive" v-model="newIncident.auto_archive_enabled" type="checkbox" class="custom-control-input">
+                    <label class="custom-control-label" for="new-auto-archive">{{ $t('auto_archive_after_resolution') }}</label>
+                  </div>
+                </div>
+              </div>
+              <div v-if="newIncident.auto_archive_enabled" class="form-group row">
+                <label class="col-sm-4 col-form-label">{{ $t('auto_archive_delay_hint') }}</label>
+                <div class="col-sm-8 form-inline">
+                  <input v-model.number="newIncident.auto_archive_hours" type="number" min="0" max="72" class="form-control form-control-sm mr-2" style="width: 4rem">
+                  <span>h</span>
+                </div>
+              </div>
+              <div class="form-group row">
                 <div class="col-sm-12">
                   <button type="submit" class="btn btn-primary" :disabled="!newIncident.title || !newIncident.description">
                     {{ $t('incident_create') }}
                   </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Incident modal -->
+    <div v-if="showEditIncidentModal && editingIncident" class="incidents-modal-backdrop" @click.self="closeEditIncidentModal">
+      <div class="incidents-modal-dialog" :style="modalDialogStyle">
+        <div class="incidents-modal-content">
+          <div class="incidents-modal-header">
+            <h5 class="incidents-modal-title">{{ $t('incident_edit') }}</h5>
+            <button type="button" class="incidents-modal-close" @click="closeEditIncidentModal" aria-label="Close">
+              <font-awesome-icon icon="times" />
+            </button>
+          </div>
+          <div class="incidents-modal-body">
+            <form @submit.prevent="saveIncidentEdit">
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">{{ $t('title') }}</label>
+                <div class="col-sm-8">
+                  <input v-model="editingIncident.title" type="text" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-4 col-form-label">{{ $t('description') }}</label>
+                <div class="col-sm-8">
+                  <textarea v-model="editingIncident.description" rows="5" class="form-control" required></textarea>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-8 offset-sm-4">
+                  <div class="custom-control custom-checkbox">
+                    <input id="edit-auto-archive" v-model="editingIncident.auto_archive_enabled" type="checkbox" class="custom-control-input">
+                    <label class="custom-control-label" for="edit-auto-archive">{{ $t('auto_archive_after_resolution') }}</label>
+                  </div>
+                </div>
+              </div>
+              <div v-if="editingIncident.auto_archive_enabled" class="form-group row">
+                <label class="col-sm-4 col-form-label">{{ $t('auto_archive_delay_hint') }}</label>
+                <div class="col-sm-8 form-inline">
+                  <input v-model.number="editingIncident.auto_archive_hours" type="number" min="0" max="72" class="form-control form-control-sm mr-2" style="width: 4rem" :key="'edit-hours-' + (editingIncident.id || '')">
+                  <span>h</span>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-12">
+                  <button type="submit" class="btn btn-primary">{{ $t('save') }}</button>
                 </div>
               </div>
             </form>
@@ -150,10 +229,14 @@
         messageToEdit: {},
         incidents: [],
         showIncidentModal: false,
+        showEditIncidentModal: false,
+        editingIncident: null,
         newIncident: {
           title: '',
           description: '',
           service: 0,
+          auto_archive_enabled: false,
+          auto_archive_hours: 12,
         },
       }
     },
@@ -202,6 +285,9 @@
       showIncidentModal(visible) {
         if (visible) this.$nextTick(() => requestAnimationFrame(() => this.updateModalWidth()))
       },
+      showEditIncidentModal(visible) {
+        if (visible) this.$nextTick(() => requestAnimationFrame(() => this.updateModalWidth()))
+      },
     },
     methods: {
       /* Exact same logic as StickyHeader: match .container.col-md-7 width (full main content area) */
@@ -234,14 +320,59 @@
         this.edit = true
       },
       openCreateIncidentModal() {
-        this.newIncident.service = 0
-        this.newIncident.title = ''
-        this.newIncident.description = ''
+        this.newIncident = {
+          title: '',
+          description: '',
+          service: 0,
+          auto_archive_enabled: false,
+          auto_archive_hours: 12,
+        }
         this.showIncidentModal = true
         this.$nextTick(() => { this.newIncident.service = 0 })
       },
       closeIncidentModal() {
         this.showIncidentModal = false
+      },
+      editIncident(incident) {
+        const minutes = incident.auto_archive_delay_minutes
+        const hours = (typeof minutes === 'number' && !Number.isNaN(minutes))
+          ? Math.min(72, Math.max(0, Math.floor(minutes / 60)))
+          : 0
+        this.editingIncident = {
+          id: incident.id,
+          title: incident.title,
+          description: incident.description,
+          auto_archive_enabled: Boolean(incident.auto_archive_enabled),
+          auto_archive_hours: hours,
+        }
+        this.showEditIncidentModal = true
+      },
+      closeEditIncidentModal() {
+        this.showEditIncidentModal = false
+        this.editingIncident = null
+      },
+      async saveIncidentEdit() {
+        if (!this.editingIncident) return
+        const incident = this.incidents.find(i => i.id === this.editingIncident.id)
+        if (!incident) return
+        const delayMinutes = Math.min(72 * 60, Math.max(0, (this.editingIncident.auto_archive_hours || 0) * 60))
+        const res = await Api.incident_update(incident, {
+          title: this.editingIncident.title,
+          description: this.editingIncident.description,
+          auto_archive_enabled: this.editingIncident.auto_archive_enabled,
+          auto_archive_delay_minutes: this.editingIncident.auto_archive_enabled ? delayMinutes : 0,
+        })
+        if (res.status === 'success') {
+          await this.loadIncidents()
+          this.closeEditIncidentModal()
+        }
+      },
+      async toggleArchiveIncident(incident) {
+        const res = await Api.incident_archive(incident, !incident.archived)
+        if (res.status === 'success') {
+          incident.archived = !incident.archived
+          await this.loadIncidents()
+        }
       },
       service(id) {
         return this.$store.getters.serviceById(id) || {}
@@ -291,14 +422,23 @@
       },
       async createIncident() {
         const isGlobal = this.newIncident.service === 0
+        const delayMinutes = this.newIncident.auto_archive_enabled
+          ? Math.min(72 * 60, Math.max(0, (this.newIncident.auto_archive_hours || 0) * 60))
+          : 0
+        const payload = {
+          title: this.newIncident.title,
+          description: this.newIncident.description,
+          auto_archive_enabled: this.newIncident.auto_archive_enabled || false,
+          auto_archive_delay_minutes: delayMinutes,
+        }
         const res = isGlobal
-          ? await Api.incident_create_global({ title: this.newIncident.title, description: this.newIncident.description })
-          : await Api.incident_create(this.newIncident.service, this.newIncident)
+          ? await Api.incident_create_global({ ...payload, service: 0 })
+          : await Api.incident_create(this.newIncident.service, { ...this.newIncident, ...payload })
         if (res.status === 'success') {
           const incidents = await Api.incidents_all()
           this.incidents = incidents
           this.$store.commit('setIncidents', incidents)
-          this.newIncident = { title: '', description: '', service: 0 }
+          this.newIncident = { title: '', description: '', service: 0, auto_archive_enabled: false, auto_archive_hours: 12 }
           this.closeIncidentModal()
         }
       },
@@ -323,8 +463,19 @@
   .incident-card-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     flex-wrap: wrap;
     padding: 0.75rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .incident-header-left {
+    flex: 0 1 auto;
+  }
+
+  .incident-header-actions {
+    flex: 0 0 auto;
+    margin-left: auto;
   }
 
   .incident-title {
@@ -337,8 +488,12 @@
     margin-left: 0.35rem;
   }
 
-  .incident-delete-btn {
-    margin-left: auto;
+  .incident-auto-archive-icon {
+    color: var(--secondary, #6c757d);
+  }
+
+  .incident-auto-archive-icon .incident-auto-archive-off {
+    opacity: 0.4;
   }
 
   .incident-meta {
