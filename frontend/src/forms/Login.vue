@@ -91,7 +91,7 @@
                   await this.$store.dispatch('loadAdmin')
                   this.$store.commit('setAdmin', auth.admin)
                   this.$store.commit('setLoggedIn', true)
-                  this.$router.push('/dashboard')
+                  this.$router.push('/dashboard/status')
               }
               this.loading = false
           },

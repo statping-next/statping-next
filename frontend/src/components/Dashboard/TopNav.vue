@@ -9,7 +9,7 @@
         <div class="navbar-collapse" :class="{collapse: !navopen}" id="navbarText">
             <ul class="navbar-nav mr-auto">
                 <li @click="navopen = !navopen" class="nav-item navbar-item">
-                    <router-link to="/dashboard" class="nav-link">{{ $t('dashboard') }}</router-link>
+                    <router-link to="/dashboard/status" class="nav-link">{{ $t('status') }}</router-link>
                 </li>
                 <li @click="navopen = !navopen" class="nav-item navbar-item">
                     <router-link to="/dashboard/services" class="nav-link">{{ $t('services') }}</router-link>
@@ -18,7 +18,7 @@
                     <router-link to="/dashboard/users" class="nav-link">{{ $t('users') }}</router-link>
                 </li>
                 <li @click="navopen = !navopen" class="nav-item navbar-item">
-                    <router-link to="/dashboard/messages" class="nav-link">{{ $t('announcements') }}</router-link>
+                    <router-link to="/dashboard/incidents" class="nav-link">{{ $t('incidents') }}</router-link>
                 </li>
                 <li v-if="admin" @click="navopen = !navopen" class="nav-item navbar-item">
                     <router-link to="/dashboard/settings" class="nav-link">{{ $t('settings') }}</router-link>

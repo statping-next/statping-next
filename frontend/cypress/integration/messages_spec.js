@@ -2,7 +2,7 @@
 
 import "../support/commands"
 
-context('Announcements Tests', () => {
+context('Incidents (Announcements) Tests', () => {
 
 
   beforeEach(() => {
@@ -25,26 +25,26 @@ context('Announcements Tests', () => {
     cy.getCookies().should('have.length', 1)
   })
 
-  it('should goto messages', () => {
-    cy.visit('/dashboard/messages')
+  it('should goto incidents', () => {
+    cy.visit('/dashboard/incidents')
     cy.get('tbody > tr').should('have.length', 2)
   })
 
-  it('should create Message', () => {
-    cy.visit('/dashboard/messages')
+  it('should create Incident', () => {
+    cy.visit('/dashboard/incidents')
     cy.get('#title').clear().type('Test Message')
     cy.get('#description').clear().type('This message was created by Cypress!')
 
     cy.get('button[type="submit"]').click()
   })
 
-  it('should confirm new Message', () => {
-    cy.visit('/dashboard/messages')
+  it('should confirm new Incident', () => {
+    cy.visit('/dashboard/incidents')
     cy.get('tbody > tr').should('have.length', 3)
   })
 
-  it('should confirm delete Message', () => {
-    cy.visit('/dashboard/messages')
+  it('should confirm delete Incident', () => {
+    cy.visit('/dashboard/incidents')
     cy.get('tbody > tr').eq(0).find('.btn-danger').click()
     cy.get('tbody > tr').should('have.length', 2)
   })

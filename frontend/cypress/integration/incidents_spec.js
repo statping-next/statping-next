@@ -25,7 +25,7 @@ context('Incidents Tests', () => {
   })
 
   it('should create new incident', () => {
-      cy.visit('/dashboard')
+      cy.visit('/dashboard/status')
       cy.wait(3000)
       cy.get('.service_block').eq(0).find(".incident").click()
       cy.get('#title').clear().type('Downtime')

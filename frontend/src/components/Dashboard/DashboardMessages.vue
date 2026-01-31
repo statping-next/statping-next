@@ -1,12 +1,12 @@
 <template>
   <div class="col-12">
     <div class="card contain-card mb-4">
-      <div class="card-header">{{ $t('announcements') }}</div>
+      <div class="card-header">{{ $t('incidents') }}</div>
       <div class="card-body pt-0">
 
           <div v-if="messages.length === 0">
               <div class="alert alert-dark d-block mt-3 mb-0">
-                  You currently don't have any Announcements! Create one using the form below.
+                  You currently don't have any Incidents. Create one using the form below.
               </div>
           </div>
 

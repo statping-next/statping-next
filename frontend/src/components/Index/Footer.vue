@@ -3,7 +3,7 @@
         <div v-if="!core.footer" class="footer text-center mb-4 p-2">
           <div class="d-block text-dim">
           <div class="mb-3">
-            <router-link class="links" :to="admin ? '/dashboard' : '/login'">{{$t('dashboard')}}</router-link>
+            <router-link class="links" :to="admin ? '/dashboard/status' : '/login'">{{$t('status')}}</router-link>
           </div>
             <span class="font-1 mt-3">
             <a href="https://github.com/statping-ng/statping-ng" class="statping" target="_blank">

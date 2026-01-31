@@ -82,10 +82,13 @@ const routes = [
     },
     children: [{
       path: '',
+      redirect: 'status',
+    },{
+      path: 'status',
       component: DashboardIndex,
       meta: {
         requiresAuth: true,
-        title: 'Statping - Dashboard',
+        title: 'Statping - Status',
       }
     },{
       path: 'users',
@@ -138,11 +141,11 @@ const routes = [
         title: 'Statping - Service Failures',
       }
     },{
-      path: 'messages',
+      path: 'incidents',
       component: DashboardMessages,
         meta: {
             requiresAuth: true,
-          title: 'Statping - Messages',
+          title: 'Statping - Incidents',
         }
     },{
       path: 'settings',
