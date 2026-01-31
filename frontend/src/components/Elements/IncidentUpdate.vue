@@ -7,7 +7,7 @@
                 <font-awesome-icon icon="times" />
             </button>
         </div>
-        <div class="incident-update-datetime">{{ niceDate(update.created_at) }} (about {{ ago(update.created_at) }} ago)</div>
+        <div class="incident-update-datetime">{{ niceDate(update.created_at) }} ({{ aboutAgo(update.created_at) }})</div>
     </div>
 </template>
 

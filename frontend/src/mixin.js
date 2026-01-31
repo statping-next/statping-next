@@ -65,6 +65,17 @@ export default Vue.mixin({
     ago(t1) {
       return formatDistanceToNow(parseISO(t1))
     },
+    /** Returns "about X ago" for past dates (for use next to niceDate). */
+    aboutAgo(t1) {
+      return `about ${this.ago(t1)} ago`
+    },
+    /** Returns "about X ago" for past or "in X" for future (e.g. for "Ends" date). */
+    timeRelative(t1) {
+      const d = parseISO(t1)
+      const now = new Date()
+      if (d <= now) return this.aboutAgo(t1)
+      return formatDistanceToNow(d, { addSuffix: true })
+    },
     daysInMonth(t1) {
       return lastDayOfMonth(t1)
     },

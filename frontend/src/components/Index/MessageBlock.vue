@@ -6,9 +6,9 @@
       </h3>
       <div class="global-incident-description">{{ message.description }}</div>
       <div class="global-incident-dates">
-        <span class="global-incident-date-item">Started {{ niceDate(message.start_on) }}</span>
+        <span class="global-incident-date-item">Started {{ niceDate(message.start_on) }} ({{ aboutAgo(message.start_on) }})</span>
         <span class="global-incident-date-sep">·</span>
-        <span class="global-incident-date-item">Ends {{ niceDate(message.end_on) }}</span>
+        <span class="global-incident-date-item">Ends {{ niceDate(message.end_on) }} ({{ timeRelative(message.end_on) }})</span>
       </div>
     </div>
   </div>

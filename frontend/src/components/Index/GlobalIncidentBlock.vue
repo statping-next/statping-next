@@ -6,9 +6,9 @@
       </h3>
       <div v-if="incident.description" class="global-incident-description" v-html="incident.description"></div>
       <div class="global-incident-dates">
-        <span class="global-incident-date-item">Started {{ niceDate(incident.created_at) }}</span>
+        <span class="global-incident-date-item">Started {{ niceDate(incident.created_at) }} ({{ aboutAgo(incident.created_at) }})</span>
         <span class="global-incident-date-sep">·</span>
-        <span class="global-incident-date-item">Last updated {{ niceDate(lastUpdatedTime(incident)) }}</span>
+        <span class="global-incident-date-item">Last updated {{ niceDate(lastUpdatedTime(incident)) }} ({{ aboutAgo(lastUpdatedTime(incident)) }})</span>
       </div>
       <div v-if="incident.updates && incident.updates.length > 0" class="global-incident-updates">
         <IncidentUpdate v-for="(update, ui) in incident.updates" :key="update.id || ui" :update="update" :admin="false"/>

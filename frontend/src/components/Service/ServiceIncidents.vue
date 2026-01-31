@@ -18,9 +18,9 @@
         />
 
         <div class="service-incident-dates mb-3">
-          <span>Started {{ niceDate(incident.created_at) }}</span>
+          <span>Started {{ niceDate(incident.created_at) }} ({{ aboutAgo(incident.created_at) }})</span>
           <span class="mx-2">·</span>
-          <span>Last updated {{ niceDate(lastUpdatedTime(incident)) }}</span>
+          <span>Last updated {{ niceDate(lastUpdatedTime(incident)) }} ({{ aboutAgo(lastUpdatedTime(incident)) }})</span>
         </div>
 
         <div
