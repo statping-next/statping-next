@@ -31,7 +31,7 @@
 
             <div class="col-7 pr-2 pl-0">
               <div class="btn-group float-right">
-                  <button @click="$router.push({path: `/dashboard/service/${service.id}/incidents`, params: {id: service.id}})" @mouseleave="unsetHover" @mouseover="setHover($t('incidents'))" class="btn btn-sm btn-white incident">
+                  <button @click="$router.push(`/dashboard/incidents?service=${service.id}`)" @mouseleave="unsetHover" @mouseover="setHover($t('incidents'))" class="btn btn-sm btn-white incident">
                     <font-awesome-icon icon="bullhorn"/>
                   </button>
                   <button @click="$router.push({path: `/dashboard/service/${service.id}/checkins`, params: {id: service.id}})" @mouseleave="unsetHover" @mouseover="setHover($t('checkins'))" class="btn btn-sm btn-white checkins">

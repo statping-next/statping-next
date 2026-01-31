@@ -24,6 +24,11 @@ func findIncident(r *http.Request) (*incidents.Incident, int64, error) {
 	return checkin, id, nil
 }
 
+func apiAllIncidentsHandler(w http.ResponseWriter, r *http.Request) {
+	all := incidents.AllWithUpdates()
+	returnJson(all, w, r)
+}
+
 func apiServiceIncidentsHandler(w http.ResponseWriter, r *http.Request) {
 	service, err := findService(r)
 	if err != nil {

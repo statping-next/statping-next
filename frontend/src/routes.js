@@ -11,7 +11,6 @@ const Settings = () => import(/* webpackChunkName: "dashboard" */ '@/pages/Setti
 const Login = () => import(/* webpackChunkName: "index" */ '@/pages/Login')
 const Service = () => import(/* webpackChunkName: "index" */ '@/pages/Service')
 const Setup = () => import(/* webpackChunkName: "index" */ '@/forms/Setup')
-const Incidents = () => import(/* webpackChunkName: "dashboard" */ '@/components/Dashboard/Incidents')
 const Checkins = () => import(/* webpackChunkName: "dashboard" */ '@/components/Dashboard/Checkins')
 const Failures = () => import(/* webpackChunkName: "dashboard" */ '@/components/Dashboard/Failures')
 const NotFound = () => import(/* webpackChunkName: "index" */ '@/pages/NotFound')
@@ -121,11 +120,7 @@ const routes = [
       }
     },{
       path: 'service/:id/incidents',
-      component: Incidents,
-      meta: {
-        requiresAuth: true,
-        title: 'Statping - Incidents',
-      }
+      redirect: to => ({ path: '/dashboard/incidents', query: { service: to.params.id } }),
     },{
       path: 'service/:id/checkins',
       component: Checkins,

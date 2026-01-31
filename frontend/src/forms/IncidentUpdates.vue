@@ -1,31 +1,30 @@
 <template>
-    <div class="card-body pt-3">
+    <div class="incident-updates-body">
 
-        <div v-if="updates.length===0" class="alert alert-link text-danger">
-            No updates found, create a new Incident Update below.
+        <div v-if="updates.length === 0" class="incident-updates-empty">
+            No updates yet. Add one below.
         </div>
 
-        <div v-for="update in updates" :key="update.id">
-            <IncidentUpdate :update="update" :onUpdate="loadUpdates" :admin="true"/>
+        <div class="incident-updates-list">
+            <IncidentUpdate v-for="update in updates" :key="update.id" :update="update" :onUpdate="onUpdateCallback" :admin="true"/>
         </div>
 
-        <form class="row" @submit.prevent="createIncidentUpdate">
-            <div class="col-12 col-md-3 mb-3 mb-md-0">
-                <select v-model="incident_update.type" class="form-control">
+        <form class="incident-updates-add row" @submit.prevent="createIncidentUpdate">
+            <div class="col-12 col-md-3 mb-2 mb-md-0">
+                <select v-model="incident_update.type" class="form-control form-control-sm">
                     <option value="Investigating">Investigating</option>
                     <option value="Update">Update</option>
                     <option value="Unknown">Unknown</option>
                     <option value="Resolved">Resolved</option>
                 </select>
             </div>
-            <div class="col-12 col-md-7 mb-3 mb-md-0">
-                <input v-model="incident_update.message" name="description" class="form-control" id="message" required>
+            <div class="col-12 col-md-7 mb-2 mb-md-0">
+                <input v-model="incident_update.message" name="description" class="form-control form-control-sm" placeholder="Update message..." required>
             </div>
-
             <div class="col-12 col-md-2">
                 <button @click.prevent="createIncidentUpdate"
                         :disabled="!incident_update.message"
-                        type="submit" class="btn btn-block btn-primary">
+                        type="submit" class="btn btn-sm btn-primary btn-block">
                     Add
                 </button>
             </div>
@@ -66,9 +65,9 @@
             async createIncidentUpdate() {
                 this.res = await Api.incident_update_create(this.incident_update)
                 if (this.res.status === "success") {
-                    this.updates.push(this.res.output) // this is better in terms of not having to querry the db to get a fresh copy of all updates
-                    //await this.loadUpdates()
-                } // TODO: further error checking here... maybe alert user it failed with modal or so
+                    this.updates.push(this.res.output)
+                    this.$emit('updated')
+                }
 
                 // reset the form data
                 this.incident_update = {
@@ -81,11 +80,38 @@
 
             async loadUpdates() {
                 this.updates = await Api.incident_updates(this.incident)
+            },
+            async onUpdateCallback() {
+                await this.loadUpdates()
+                this.$emit('updated')
             }
         }
     }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .incident-updates-body {
+    padding: 1rem 1.25rem;
+  }
+
+  .incident-updates-empty {
+    font-size: 0.875rem;
+    color: var(--secondary, #6c757d);
+    margin-bottom: 1rem;
+  }
+
+  .incident-updates-list {
+    margin-bottom: 1.25rem;
+  }
+
+  .incident-updates-add {
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    align-items: center;
+  }
+
+  .incident-updates-add .form-control,
+  .incident-updates-add .btn {
+    height: 2.25rem;
+  }
 </style>

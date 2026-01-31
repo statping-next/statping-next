@@ -105,6 +105,15 @@ func All() []*Incident {
 	return incidents
 }
 
+// AllWithUpdates returns all incidents with their updates loaded (for admin list).
+func AllWithUpdates() []*Incident {
+	incidents := All()
+	for _, i := range incidents {
+		db.Model(i).Related(&i.Updates).Order("id DESC")
+	}
+	return incidents
+}
+
 func (i *Incident) Create() error {
 	return db.Create(i).Error()
 }

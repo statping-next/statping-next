@@ -15,12 +15,6 @@
       </span>
     </div>
 
-    <div v-if="loaded" v-for="incident in incidents" class="col-12 font-2 m-0 mb-2">
-      <font-awesome-icon icon="bullhorn" class="mr-1" size="1x"/>Recent Incident<br>
-      <span class="font-italic font-weight-light text-dim mt-1" style="max-width: 270px">{{incident.title}} - {{incident.description}}</span>
-      <span class="font-0 text-dim float-right font-weight-light mt-1">@ <strong>{{niceDate(incident.created_at)}}</strong></span>
-    </div>
-
     <div v-if="success_event && !failureBefore" class="col-12 font-2 m-0 mb-2">
       <span class="text-success"><font-awesome-icon icon="check" class="mr-1" size="1x"/>No New Events</span>
       <span v-if="!this.isZero(service.last_error)" class="font-italic d-inline-block text-truncate text-dim mt-1" style="max-width: 270px">
@@ -32,7 +26,6 @@
 </template>
 
 <script>
-import Api from "../../API";
 const Loading = () => import(/* webpackChunkName: "index" */ "@/components/Elements/Loading");
 
 export default {
@@ -69,7 +62,7 @@ name: "ServiceEvents",
       return this.$store.getters.serviceMessages(this.service.id)
     },
     success_event() {
-      if (this.service.online && this.service.messages.length === 0 && this.service.incidents.length === 0) {
+      if (this.service.online && this.service.messages.length === 0) {
         return true
       }
       return false
@@ -79,14 +72,10 @@ name: "ServiceEvents",
     async load() {
       this.loaded = false
       await this.getMessages()
-      await this.getIncidents()
       this.loaded = true
     },
     async getMessages() {
-      // this.messages = this.$store.getters.serviceMessages(this.service.id)
-    },
-    async getIncidents() {
-      this.incidents = await Api.incidents_service(this.service.id)
+      // Messages are from store (serviceMessages)
     },
   }
 }

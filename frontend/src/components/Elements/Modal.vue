@@ -1,6 +1,6 @@
 <template>
- <div v-if="modal.visible" class="modal d-block mt-5 pt-5" tabindex="-1">
-      <div class="modal-dialog">
+ <div v-if="modal.visible" class="modal d-block mt-5 pt-5" tabindex="-1" @click.self="close">
+      <div class="modal-dialog" @click.stop>
         <div class="modal-content bg-dark text-white">
           <div class="modal-header">
             <h5 class="modal-title">{{modal.title}}</h5>
