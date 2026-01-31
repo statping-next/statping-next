@@ -12,23 +12,23 @@
                     <router-link to="/dashboard/status" class="nav-link">{{ $t('status') }}</router-link>
                 </li>
                 <li @click="navopen = !navopen" class="nav-item navbar-item">
+                    <router-link to="/dashboard/incidents" class="nav-link">{{ $t('incidents') }}</router-link>
+                </li>
+                <li v-if="admin" @click="navopen = !navopen" class="nav-item navbar-item">
+                    <router-link to="/dashboard/logs" class="nav-link">{{ $t('logs') }}</router-link>
+                </li>
+                <li @click="navopen = !navopen" class="nav-item navbar-item">
                     <router-link to="/dashboard/services" class="nav-link">{{ $t('services') }}</router-link>
                 </li>
                 <li v-if="admin" @click="navopen = !navopen" class="nav-item navbar-item">
                     <router-link to="/dashboard/users" class="nav-link">{{ $t('users') }}</router-link>
                 </li>
-                <li @click="navopen = !navopen" class="nav-item navbar-item">
-                    <router-link to="/dashboard/incidents" class="nav-link">{{ $t('incidents') }}</router-link>
-                </li>
                 <li v-if="admin" @click="navopen = !navopen" class="nav-item navbar-item">
                     <router-link to="/dashboard/settings" class="nav-link">{{ $t('settings') }}</router-link>
                 </li>
-              <li v-if="admin" @click="navopen = !navopen" class="nav-item navbar-item">
-                <router-link to="/dashboard/logs" class="nav-link">{{ $t('logs') }}</router-link>
-              </li>
-              <li v-if="admin" @click="navopen = !navopen" class="nav-item navbar-item">
-                <router-link to="/dashboard/help" class="nav-link">{{ $t('help') }}</router-link>
-              </li>
+                <li v-if="admin" @click="navopen = !navopen" class="nav-item navbar-item">
+                    <router-link to="/dashboard/help" class="nav-link">{{ $t('help') }}</router-link>
+                </li>
             </ul>
             <span class="navbar-text">
       <a href="#" class="nav-link" @click.prevent="logout">{{ $t('logout') }}</a>

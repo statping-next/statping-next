@@ -43,8 +43,10 @@ const routes = [
     component: Dashboard,
     meta: {
       requiresAuth: true,
+      requiresAdmin: true,
       title: 'Statping - Dashboard',
     },
+    // Entire /dashboard is admin-only: beforeEnter enforces auth + admin
     beforeEnter: async (to, from, next) => {
       if (to.matched.some(record => record.meta.requiresAuth)) {
         if (to.path !== '/login') {

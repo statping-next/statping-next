@@ -9,14 +9,14 @@
                 </router-link>
             </div>
 
-            <!-- Middle: Navigation items (admin mode only) -->
+            <!-- Middle: Navigation items (admin-only dashboard) -->
             <nav v-if="adminMode" class="sticky-nav">
                 <router-link to="/dashboard/status" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/status') }" :data-text="$t('status')">{{ $t('status') }}</router-link>
+                <router-link to="/dashboard/incidents" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/incidents') }" :data-text="$t('incidents')">{{ $t('incidents') }}</router-link>
+                <router-link v-if="admin" to="/dashboard/logs" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/logs') }" :data-text="$t('logs')">{{ $t('logs') }}</router-link>
                 <router-link to="/dashboard/services" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/services') }" :data-text="$t('services')">{{ $t('services') }}</router-link>
                 <router-link v-if="admin" to="/dashboard/users" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/users') }" :data-text="$t('users')">{{ $t('users') }}</router-link>
-                <router-link to="/dashboard/incidents" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/incidents') }" :data-text="$t('incidents')">{{ $t('incidents') }}</router-link>
                 <router-link v-if="admin" to="/dashboard/settings" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/settings') }" :data-text="$t('settings')">{{ $t('settings') }}</router-link>
-                <router-link v-if="admin" to="/dashboard/logs" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/logs') }" :data-text="$t('logs')">{{ $t('logs') }}</router-link>
                 <router-link v-if="admin" to="/dashboard/help" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/help') }" :data-text="$t('help')">{{ $t('help') }}</router-link>
             </nav>
 
