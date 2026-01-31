@@ -8,7 +8,7 @@ const tokenKey = "statping_auth";
 class Api {
   constructor() {
     this.version = "0.91.0";
-    this.commit = "e85dfa5c12ee6352a4d15f655af1d487a8b1bb18";
+    this.commit = "d3ab5c9c502aeb212f9f17c3d0d0668446c4e867";
   }
 
   async oauth() {
@@ -150,6 +150,10 @@ class Api {
 
   async incident_create(service_id, data) {
     return axios.post('api/services/' + service_id + '/incidents', data).then(response => (response.data))
+  }
+
+  async incident_create_global(data) {
+    return axios.post('api/incidents', { ...data, service: 0 }).then(response => (response.data))
   }
 
   async incident_delete(incident) {

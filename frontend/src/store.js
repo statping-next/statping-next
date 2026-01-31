@@ -48,6 +48,7 @@ export default new Vuex.Store({
     service: null,
     groups: [],
     messages: [],
+    incidents: [],
     users: [],
     notifiers: [],
     checkins: [],
@@ -93,6 +94,12 @@ export default new Vuex.Store({
         return []
       }
       return state.messages.filter(s => !s.service || s.service === 0)
+    },
+    globalIncidents: state => {
+      if (!state.incidents || !Array.isArray(state.incidents)) {
+        return []
+      }
+      return state.incidents.filter(i => Number(i.service) === 0)
     },
     servicesInOrder: state => state.services.sort((a, b) => a.order_id - b.order_id),
     servicesNoGroup: state => state.services.filter(g => g.group_id === 0).sort((a, b) => a.order_id - b.order_id),
@@ -165,6 +172,9 @@ export default new Vuex.Store({
     },
     setMessages(state, messages) {
       state.messages = messages
+    },
+    setIncidents(state, incidents) {
+      state.incidents = incidents || []
     },
     setUsers(state, users) {
       state.users = users
@@ -260,6 +270,8 @@ export default new Vuex.Store({
       context.commit("setServices", services);
       const messages = await Api.messages()
       context.commit("setMessages", messages)
+      const incidents = await Api.incidents_all()
+      context.commit("setIncidents", incidents)
       const oauth = await Api.oauth()
       context.commit("setOAuth", oauth);
       context.commit("setHasPublicData", true)
@@ -271,6 +283,8 @@ export default new Vuex.Store({
       context.commit("setServices", services);
       const messages = await Api.messages()
       context.commit("setMessages", messages)
+      const incidents = await Api.incidents_all()
+      context.commit("setIncidents", incidents)
       context.commit("setHasPublicData", true)
       const checkins = await Api.checkins()
       context.commit("setCheckins", checkins);

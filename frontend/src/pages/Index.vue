@@ -15,6 +15,7 @@
 
       <div class="col-12 full-col-12">
           <MessageBlock v-for="message in messages" v-bind:key="message.id" :message="message" />
+          <GlobalIncidentBlock v-for="incident in globalIncidents" v-bind:key="incident.id" :incident="incident" />
       </div>
 
       <div class="col-12 full-col-12">
@@ -43,6 +44,7 @@ const Group = () => import(/* webpackChunkName: "index" */ '@/components/Index/G
 const Header = () => import(/* webpackChunkName: "index" */ '@/components/Index/Header')
 const StickyHeader = () => import(/* webpackChunkName: "index" */ '@/components/StickyHeader')
 const MessageBlock = () => import(/* webpackChunkName: "index" */ '@/components/Index/MessageBlock')
+const GlobalIncidentBlock = () => import(/* webpackChunkName: "index" */ '@/components/Index/GlobalIncidentBlock')
 const ServiceBlock = () => import(/* webpackChunkName: "index" */ '@/components/Service/ServiceBlock')
 const GroupServiceFailures = () => import(/* webpackChunkName: "index" */ '@/components/Index/GroupServiceFailures')
 const IncidentsBlock = () => import(/* webpackChunkName: "index" */ '@/components/Index/IncidentsBlock')
@@ -55,6 +57,7 @@ export default {
       GroupServiceFailures,
       ServiceBlock,
       MessageBlock,
+      GlobalIncidentBlock,
       MessagesIcon,
       Group,
       Header,
@@ -88,6 +91,9 @@ export default {
                 return []
             }
             return msgs.filter(m => this.inRange(m) && m.service === 0)
+        },
+        globalIncidents() {
+            return this.$store.getters.globalIncidents || []
         },
         groups() {
             return this.$store.getters.groupsInOrder

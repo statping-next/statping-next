@@ -29,6 +29,11 @@ func apiAllIncidentsHandler(w http.ResponseWriter, r *http.Request) {
 	returnJson(all, w, r)
 }
 
+// apiAllIncidentsHandlerScoped returns all incidents for public/read (main page global incidents).
+func apiAllIncidentsHandlerScoped(r *http.Request) interface{} {
+	return incidents.AllWithUpdates()
+}
+
 func apiServiceIncidentsHandler(w http.ResponseWriter, r *http.Request) {
 	service, err := findService(r)
 	if err != nil {
@@ -83,6 +88,21 @@ func apiCreateIncidentHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	incident.ServiceId = service.Id
+	if err := incident.Create(); err != nil {
+		sendErrorJson(err, w, r)
+		return
+	}
+	sendJsonAction(incident, "create", w, r)
+}
+
+// apiCreateGlobalIncidentHandler creates an incident with service=0 (global).
+func apiCreateGlobalIncidentHandler(w http.ResponseWriter, r *http.Request) {
+	var incident *incidents.Incident
+	if err := DecodeJSON(r, &incident); err != nil {
+		sendErrorJson(err, w, r)
+		return
+	}
+	incident.ServiceId = 0
 	if err := incident.Create(); err != nil {
 		sendErrorJson(err, w, r)
 		return

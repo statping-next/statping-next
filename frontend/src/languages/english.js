@@ -123,6 +123,7 @@ const english = {
     incidents: "Incidents",
     incident_create: "Create Incident",
     incident_delete: "Delete Incident",
+    global_incident: "Global Incident",
     delete_announcement: "Delete Announcement",
     service_info: "Service Info",
     service_name: "Service Name",

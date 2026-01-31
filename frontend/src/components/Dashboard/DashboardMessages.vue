@@ -103,7 +103,8 @@
               <div class="form-group row">
                 <label class="col-sm-4 col-form-label">{{ $tc('service', 1) }}</label>
                 <div class="col-sm-8">
-                  <select v-model.number="newIncident.service" class="form-control" required>
+                  <select v-model.number="newIncident.service" class="form-control" required :key="'incident-service-' + showIncidentModal">
+                    <option :value="0">{{ $t('global_incident') }}</option>
                     <option v-for="s in $store.getters.services" :key="s.id" :value="s.id">{{ s.name }}</option>
                   </select>
                 </div>
@@ -122,7 +123,7 @@
               </div>
               <div class="form-group row">
                 <div class="col-sm-12">
-                  <button type="submit" class="btn btn-primary" :disabled="!newIncident.title || !newIncident.description || !newIncident.service">
+                  <button type="submit" class="btn btn-primary" :disabled="!newIncident.title || !newIncident.description">
                     {{ $t('incident_create') }}
                   </button>
                 </div>
@@ -152,7 +153,7 @@
         newIncident: {
           title: '',
           description: '',
-          service: null,
+          service: 0,
         },
       }
     },
@@ -187,8 +188,8 @@
       if (serviceId) {
         this.newIncident.service = serviceId
         this.$nextTick(() => { this.showIncidentModal = true })
-      } else if (this.$store.getters.services && this.$store.getters.services.length) {
-        this.newIncident.service = this.$store.getters.services[0].id
+      } else {
+        this.newIncident.service = 0
       }
     },
     beforeDestroy() {
@@ -233,12 +234,11 @@
         this.edit = true
       },
       openCreateIncidentModal() {
-        if (this.$store.getters.services && this.$store.getters.services.length) {
-          this.newIncident.service = this.$store.getters.services[0].id
-        }
+        this.newIncident.service = 0
         this.newIncident.title = ''
         this.newIncident.description = ''
         this.showIncidentModal = true
+        this.$nextTick(() => { this.newIncident.service = 0 })
       },
       closeIncidentModal() {
         this.showIncidentModal = false
@@ -290,10 +290,15 @@
         this.$store.commit('setModal', modal)
       },
       async createIncident() {
-        const res = await Api.incident_create(this.newIncident.service, this.newIncident)
+        const isGlobal = this.newIncident.service === 0
+        const res = isGlobal
+          ? await Api.incident_create_global({ title: this.newIncident.title, description: this.newIncident.description })
+          : await Api.incident_create(this.newIncident.service, this.newIncident)
         if (res.status === 'success') {
-          this.incidents.push(res.output)
-          this.newIncident = { title: '', description: '', service: this.$store.getters.services && this.$store.getters.services[0] ? this.$store.getters.services[0].id : null }
+          const incidents = await Api.incidents_all()
+          this.incidents = incidents
+          this.$store.commit('setIncidents', incidents)
+          this.newIncident = { title: '', description: '', service: 0 }
           this.closeIncidentModal()
         }
       },
