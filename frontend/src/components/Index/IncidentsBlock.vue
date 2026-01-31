@@ -130,7 +130,7 @@ export default {
   margin-bottom: 0.75rem;
 }
 .dark-theme .incident-dates {
-  color: #ffffff;
+  color: #aaaaaa;
 }
 .incident-date-sep {
   margin: 0 0.35rem;

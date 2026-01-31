@@ -70,6 +70,9 @@ export default {
   color: var(--secondary, #6c6c6c);
   margin-bottom: 0.75rem;
 }
+.dark-theme .global-incident-dates {
+  color: #aaaaaa;
+}
 
 .global-incident-date-sep {
   margin: 0 0.35rem;

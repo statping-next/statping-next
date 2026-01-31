@@ -112,4 +112,7 @@
     margin-top: 0.35rem;
     margin-left: 0;
   }
+  .dark-theme .incident-update-datetime {
+    color: #aaaaaa;
+  }
 </style>
