@@ -1,0 +1,1 @@
+make binary && scp statping status.bonifacelabs.net: && ssh status.bonifacelabs.net "sudo rm /srv/statping/bin/statping_custom-0.94.0 && sudo mv ~/statping /srv/statping/bin/statping_custom-0.94.0 && sudo systemctl restart statping"

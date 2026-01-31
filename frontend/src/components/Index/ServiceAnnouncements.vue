@@ -1,9 +1,9 @@
 <template>
   <div v-if="messagesInRange.length > 0" class="service-announcements-block">
     <div v-for="message in messagesInRange" :key="message.id" class="service-announcement-nested" role="alert">
-      <h5 class="incident-title font-weight-bold">
+      <h3 class="incident-title font-weight-bold">
         <span class="incident-emoji">📢</span> {{ message.title }}
-      </h5>
+      </h3>
       <div v-if="message.description" class="incident-description" v-html="message.description"></div>
       <div class="incident-dates">
         <span class="incident-date-item">Started {{ niceDate(message.start_on) }} ({{ aboutAgo(message.start_on) }})</span>
@@ -88,18 +88,18 @@ export default {
   border-color: #0f1114;
 }
 
-/* Content styles – identical to IncidentsBlock (same classes, same values) */
+/* Content styles – match global announcement/incident font sizes and spacing */
 .incident-title {
-  font-size: 1rem;
-  margin-bottom: 0.35rem;
+  font-size: calc(1.25rem - 0.5px);
+  margin-bottom: 1rem;
 }
 .incident-emoji {
-  font-size: 0.85em;
+  font-size: 0.9em;
   vertical-align: middle;
 }
 
 .incident-description {
-  font-size: 0.9rem;
+  font-size: calc(1rem - 0.5px);
   margin-bottom: 0.5rem;
 }
 .incident-description >>> p:last-child {
@@ -107,7 +107,7 @@ export default {
 }
 
 .incident-dates {
-  font-size: 0.8rem;
+  font-size: calc(0.875rem + 0.5px);
   color: #6c6c6c;
   margin-bottom: 0.75rem;
 }

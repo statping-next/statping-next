@@ -71,7 +71,7 @@
       </div>
       <div class="card-body pt-0">
         <div v-if="incidents.length === 0" class="alert alert-dark d-block mt-3 mb-0">
-          No incidents. Create a service incident.
+          No incidents. Create a global or service-specific incident.
         </div>
 
         <div v-for="incident in filteredIncidents" :key="incident.id" class="card incident-card mb-4">

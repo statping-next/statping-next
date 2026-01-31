@@ -65,7 +65,7 @@
 
   .incident-update-type {
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: calc(0.875rem + 1.5px);
     text-transform: capitalize;
     flex-shrink: 0;
   }
@@ -89,7 +89,7 @@
   .incident-update-message {
     flex: 1;
     color: inherit;
-    font-size: 0.9375rem;
+    font-size: calc(0.9375rem + 1px);
   }
 
   .incident-update-delete {
@@ -106,8 +106,9 @@
     color: #dc3545;
   }
 
+  /* Match main block dates (Started/Ends/Last updated) font size */
   .incident-update-datetime {
-    font-size: 0.8125rem;
+    font-size: calc(0.875rem + 0.5px);
     color: #6c757d;
     margin-top: 0.35rem;
     margin-left: 0;

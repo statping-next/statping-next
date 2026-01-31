@@ -1,6 +1,6 @@
 <template>
   <div class="card shadow mb-4 global-incident-block" role="alert">
-    <div class="card-body pb-2">
+    <div class="card-body">
       <h3 class="mb-3 font-weight-bold global-incident-title">
         <span class="global-incident-emoji">⚠️</span> {{ incident.title }}
       </h3>
@@ -51,8 +51,9 @@ export default {
   box-sizing: border-box;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
+/* Top/sides 1rem; bottom 0.25rem so total bottom = 0.25rem + .global-incident-dates margin (0.75rem) = 1rem, matching top/sides */
 .global-incident-block .card-body {
-  padding: 1rem 1.75rem 0.5rem;
+  padding: 1rem 1rem 0.25rem;
   box-sizing: border-box;
 }
 .global-incident-block:hover {
@@ -65,7 +66,7 @@ export default {
 }
 
 .global-incident-title {
-  font-size: 1.25rem;
+  font-size: calc(1.25rem - 0.5px);
 }
 
 .global-incident-emoji {
@@ -74,7 +75,7 @@ export default {
 }
 
 .global-incident-description {
-  font-size: 1rem;
+  font-size: calc(1rem - 0.5px);
   margin-bottom: 0.75rem;
 }
 .global-incident-description >>> p:last-child {
@@ -82,7 +83,7 @@ export default {
 }
 
 .global-incident-dates {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem + 0.5px);
   color: var(--secondary, #6c6c6c);
   margin-bottom: 0.75rem;
 }
