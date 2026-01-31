@@ -83,19 +83,25 @@
 }
 
 .chartmarker {
-  padding: 0px;
+  padding: 8px 12px;
   width: 200px;
   text-align: left;
+  background: rgba(0, 0, 0, 0.88);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .chartmarker SPAN {
   font-size: 8pt;
   display: block;
-  color: #b1b1b1;
+  color: #e8e8e8;
 }
 
 .apexcharts-tooltip {
-  box-shadow: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.88) !important;
+  border: none;
+  color: #e8e8e8;
 }
 
 .dropup .dropdown-menu {
