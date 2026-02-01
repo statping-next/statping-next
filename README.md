@@ -28,7 +28,11 @@ Most of the [documentation for statping-ng](https://github.com/statping-ng/statp
 
 ### Dark Theme
 
+![Dark Theme - Jellyfin](/images/dark-theme-jellyfin.png)
+
 ### Light Theme
+
+![Light Theme - Jellyfin](/images/light-theme-jellyfin.png)
 
 # Contributing
 
