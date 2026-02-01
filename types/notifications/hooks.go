@@ -1,7 +1,7 @@
 package notifications
 
 import (
-	"github.com/statping-ng/statping-ng/types/metrics"
+	"github.com/statping-next/statping-next/types/metrics"
 )
 
 func (n *Notification) AfterFind() (err error) {

@@ -3,11 +3,11 @@ package services
 import (
 	"time"
 
-	"github.com/statping-ng/statping-ng/types/checkins"
-	"github.com/statping-ng/statping-ng/types/failures"
-	"github.com/statping-ng/statping-ng/types/incidents"
-	"github.com/statping-ng/statping-ng/types/messages"
-	"github.com/statping-ng/statping-ng/types/null"
+	"github.com/statping-next/statping-next/types/checkins"
+	"github.com/statping-next/statping-next/types/failures"
+	"github.com/statping-next/statping-next/types/incidents"
+	"github.com/statping-next/statping-next/types/messages"
+	"github.com/statping-next/statping-next/types/null"
 )
 
 // Service is the main struct for Services

@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"github.com/statping-ng/statping-ng/source"
-	"github.com/statping-ng/statping-ng/utils"
+	"github.com/statping-next/statping-next/source"
+	"github.com/statping-next/statping-next/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

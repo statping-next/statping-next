@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-const wikiUrl = "https://github.com/statping-ng/statping-ng.wiki"
+const wikiUrl = "https://github.com/statping-next/statping-next.wiki"
 
 var vue = `<template>
 <div class="col-12">
@@ -109,7 +109,7 @@ func main() {
 
 	fmt.Println("Generating Help view from Wiki")
 
-	d, _ := ioutil.ReadFile("statping.wiki/_Sidebar.md")
+	d, _ := ioutil.ReadFile("statping-next.wiki/_Sidebar.md")
 
 	var cats []*Category
 	var pages []*Page
@@ -131,7 +131,7 @@ func main() {
 			cats = append(cats, newCate)
 		}
 		if txt[0:2] == "[[" {
-			file := "statping.wiki/" + txt[2:len(txt)-2] + ".md"
+			file := "statping-next.wiki/" + txt[2:len(txt)-2] + ".md"
 			file = strings.ReplaceAll(file, " ", "-")
 			page := &Page{
 				String: txt[2 : len(txt)-2],
@@ -144,12 +144,12 @@ func main() {
 
 	home := &Page{
 		String: "Home",
-		Data:   open("statping.wiki/Home.md"),
+		Data:   open("statping-next.wiki/Home.md"),
 	}
 
 	footer := &Page{
 		String: "Footer",
-		Data:   open("statping.wiki/_Footer.md"),
+		Data:   open("statping-next.wiki/_Footer.md"),
 	}
 
 	w := bytes.NewBufferString("")
@@ -169,7 +169,7 @@ func main() {
 	ioutil.WriteFile("../frontend/src/pages/Help.vue", w.Bytes(), os.FileMode(0755))
 
 	fmt.Println("Deleting statping wiki repo")
-	os.RemoveAll("statping.wiki")
+	os.RemoveAll("statping-next.wiki")
 }
 
 func open(filename string) string {

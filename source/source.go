@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"github.com/GeertJohan/go.rice"
 	"github.com/pkg/errors"
-	"github.com/statping-ng/statping-ng/utils"
+	"github.com/statping-next/statping-next/utils"
 	"os"
 	"os/exec"
 	"path/filepath"

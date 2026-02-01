@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/statping-ng/statping-ng/types/errors"
-	"github.com/statping-ng/statping-ng/types/users"
-	"github.com/statping-ng/statping-ng/utils"
+	"github.com/statping-next/statping-next/types/errors"
+	"github.com/statping-next/statping-next/types/users"
+	"github.com/statping-next/statping-next/utils"
 )
 
 func findUser(r *http.Request) (*users.User, int64, error) {

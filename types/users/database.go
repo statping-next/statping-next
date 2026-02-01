@@ -1,9 +1,9 @@
 package users
 
 import (
-	"github.com/statping-ng/statping-ng/database"
-	"github.com/statping-ng/statping-ng/types/metrics"
-	"github.com/statping-ng/statping-ng/utils"
+	"github.com/statping-next/statping-next/database"
+	"github.com/statping-next/statping-next/types/metrics"
+	"github.com/statping-next/statping-next/utils"
 )
 
 var (

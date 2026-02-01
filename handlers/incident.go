@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/statping-ng/statping-ng/types/errors"
-	"github.com/statping-ng/statping-ng/types/incidents"
-	"github.com/statping-ng/statping-ng/utils"
+	"github.com/statping-next/statping-next/types/errors"
+	"github.com/statping-next/statping-next/types/incidents"
+	"github.com/statping-next/statping-next/utils"
 )
 
 func findIncident(r *http.Request) (*incidents.Incident, int64, error) {

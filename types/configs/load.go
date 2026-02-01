@@ -2,7 +2,7 @@ package configs
 
 import (
 	"errors"
-	"github.com/statping-ng/statping-ng/utils"
+	"github.com/statping-next/statping-next/utils"
 	"gopkg.in/yaml.v2"
 	"os"
 )

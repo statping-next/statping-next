@@ -1,4 +1,3 @@
-[submodule "source/statping-ng.wiki"]
-    path = source/statping-ng.wiki
-    # TODO should this be a relative path? (would require wiki fork for statping forks)
+[submodule "source/statping-next.wiki"]
+	path = source/statping-next.wiki
 	url = https://github.com/statping-ng/statping-ng.wiki.git

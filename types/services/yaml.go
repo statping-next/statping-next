@@ -2,7 +2,7 @@ package services
 
 import (
 	"github.com/pkg/errors"
-	"github.com/statping-ng/statping-ng/utils"
+	"github.com/statping-next/statping-next/utils"
 	"gopkg.in/yaml.v2"
 )
 

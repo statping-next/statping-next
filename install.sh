@@ -12,7 +12,7 @@ cyan="\033[36m"
 white="\033[37m"
 gpg_key=64B9C6AAE2D55278
 gpgurl=https://statping.com/statping.gpg
-repo=https://github.com/statping-ng/statping-ng
+repo=https://github.com/statping-next/statping-next
 
 statping_get_tarball() {
   fext='tar.gz'
@@ -32,7 +32,7 @@ statping_get_tarball() {
     else
       tar xzf $tarball_tmp -C "$temp"
     fi
-    printf "$green> Installing to $DEST/statping-ng\n"
+    printf "$green> Installing to $DEST/statping-next\n"
     mv "$temp"/statping "$DEST"
     rm -rf "$temp"
     rm $tarball_tmp*
@@ -55,9 +55,9 @@ statping_brew_install() {
   if [[ -z "$(command -v brew --version)" ]]; then
     printf "${white}Using Brew to install!$reset\n"
     printf "${yellow}---> brew tap statping/statping$reset\n"
-    brew tap statping-ng/statping-ng
+    brew tap statping-next/statping-next
     printf "${yellow}---> brew install statping$reset\n"
-    brew install statping-ng
+    brew install statping-next
     printf "${green}Brew installation is complete!$reset\n"
     printf "${yellow}You can use 'brew upgrade' to upgrade Statping next time.$reset\n"
   else

@@ -13,7 +13,7 @@
                         <span v-if="smallText[service.id].downFor" class="text-danger">{{smallText[service.id].downFor}}</span>
                       </span>
                       <span class="text-center font-2 service-status-aux" style="display: flex; align-items: baseline; margin-right: 1em;">
-                        <span :class="{'text-muted': service.online, 'text-white': !service.online}">{{smallText[service.id].lastChecked}}</span>
+                        <span class="text-muted">{{smallText[service.id].lastChecked}}</span>
                       </span>
                       <span class="badge text-uppercase" :class="{'bg-success': service.online, 'bg-danger': !service.online }" style="min-width: 70px; text-align: center;">
                           {{service.online ? $t('online') : $t('offline')}}

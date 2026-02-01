@@ -1,7 +1,7 @@
 package users
 
 import (
-	"github.com/statping-ng/statping-ng/types/null"
+	"github.com/statping-next/statping-next/types/null"
 )
 
 func Samples() error {

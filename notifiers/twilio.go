@@ -9,12 +9,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/statping-ng/statping-ng/types/failures"
-	"github.com/statping-ng/statping-ng/types/notifications"
-	"github.com/statping-ng/statping-ng/types/notifier"
-	"github.com/statping-ng/statping-ng/types/null"
-	"github.com/statping-ng/statping-ng/types/services"
-	"github.com/statping-ng/statping-ng/utils"
+	"github.com/statping-next/statping-next/types/failures"
+	"github.com/statping-next/statping-next/types/notifications"
+	"github.com/statping-next/statping-next/types/notifier"
+	"github.com/statping-next/statping-next/types/null"
+	"github.com/statping-next/statping-next/types/services"
+	"github.com/statping-next/statping-next/utils"
 )
 
 var _ notifier.Notifier = (*twilio)(nil)

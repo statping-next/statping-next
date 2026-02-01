@@ -8,7 +8,7 @@ const tokenKey = "statping_auth";
 class Api {
   constructor() {
     this.version = "0.91.0";
-    this.commit = "202437812c168d338e15bb589131c495fde87aca";
+    this.commit = "fe11f5aed0335948e7633f8022441c1e88c0a0ef";
   }
 
   async oauth() {
@@ -291,7 +291,7 @@ class Api {
   }
 
   async github_release() {
-    return fetch('https://api.github.com/repos/statping-ng/statping-ng/releases/latest').then(response => response.json())
+    return fetch('https://api.github.com/repos/statping-next/statping-next/releases/latest').then(response => response.json())
   }
 
   async allActions(...all) {

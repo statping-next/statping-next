@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/statping-ng/statping-ng/types/checkins"
-	"github.com/statping-ng/statping-ng/types/errors"
-	"github.com/statping-ng/statping-ng/types/services"
-	"github.com/statping-ng/statping-ng/utils"
+	"github.com/statping-next/statping-next/types/checkins"
+	"github.com/statping-next/statping-next/types/errors"
+	"github.com/statping-next/statping-next/types/services"
+	"github.com/statping-next/statping-next/utils"
 )
 
 func findCheckin(r *http.Request) (*checkins.Checkin, string, error) {

@@ -1,4 +1,4 @@
-name: statping-ng
+name: statping-next
 version: "stable"
 version-script: cat version.txt
 summary: Statping-ng Server Monitoring with Status Page
@@ -36,7 +36,7 @@ parts:
     source: .
     plugin: nil
     override-build: |
-      curl -o- -L https://raw.githubusercontent.com/adamboutcher/statping-ng/dev/install.sh | bash
+      curl -o- -L https://raw.githubusercontent.com/adamboutcher/statping-next/dev/install.sh | bash
     build-packages:
       - tar
       - curl

@@ -1,10 +1,10 @@
 // Package statping is a server monitoring application that includes a status page server. Visit the Statping repo at
-// https://github.com/adamboutcher/statping-ng to get a full understanding of what this application can do.
+// https://github.com/statping-next/statping-next to get a full understanding of what this application can do.
 //
 // Install Statping
 //
 // Statping is available for Mac, Linux and Windows 64x. You can download the tar.gz file or use a couple other methods. Download
-// the latest release at https://github.com/statping-ng/statping-ng/releases/latest or view below. If you're on windows, download
+// the latest release at https://github.com/statping-next/statping-next/releases/latest or view below. If you're on windows, download
 // the zip file from the latest releases link.
 //
 //		// MacOS using homebrew

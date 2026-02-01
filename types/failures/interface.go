@@ -2,7 +2,7 @@ package failures
 
 import (
 	"fmt"
-	"github.com/statping-ng/statping-ng/database"
+	"github.com/statping-next/statping-next/database"
 	"time"
 )
 

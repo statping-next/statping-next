@@ -1,4 +1,4 @@
-module github.com/statping-ng/statping-ng
+module github.com/statping-next/statping-next
 
 go 1.19
 
@@ -65,7 +65,6 @@ require (
 	github.com/gofrs/uuid v3.2.0+incompatible // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
-	github.com/gomarkdown/markdown v0.0.0-20221013030248-663e2500819c // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
@@ -114,8 +113,6 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
-	github.com/tdewolff/minify/v2 v2.12.4 // indirect
-	github.com/tdewolff/parse/v2 v2.6.4 // indirect
 	github.com/timewasted/linode v0.0.0-20160829202747-37e84520dcf7 // indirect
 	github.com/transip/gotransip/v6 v6.0.2 // indirect
 	github.com/vultr/govultr v0.3.3 // indirect

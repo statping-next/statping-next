@@ -11,12 +11,12 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/statping-ng/statping-ng/types"
-	"github.com/statping-ng/statping-ng/types/checkins"
-	"github.com/statping-ng/statping-ng/types/errors"
-	"github.com/statping-ng/statping-ng/types/failures"
-	"github.com/statping-ng/statping-ng/types/hits"
-	"github.com/statping-ng/statping-ng/utils"
+	"github.com/statping-next/statping-next/types"
+	"github.com/statping-next/statping-next/types/checkins"
+	"github.com/statping-next/statping-next/types/errors"
+	"github.com/statping-next/statping-next/types/failures"
+	"github.com/statping-next/statping-next/types/hits"
+	"github.com/statping-next/statping-next/utils"
 )
 
 const limitedFailures = 25

@@ -1,8 +1,8 @@
 package core
 
 import (
-	"github.com/statping-ng/statping-ng/types/null"
-	"github.com/statping-ng/statping-ng/utils"
+	"github.com/statping-next/statping-next/types/null"
+	"github.com/statping-next/statping-next/utils"
 	"time"
 )
 

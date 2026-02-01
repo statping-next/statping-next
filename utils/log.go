@@ -5,7 +5,7 @@ import (
 	"github.com/fatih/structs"
 	"github.com/getsentry/sentry-go"
 	Logger "github.com/sirupsen/logrus"
-	"github.com/statping-ng/statping-ng/types/null"
+	"github.com/statping-next/statping-next/types/null"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"io"
 	"os"

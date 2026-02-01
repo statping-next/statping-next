@@ -4,19 +4,19 @@ services:
 
   statping_dev:
     container_name: statping_dev
-    image: statping-ng/statping-ng:dev
+    image: statping-next/statping-next:dev
     restart: on-failure
     volumes:
-      - ./cmd:/go/src/github.com/statping-ng/statping-ng/cmd/
-      - ./core:/go/src/github.com/statping-ng/statping-ng/core/
-      - ./database:/go/src/github.com/statping-ng/statping-ng/database/
-      - ./dev:/go/src/github.com/statping-ng/statping-ng/dev/
-      - ./frontend:/go/src/github.com/statping-ng/statping-ng/frontend/
-      - ./handlers:/go/src/github.com/statping-ng/statping-ng/handlers/
-      - ./notifiers:/go/src/github.com/statping-ng/statping-ng/notifiers/
-      - ./source:/go/src/github.com/statping-ng/statping-ng/source/
-      - ./types:/go/src/github.com/statping-ng/statping-ng/types/
-      - ./utils:/go/src/github.com/statping-ng/statping-ng/utils/
+      - ./cmd:/go/src/github.com/statping-next/statping-next/cmd/
+      - ./core:/go/src/github.com/statping-next/statping-next/core/
+      - ./database:/go/src/github.com/statping-next/statping-next/database/
+      - ./dev:/go/src/github.com/statping-next/statping-next/dev/
+      - ./frontend:/go/src/github.com/statping-next/statping-next/frontend/
+      - ./handlers:/go/src/github.com/statping-next/statping-next/handlers/
+      - ./notifiers:/go/src/github.com/statping-next/statping-next/notifiers/
+      - ./source:/go/src/github.com/statping-next/statping-next/source/
+      - ./types:/go/src/github.com/statping-next/statping-next/types/
+      - ./utils:/go/src/github.com/statping-next/statping-next/utils/
     environment:
       DB_CONN: sqlite
       API_SECRET: exampleapisecret

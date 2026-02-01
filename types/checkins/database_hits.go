@@ -3,7 +3,7 @@ package checkins
 import (
 	"time"
 
-	"github.com/statping-ng/statping-ng/database"
+	"github.com/statping-next/statping-next/database"
 )
 
 type CheckinHitters struct {

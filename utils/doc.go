@@ -6,5 +6,5 @@
 // You can overwrite the utils.Directory global variable by including
 // STATPING_DIR environment variable to be an absolute path.
 //
-// More info on: https://github.com/statping-ng	/statping-ng
+// More info on: https://github.com/statping-next/statping-next
 package utils

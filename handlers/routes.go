@@ -6,11 +6,11 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/statping-ng/statping-ng/source"
-	"github.com/statping-ng/statping-ng/types/core"
-	"github.com/statping-ng/statping-ng/utils"
+	"github.com/statping-next/statping-next/source"
+	"github.com/statping-next/statping-next/types/core"
+	"github.com/statping-next/statping-next/utils"
 
-	_ "github.com/statping-ng/statping-ng/types/metrics"
+	_ "github.com/statping-next/statping-next/types/metrics"
 )
 
 var (

@@ -3,9 +3,9 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/statping-ng/statping-ng/types/core"
-	"github.com/statping-ng/statping-ng/types/errors"
-	"github.com/statping-ng/statping-ng/utils"
+	"github.com/statping-next/statping-next/types/core"
+	"github.com/statping-next/statping-next/types/errors"
+	"github.com/statping-next/statping-next/utils"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/slack"
 	"net/http"

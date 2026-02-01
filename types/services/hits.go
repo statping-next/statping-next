@@ -3,8 +3,8 @@ package services
 import (
 	"time"
 
-	"github.com/statping-ng/statping-ng/types/checkins"
-	"github.com/statping-ng/statping-ng/types/hits"
+	"github.com/statping-next/statping-next/types/checkins"
+	"github.com/statping-next/statping-next/types/hits"
 )
 
 func (s *Service) HitsColumnID() (string, int64) {
