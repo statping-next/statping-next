@@ -22,6 +22,22 @@ func staticAssets(src string) http.Handler {
 	return http.StripPrefix(src+"/", http.FileServer(http.Dir(utils.Directory+"/assets/"+src)))
 }
 
+// noCacheForImg wraps h so /img/* never returns 304. Browsers send If-None-Match; embedded
+// files can have stable ETags across deploys, so the server would return 304 and the browser
+// keeps the old cached body (curl gets 200 because it doesn't send conditionals).
+func noCacheForImg(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		r2 := r.Clone(r.Context())
+		r2.Header.Del("If-None-Match")
+		r2.Header.Del("If-Modified-Since")
+		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+		if core.App != nil && core.App.Commit != "" {
+			w.Header().Set("X-Statping-Commit", core.App.Commit)
+		}
+		h.ServeHTTP(w, r2)
+	})
+}
+
 // Router returns all of the routes used in Statping.
 // Server will use static assets if the 'assets' directory is found in the root directory.
 func Router() *mux.Router {
@@ -64,19 +80,21 @@ func Router() *mux.Router {
 		}()
 	}
 
+	tmplFileSrv := http.FileServer(source.TmplBox.HTTPBox())
+	tmplBoxHandler := http.StripPrefix(basePath, tmplFileSrv)
+
 	if source.UsingAssets(dir) {
 		indexHandler := http.FileServer(http.Dir(dir + "/assets/"))
 
 		r.PathPrefix("/css/").Handler(http.StripPrefix(basePath, staticAssets("css")))
 		r.PathPrefix("/robots.txt").Handler(http.StripPrefix(basePath, indexHandler))
 	} else {
-		tmplFileSrv := http.FileServer(source.TmplBox.HTTPBox())
-		tmplBoxHandler := http.StripPrefix(basePath, tmplFileSrv)
-
 		r.PathPrefix("/css/").Handler(http.StripPrefix(basePath, tmplFileSrv))
 		r.PathPrefix("/robots.txt").Handler(tmplBoxHandler)
 	}
 
+	// Always serve /img/ from embedded binary; never return 304 so browsers don't keep stale body.
+	r.PathPrefix("/img/").Handler(noCacheForImg(http.StripPrefix(basePath, tmplFileSrv)))
 	r.PathPrefix("/js/").Handler(http.StripPrefix(basePath, http.FileServer(source.TmplBox.HTTPBox())))
 
 	api := r.NewRoute().Subrouter()

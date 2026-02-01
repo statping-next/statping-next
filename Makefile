@@ -147,13 +147,13 @@ frontend-build:
 	@cp -r frontend/dist source/
 	@cp -r frontend/src/assets/scss source/dist/
 	@cp frontend/public/robots.txt source/dist/
+	@cp -r frontend/public/img source/dist/
 	@echo "Frontend build complete at ./source/dist"
 
 yarn:
 	rm -rf source/dist && rm -rf frontend/dist
 	cd frontend && yarn
 
-# compile assets using SASS and Rice. compiles scss -> css, and run rice embed-go
 compile: frontend-build
 	@echo "Installing rice tool..."
 	@go install github.com/GeertJohan/go.rice/rice@latest
@@ -162,6 +162,7 @@ compile: frontend-build
 		exit 1; \
 	fi
 	rm -f source/rice-box.go
+	@cp -r frontend/public/img source/dist/
 	cd source && $(RICE_BIN) embed-go
 	make generate
 

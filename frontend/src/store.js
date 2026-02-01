@@ -15,7 +15,7 @@ function applyBranding(core) {
     document.title = core.name
   }
 
-  // Set favicon once: user's or default (never show default then replace with user's)
+  // Set favicon: user's override or project default (never show default if user set one)
   const href = core.favicon || DEFAULT_FAVICON
   let link = document.getElementById('app-favicon') || document.querySelector("link[rel='shortcut icon']") || document.querySelector("link[rel='icon']")
   if (!link) {
