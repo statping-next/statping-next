@@ -1,41 +1,41 @@
 <template>
 <div class="mb-5">
-  <h3 v-if="!loaded" >Import and Export</h3>
+  <h3 v-if="!loaded">{{ $t('import_export') }}</h3>
   <p v-if="!loaded">
-    You can export your current Statping services, groups, notifiers, and other settings to a JSON file.
+    {{ $t('export_description') }}
   </p>
 
   <div v-if="!loaded" class="mt-4 row">
     <div class="col-8 custom-file">
       <input @change="onFileChange" type="file" class="custom-file-input pointer" id="customFile" accept=".json,application/json">
-      <label class="custom-file-label" for="customFile">Choose exported Statping JSON file</label>
+      <label class="custom-file-label" for="customFile">{{ $t('choose_exported_file') }}</label>
     </div>
     <div class="col-4">
-      <a class="btn btn-block btn-light btn-outline-secondary" href="/api/settings/export">Export</a>
+      <a class="btn btn-block btn-light btn-outline-secondary" href="/api/settings/export">{{ $t('export_btn') }}</a>
     </div>
   </div>
 
   <div v-if="loaded" class="col-12 mb-4">
-    <h3>Core Settings
+    <h3>{{ $t('core_settings') }}
       <span @click="file.core.enabled = !!file.core.enabled" class="switch switch-sm float-right">
             <input @change="update" v-model="file.core.enabled" type="checkbox" class="switch" :id="`switch-core`">
             <label :for="`switch-core`"></label>
           </span>
     </h3>
 
-    <div class="row mb-2"><span class="col-4">Name</span><span class="col-8 text-right font-weight-bold">{{file.core.name}}</span></div>
-    <div class="row mb-2"><span class="col-4">Logo</span><span class="col-8 text-right font-weight-bold">{{file.core.logo}}</span></div>
-    <div class="row mb-2"><span class="col-4">Description</span><span class="col-8 text-right font-weight-bold">{{file.core.description}}</span></div>
-    <div class="row mb-2"><span class="col-4">Domain</span><span class="col-8 text-right font-weight-bold">{{file.core.domain}}</span></div>
+    <div class="row mb-2"><span class="col-4">{{ $t('name') }}</span><span class="col-8 text-right font-weight-bold">{{file.core.name}}</span></div>
+    <div class="row mb-2"><span class="col-4">{{ $t('logo_label') }}</span><span class="col-8 text-right font-weight-bold">{{file.core.logo}}</span></div>
+    <div class="row mb-2"><span class="col-4">{{ $t('description') }}</span><span class="col-8 text-right font-weight-bold">{{file.core.description}}</span></div>
+    <div class="row mb-2"><span class="col-4">{{ $t('domain') }}</span><span class="col-8 text-right font-weight-bold">{{file.core.domain}}</span></div>
 
   </div>
 
   <div v-if="loaded" class="col-12 mb-4">
-    <h3>Users
-      <button @click.prevent="toggle_all(file.users)" class="btn btn-sm btn-outline-dark float-right mt-1">Select All</button>
+    <h3>{{ $t('users_label') }}
+      <button @click.prevent="toggle_all(file.users)" class="btn btn-sm btn-outline-dark float-right mt-1">{{ $t('select_all') }}</button>
     </h3>
     <div v-if="!file.users" class="alert alert-link">
-      No Users in file
+      {{ $t('no_users_in_file') }}
     </div>
     <div v-for="user in file.users" v-bind:key="user.id" class="row">
       <div class="col-4 font-weight-bold">
@@ -55,18 +55,18 @@
 
 
   <div v-if="loaded" class="col-12 mb-4">
-    <h3>Checkins
-      <button @click.prevent="toggle_all(file.checkins)" class="btn btn-sm btn-outline-dark float-right mt-1">Select All</button>
+    <h3>{{ $t('checkins_label') }}
+      <button @click.prevent="toggle_all(file.checkins)" class="btn btn-sm btn-outline-dark float-right mt-1">{{ $t('select_all') }}</button>
     </h3>
     <div v-if="!file.checkins" class="alert alert-link">
-      No Checkins in file
+      {{ $t('no_checkins_in_file') }}
     </div>
     <div v-for="checkin in file.checkins" v-bind:key="checkin.id" class="row">
       <div class="col-4 font-weight-bold">
         {{checkin.name}}
       </div>
       <div class="col-6">
-        Service #{{checkin.service_id}}
+        {{ $t('service_number', { id: checkin.service_id }) }}
       </div>
       <div class="col-2 text-right">
           <span @click="checkin.enabled = !!checkin.enabled" class="switch switch-sm">
@@ -78,11 +78,11 @@
   </div>
 
   <div v-if="loaded" class="col-12 mb-4">
-    <h3>Services
-      <button @click.prevent="toggle_all(file.services)" class="btn btn-sm btn-outline-dark float-right mt-1">Select All</button>
+    <h3>{{ $t('services_label') }}
+      <button @click.prevent="toggle_all(file.services)" class="btn btn-sm btn-outline-dark float-right mt-1">{{ $t('select_all') }}</button>
     </h3>
     <div v-if="!file.services" class="alert alert-link">
-      No Services in file
+      {{ $t('no_services_in_file') }}
     </div>
     <div v-for="service in file.services" v-bind:key="service.id" class="row">
         <div class="col-4 font-weight-bold">
@@ -101,11 +101,11 @@
   </div>
 
   <div v-if="loaded" class="col-12 mb-4">
-    <h3>Groups
-      <button @click.prevent="toggle_all(file.groups)" class="btn btn-sm btn-outline-dark float-right mt-1">Select All</button>
+    <h3>{{ $t('groups_label') }}
+      <button @click.prevent="toggle_all(file.groups)" class="btn btn-sm btn-outline-dark float-right mt-1">{{ $t('select_all') }}</button>
     </h3>
     <div v-if="!file.groups" class="alert alert-link">
-      No Groups in file
+      {{ $t('no_groups_in_file') }}
     </div>
     <div v-for="group in file.groups" v-bind:key="group.id" class="row">
       <div class="col-4 font-weight-bold">
@@ -121,11 +121,11 @@
   </div>
 
   <div v-if="loaded" class="col-12 mb-4">
-    <h3>Incidents
-      <button @click.prevent="toggle_all(file.incidents)" class="btn btn-sm btn-outline-dark float-right mt-1">Select All</button>
+    <h3>{{ $t('incidents_label') }}
+      <button @click.prevent="toggle_all(file.incidents)" class="btn btn-sm btn-outline-dark float-right mt-1">{{ $t('select_all') }}</button>
     </h3>
     <div v-if="!file.incidents" class="alert alert-link">
-      No Incidents in file
+      {{ $t('no_incidents_in_file') }}
     </div>
     <div v-for="incident in file.incidents" v-bind:key="incident.id" class="row">
       <div class="col-4 font-weight-bold">
@@ -141,11 +141,11 @@
   </div>
 
   <div v-if="loaded" class="col-12 mb-3">
-    <h3>Notifiers
-      <button @click.prevent="toggle_all(file.notifiers)" class="btn btn-sm btn-outline-dark float-right mt-1">Select All</button>
+    <h3>{{ $t('notifiers_label') }}
+      <button @click.prevent="toggle_all(file.notifiers)" class="btn btn-sm btn-outline-dark float-right mt-1">{{ $t('select_all') }}</button>
     </h3>
     <div v-if="!file.notifiers" class="alert alert-link">
-      No Notifiers in file
+      {{ $t('no_notifiers_in_file') }}
     </div>
     <div v-for="notifier in file.notifiers" v-bind:key="notifier.id" class="row">
       <div class="col-4">
@@ -165,7 +165,7 @@
   </div>
 
   <div class="col-12">
-    <button v-if="loaded" @click.prevent="import_all" class="btn btn-block btn-success">Import</button>
+    <button v-if="loaded" @click.prevent="import_all" class="btn btn-block btn-success">{{ $t('import_btn') }}</button>
   </div>
 
 </div>

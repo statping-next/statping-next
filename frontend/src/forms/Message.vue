@@ -13,7 +13,7 @@
           <div class="form-group row">
             <label class="col-sm-4 col-form-label">{{ $t('title') }}</label>
             <div class="col-sm-8">
-              <input v-model="message.title" type="text" name="title" class="form-control" id="title" placeholder="Announcement Title" required>
+              <input v-model="message.title" type="text" name="title" class="form-control" id="title" :placeholder="$t('announcement_title_placeholder')" required>
             </div>
           </div>
 
@@ -57,7 +57,7 @@
           <div v-if="message.notify" class="form-group row">
             <label for="notify_method" class="col-sm-4 col-form-label">{{ $t('notify_method') }}</label>
             <div class="col-sm-8">
-              <input v-model="message.notify_method" type="text" name="notify_method" class="form-control" id="notify_method" value="" placeholder="email">
+              <input v-model="message.notify_method" type="text" name="notify_method" class="form-control" id="notify_method" value="" :placeholder="$t('notify_method_placeholder')">
             </div>
           </div>
 
@@ -93,7 +93,7 @@
           <div class="form-group row">
             <label class="col-sm-4 col-form-label">{{ $t('title') }}</label>
             <div class="col-sm-8">
-              <input v-model="message.title" type="text" name="title" class="form-control" id="title" placeholder="Announcement Title" required>
+              <input v-model="message.title" type="text" name="title" class="form-control" id="title" :placeholder="$t('announcement_title_placeholder')" required>
             </div>
           </div>
           <div class="form-group row">
@@ -132,7 +132,7 @@
           <div v-if="message.notify" class="form-group row">
             <label for="notify_method_emb" class="col-sm-4 col-form-label">{{ $t('notify_method') }}</label>
             <div class="col-sm-8">
-              <input v-model="message.notify_method" type="text" name="notify_method" class="form-control" id="notify_method_emb" placeholder="email">
+              <input v-model="message.notify_method" type="text" name="notify_method" class="form-control" id="notify_method_emb" :placeholder="$t('notify_method_placeholder')">
             </div>
           </div>
           <div v-if="message.notify" class="form-group row">

@@ -18,7 +18,7 @@
 
                 <div v-if="groupsList.length === 0">
                     <div class="alert alert-dark d-block mt-3 mb-0">
-                        You currently don't have any groups! Create one using the form below.
+                        {{ $t('no_groups_create') }}
                     </div>
                 </div>
 
@@ -126,10 +126,10 @@
           async deleteGroup(g) {
             const modal = {
               visible: true,
-              title: "Delete Group",
-              body: `Are you sure you want to delete group ${g.name}? All services attached will be removed from this group.`,
+              title: this.$t('delete_group'),
+              body: this.$t('confirm_delete_group', { name: g.name }),
               btnColor: "btn-danger",
-              btnText: "Delete Group",
+              btnText: this.$t('delete_group'),
               func: () => this.delete(g),
             }
             this.$store.commit("setModal", modal)

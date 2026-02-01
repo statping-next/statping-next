@@ -4,7 +4,7 @@
             <!-- Left side: Logo (always on left) -->
             <div class="sticky-header-left">
                 <router-link to="/" class="sticky-logo-link" :class="{ 'visible': visible || adminMode }" :title="$t('return_to_home')">
-                    <img :src="displayLogo" :alt="core.name || 'Statping'" class="sticky-logo">
+                    <img :src="displayLogo" :alt="core.name || $t('app_name')" class="sticky-logo">
                 </router-link>
             </div>
 
@@ -19,11 +19,11 @@
                         <span v-if="refreshInterval > 0" class="refresh-badge">{{refreshInterval}}s</span>
                         <span v-else class="refresh-badge off">OFF</span>
                     </button>
-                    <button @click="toggleTheme" class="btn btn-sm theme-toggle-btn" :title="darkTheme ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+                    <button @click="toggleTheme" class="btn btn-sm theme-toggle-btn" :title="darkTheme ? $t('switch_to_light_mode') : $t('switch_to_dark_mode')">
                         <font-awesome-icon v-if="darkTheme" icon="sun" />
                         <font-awesome-icon v-else icon="moon" />
                     </button>
-                    <router-link to="/dashboard/status" class="btn btn-sm admin-btn" title="Admin Dashboard">
+                    <router-link to="/dashboard/status" class="btn btn-sm admin-btn" :title="$t('admin_dashboard')">
                         <font-awesome-icon icon="cog" />
                     </router-link>
                 </div>
@@ -33,14 +33,14 @@
                         <span v-if="refreshInterval > 0" class="refresh-badge">{{refreshInterval}}s</span>
                         <span v-else class="refresh-badge off">OFF</span>
                     </button>
-                    <button @click="toggleTheme" class="btn btn-sm theme-toggle-btn" :title="darkTheme ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+                    <button @click="toggleTheme" class="btn btn-sm theme-toggle-btn" :title="darkTheme ? $t('switch_to_light_mode') : $t('switch_to_dark_mode')">
                         <font-awesome-icon v-if="darkTheme" icon="sun" />
                         <font-awesome-icon v-else icon="moon" />
                     </button>
                     <button @click="logout" class="btn btn-sm logout-btn" :title="$t('logout')">
                         <font-awesome-icon icon="sign-out-alt" />
                     </button>
-                    <router-link to="/" class="btn btn-sm back-btn" title="Back to Home">
+                    <router-link to="/" class="btn btn-sm back-btn" :title="$t('back_to_home')">
                         <font-awesome-icon icon="arrow-left" />
                     </router-link>
                 </div>
@@ -87,9 +87,9 @@ export default {
     },
     refreshTitle() {
       if (this.refreshInterval === 0) {
-        return 'Auto-refresh: OFF (Click to enable)'
+        return this.$t('refresh_title_off')
       } else {
-        return `Auto-refresh: ${this.refreshInterval}s (Click to change)`
+        return this.$t('refresh_title_interval', { interval: this.refreshInterval })
       }
     },
     headerStyle() {

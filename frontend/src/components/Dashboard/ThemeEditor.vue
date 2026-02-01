@@ -1,37 +1,37 @@
 <template>
     <div>
         <div class="card mb-5">
-            <div class="card-header">Default Theme</div>
+            <div class="card-header">{{ $t('default_theme') }}</div>
             <div class="card-body">
                 <div class="form-group">
-                    <label>Default Theme for New Users</label>
+                    <label>{{ $t('default_theme_for_new_users') }}</label>
                     <select v-model="core.default_theme" @change="saveDefaultTheme" class="form-control">
-                        <option value="">System Default (Light)</option>
-                        <option value="light">Light</option>
-                        <option value="dark">Dark</option>
+                        <option value="">{{ $t('system_default_light') }}</option>
+                        <option value="light">{{ $t('light') }}</option>
+                        <option value="dark">{{ $t('dark') }}</option>
                     </select>
-                    <small class="form-text text-muted">This theme will be used as the default for users who haven't set a preference. Users can override this in their browser.</small>
+                    <small class="form-text text-muted">{{ $t('default_theme_desc') }}</small>
                 </div>
             </div>
         </div>
 
         <div class="card mb-5">
-            <div class="card-header">Logo Configuration</div>
+            <div class="card-header">{{ $t('logo_configuration') }}</div>
             <div class="card-body">
                 <div class="form-group">
-                    <label>Light Theme Logo</label>
-                    <input v-model="core.logo_light" @change="saveLogo" type="text" class="form-control" placeholder="https://example.com/logo.png" id="logo_light">
-                    <small class="form-text text-muted">Primary logo URL for light theme; also used as fallback for dark theme if no dark logo is set.</small>
+                    <label>{{ $t('light_theme_logo') }}</label>
+                    <input v-model="core.logo_light" @change="saveLogo" type="text" class="form-control" :placeholder="$t('logo_url_placeholder')" id="logo_light">
+                    <small class="form-text text-muted">{{ $t('logo_light_desc') }}</small>
                 </div>
                 <div class="form-group">
-                    <label>Dark Theme Logo (Optional)</label>
-                    <input v-model="core.logo_dark" @change="saveLogo" type="text" class="form-control" placeholder="https://example.com/logo-dark.png" id="logo_dark">
-                    <small class="form-text text-muted">Optional logo URL for dark theme.</small>
+                    <label>{{ $t('dark_theme_logo_optional') }}</label>
+                    <input v-model="core.logo_dark" @change="saveLogo" type="text" class="form-control" :placeholder="$t('logo_dark_placeholder')" id="logo_dark">
+                    <small class="form-text text-muted">{{ $t('logo_dark_optional_desc') }}</small>
                 </div>
                 <div class="form-group">
-                    <label>Favicon URL (Optional)</label>
-                    <input v-model="core.favicon" @change="saveLogo" type="text" class="form-control" placeholder="https://example.com/favicon.ico" id="favicon">
-                    <small class="form-text text-muted">Custom favicon URL. This will be used for the browser tab icon.</small>
+                    <label>{{ $t('favicon_url_optional') }}</label>
+                    <input v-model="core.favicon" @change="saveLogo" type="text" class="form-control" :placeholder="$t('favicon_placeholder')" id="favicon">
+                    <small class="form-text text-muted">{{ $t('favicon_desc') }}</small>
                 </div>
             </div>
         </div>
@@ -59,22 +59,22 @@
         </div>
 
     <form v-observe-visibility="visible" v-if="loaded && directory" @submit.prevent="saveAssets" :disabled="pending">
-        <h3>Variables</h3>
+        <h3>{{ $t('theme_editor_variables') }}</h3>
         <codemirror v-show="loaded" v-model="vars" ref="vars" :options="cmOptions" class="codemirrorInput"/>
 
-        <h3 class="mt-3">Base {{$t('theme')}}</h3>
+        <h3 class="mt-3">{{ $t('base_theme') }}</h3>
         <codemirror v-show="loaded" v-model="base" ref="base" :options="cmOptions" class="codemirrorInput"/>
 
-        <h3 class="mt-3">Layout {{$t('theme')}}</h3>
+        <h3 class="mt-3">{{ $t('layout_theme') }}</h3>
         <codemirror v-show="loaded" v-model="layout" ref="layout" :options="cmOptions" class="codemirrorInput"/>
 
-        <h3 class="mt-3">Forms {{$t('theme')}}</h3>
+        <h3 class="mt-3">{{ $t('forms_theme') }}</h3>
         <codemirror v-show="loaded" v-model="forms" ref="forms" :options="cmOptions" class="codemirrorInput"/>
 
-        <h3 class="mt-3">Mixins</h3>
+        <h3 class="mt-3">{{ $t('mixins') }}</h3>
         <codemirror v-show="loaded" v-model="mixins" ref="mixins" :options="cmOptions" class="codemirrorInput"/>
 
-        <h3 class="mt-3">Mobile Overwrites</h3>
+        <h3 class="mt-3">{{ $t('mobile_overwrites') }}</h3>
         <codemirror v-show="loaded" v-model="mobile" ref="mobile" :options="cmOptions" class="codemirrorInput"/>
 
     </form>
@@ -83,10 +83,10 @@
         <div v-if="directory" class="card-footer">
             <div class="row">
                 <div class="col-6">
-                    <button id="save_assets" @click.prevent="saveAssets" type="submit" class="btn btn-primary btn-block" :disabled="pending">{{pending ? "Saving..." : "Save Styles"}}</button>
+                    <button id="save_assets" @click.prevent="saveAssets" type="submit" class="btn btn-primary btn-block" :disabled="pending">{{pending ? $t('saving') : $t('save_styles') }}</button>
                 </div>
                 <div class="col-6">
-                    <button id="delete_assets" @click.prevent="deleteAssets" class="btn btn-danger btn-block confirm-btn" :disabled="pending">Delete Local Assets</button>
+                    <button id="delete_assets" @click.prevent="deleteAssets" class="btn btn-danger btn-block confirm-btn" :disabled="pending">{{ $t('delete_local_assets') }}</button>
                 </div>
             </div>
         </div>
@@ -201,10 +201,10 @@ import('codemirror/mode/css/css.js')
           async deleteAssets() {
             const modal = {
               visible: true,
-              title: "Delete Local Assets",
-              body: `Are you sure you want to delete all local assets?`,
+              title: this.$t('delete_local_assets'),
+              body: this.$t('confirm_delete_assets'),
               btnColor: "btn-danger",
-              btnText: "Delete",
+              btnText: this.$t('delete'),
               func: () => this.delete(),
             }
             this.$store.commit("setModal", modal)

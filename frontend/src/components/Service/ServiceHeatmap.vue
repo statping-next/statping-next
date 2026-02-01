@@ -2,7 +2,7 @@
     <div>
         <div v-if="!ready" class="text-center py-4">
             <font-awesome-icon icon="circle-notch" spin/>
-            <span class="ml-2">Loading...</span>
+            <span class="ml-2">{{ $t('loading') }}...</span>
         </div>
 
         <div v-if="ready" style="margin-bottom: 1rem;">
@@ -31,7 +31,7 @@
                                 fontSize: '0.65rem'
                             }"
                             @click="!dayData.isFuture && canViewFailures && onDayClick(dayData)"
-                            :title="dayData.isFuture ? dayData.tooltip : (canViewFailures ? dayData.tooltip : 'Login required to view failure details')"
+                            :title="dayData.isFuture ? dayData.tooltip : (canViewFailures ? dayData.tooltip : $t('login_required_failure_details'))"
                         >
                             {{ dayData.displayValue }}
                         </td>
@@ -44,12 +44,12 @@
         <div v-if="selectedDayFailures.length > 0 && canViewFailures" class="mt-4">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Failures on {{ selectedDayDate }}</h5>
+                    <h5 class="mb-0">{{ $t('failures_on') }} {{ selectedDayDate }}</h5>
                     <button class="btn btn-sm btn-secondary" @click="closeFailureList">×</button>
                 </div>
                 <div class="card-body">
                     <div v-if="selectedDayFailures.length === 0" class="text-muted">
-                        No failures found for this day.
+                        {{ $t('no_failures_this_day') }}
                     </div>
                     <table v-else class="table">
                         <thead>
@@ -191,8 +191,8 @@
                   })
 
                   const tooltip = isFuture 
-                      ? `Future Date: ${formattedDate}`
-                      : `${value} ${value === 1 ? 'Failure' : 'Failures'}: ${formattedDate}`
+                      ? `${this.$t('future_date')} ${formattedDate}`
+                      : `${value} ${value === 1 ? this.$t('failure_singular') : this.$t('failures')}: ${formattedDate}`
 
                   days.push({
                       day: day,

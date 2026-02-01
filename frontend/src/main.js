@@ -9,7 +9,7 @@ import router from './routes'
 import "./mixin"
 import "./icons"
 import store from './store'
-import language from './languages'
+import i18n from './i18n'
 
 const App = () => import(/* webpackChunkName: "index" */ '@/App.vue')
 
@@ -20,11 +20,6 @@ Vue.use(VueRouter);
 Vue.use(VueObserveVisibility);
 Vue.use(VueCookies);
 Vue.use(VueI18n);
-
-const i18n = new VueI18n({
-  fallbackLocale: "en",
-  messages: language
-});
 
 Vue.$cookies.config('3d')
 

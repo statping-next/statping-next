@@ -70,9 +70,9 @@ export default {
         this.hover_text = ""
       },
     mouseover(e) {
-      let txt = `${e.amount} Failures`
+      let txt = `${e.amount} ${this.$t('failures')}`
       if (e.amount === 0) {
-        txt = `No Issues`
+        txt = this.$t('no_issues')
       }
       this.hover_text = `${e.date.toLocaleDateString()} - ${txt}`
     },

@@ -7,7 +7,7 @@
           <font-awesome-icon icon="circle-notch" size="3x" spin/>
         </div>
         <div class="col-12 text-center mt-3 mb-3">
-          <span class="text-muted">Loading Service</span>
+          <span class="text-muted">{{ $t('loading_service') }}</span>
         </div>
       </div>
 
@@ -24,7 +24,7 @@
                     <span class="font-5 d-block font-weight-bold text-uppercase" :class="{'text-success': service.online, 'text-danger': !service.online}">
                         {{service.online ? $t('online') : $t('offline')}}
                     </span>
-                    <span class="font-1 subtitle">Status</span>
+                    <span class="font-1 subtitle">{{ $t('status') }}</span>
                 </div>
                 <div class="col-4">
                     <span class="font-5 d-block font-weight-bold">{{statusDurationText}}</span>
@@ -32,7 +32,7 @@
                 </div>
                 <div class="col-4">
                     <span class="font-5 d-block font-weight-bold">{{lastCheckedText}}</span>
-                    <span class="font-1 subtitle">Last Checked</span>
+                    <span class="font-1 subtitle">{{ $t('last_checked_label') }}</span>
                 </div>
             </div>
 
@@ -47,16 +47,16 @@
             />
 
             <div class="card mt-3">
-                <div class="card-header text-capitalize">Timeframe</div>
+                <div class="card-header text-capitalize">{{ $t('timeframe') }}</div>
                 <div class="card-body pb-4">
                     <div class="row">
                         <div class="col">
                             <flatPickr :disabled="!loaded" @on-change="reload" v-model="start_time" :config="{ wrap: true, allowInput: true, enableTime: true, dateFormat: 'Z', altInput: true, altFormat: 'Y-m-d h:i K', maxDate: this.endOf('today') }" type="text" class="form-control text-left" required />
-                            <small class="d-block">From {{this.format(new Date(start_time))}}</small>
+                            <small class="d-block">{{ $t('from_date') }} {{this.format(new Date(start_time))}}</small>
                         </div>
                         <div class="col">
                             <flatPickr :disabled="!loaded" @on-change="reload" v-model="end_time" :config="{ wrap: true, allowInput: true, enableTime: true, dateFormat: 'Z', altInput: true, altFormat: 'Y-m-d h:i K', maxDate: this.endOf('today') }" type="text" class="form-control text-left" required />
-                            <small class="d-block">To {{this.format(new Date(end_time))}}</small>
+                            <small class="d-block">{{ $t('to_date') }} {{this.format(new Date(end_time))}}</small>
                         </div>
                         <div class="col">
                             <select :disabled="!loaded" @change="chartHits(service)" v-model="group" class="form-control">
@@ -95,21 +95,21 @@
             </div>
 
             <div class="card mb-3">
-                <div class="card-header text-capitalize">Service Failures</div>
+                <div class="card-header text-capitalize">{{ $t('service_failures_header') }}</div>
                 <div class="card-body">
                     <div class="service-chart-heatmap mt-2 mb-4">
                         <ServiceHeatmap :service="service" @day-selected="onDaySelected"/>
                     </div>
                     <div v-if="selectedDayFailures.length > 0" class="mt-4">
-                        <h5 class="mb-3">Failures for {{selectedDayDate}}</h5>
+                        <h5 class="mb-3">{{ $t('failures_for') }} {{selectedDayDate}}</h5>
                         <div class="list-group">
                             <div v-for="(failure, index) in selectedDayFailures" :key="index" class="list-group-item">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h6 class="mb-1">{{failure.issue}}</h6>
                                     <small class="text-muted">{{formatDate(failure.created_at)}}</small>
                                 </div>
-                                <p v-if="failure.error_code" class="mb-1 text-muted">Error Code: {{failure.error_code}}</p>
-                                <p v-if="failure.ping_time" class="mb-0 text-muted">Response Time: {{failure.ping_time}} µs</p>
+                                <p v-if="failure.error_code" class="mb-1 text-muted">{{ $t('error_code') }}: {{failure.error_code}}</p>
+                                <p v-if="failure.ping_time" class="mb-0 text-muted">{{ $t('response_time') }}: {{failure.ping_time}} µs</p>
                             </div>
                         </div>
                     </div>
@@ -246,7 +246,7 @@ export default {
           },
             chartOptions: {
               noData: {
-                text: "Loading...",
+                text: this.$t('loading_dots'),
                 align: 'center',
                 verticalAlign: 'middle',
                 offsetX: 0,
@@ -477,7 +477,7 @@ export default {
       },
       statusDurationLabel() {
         if (!this.service) return '';
-        return this.service.online ? 'Up For' : 'Down For';
+        return this.service.online ? this.$t('up_for') : this.$t('down_for_label');
       },
       lastCheckedText() {
         if (!this.service) return 'N/A';

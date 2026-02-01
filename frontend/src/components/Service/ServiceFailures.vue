@@ -12,18 +12,18 @@
         <nav v-if="total > 4" class="mt-3">
             <ul class="pagination justify-content-center">
                 <li class="page-item" :class="{'disabled': page===1}">
-                    <a @click.prevent="gotoPage(page-1)" :disabled="page===1" class="page-link" href="#" aria-label="Previous">
+                    <a @click.prevent="gotoPage(page-1)" :disabled="page===1" class="page-link" href="#" :aria-label="$t('aria_previous')">
                         <span aria-hidden="true">&laquo;</span>
-                        <span class="sr-only">Previous</span>
+                        <span class="sr-only">{{ $t('aria_previous') }}</span>
                     </a>
                 </li>
                 <li v-for="n in maxPages" class="page-item" :class="{'active': page === n}">
                     <a @click.prevent="gotoPage(n)" class="page-link" href="#">{{n}}</a>
                 </li>
                 <li class="page-item" :class="{'disabled': page===Math.floor(total / limit)}">
-                    <a @click.prevent="gotoPage(page+1)" :disabled="page===Math.floor(total / limit)" class="page-link" href="#" aria-label="Next">
+                    <a @click.prevent="gotoPage(page+1)" :disabled="page===Math.floor(total / limit)" class="page-link" href="#" :aria-label="$t('aria_next')">
                         <span aria-hidden="true">&raquo;</span>
-                        <span class="sr-only">Next</span>
+                        <span class="sr-only">{{ $t('aria_next') }}</span>
                     </a>
                 </li>
             </ul>
@@ -81,9 +81,9 @@ export default {
         },
         smallText(s) {
             if (s.online) {
-                return `Online, last checked ${this.ago(s.last_success)}`
+                return this.$t('online_last_checked', { time: this.ago(s.last_success) })
             } else {
-                return `Offline, last error: ${s.last_failure.issue} ${this.ago(s.last_failure.created_at)}`
+                return this.$t('offline_last_error', { issue: s.last_failure.issue, time: this.ago(s.last_failure.created_at) })
             }
           }
       }

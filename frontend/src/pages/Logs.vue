@@ -12,7 +12,7 @@
             </div>
                 <div class="card-body">
                 <p v-if="logs.length === 0" class="text-monospace sm">
-                    Loading Logs...
+                    {{ $t('loading_logs') }}
                 </p>
                     <div v-for="(log, index) in logs">
                         <span class="badge badge-secondary small mr-2">{{log.time}}</span>

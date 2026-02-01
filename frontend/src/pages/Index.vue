@@ -77,11 +77,11 @@ export default {
     computed: {
       loading_text() {
         if (this.$store.getters.groups.length === 0) {
-          return "Loading Groups"
+          return this.$t('loading_groups')
         } else if (this.$store.getters.services.length === 0) {
-          return "Loading Services"
+          return this.$t('loading_services')
         } else if (this.$store.getters.messages == null) {
-          return "Loading Announcements"
+          return this.$t('loading_announcements')
         }
       },
       loaded() {

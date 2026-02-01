@@ -19,10 +19,11 @@ const Importer = () => import(/* webpackChunkName: "index" */ '@/components/Dash
 
 import VueRouter from "vue-router";
 import Api from "./API";
-import store from "./store"
+import store from "./store";
+import i18n from "./i18n";
 
 const Loading = {
-  template: '<div class="jumbotron">LOADING</div>'
+  template: '<div class="jumbotron">{{ $t("loading") }}</div>'
 }
 
 const routes = [
@@ -31,7 +32,7 @@ const routes = [
     name: 'Setup',
     component: Setup,
     meta: {
-      title: 'Statping Setup',
+      titleKey: 'page_title_setup',
     }
   },
   {
@@ -45,7 +46,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       requiresAdmin: true,
-      title: 'Statping - Dashboard',
+      titleKey: 'page_title_dashboard',
     },
     // Entire /dashboard is admin-only: beforeEnter enforces auth + admin
     beforeEnter: async (to, from, next) => {
@@ -98,14 +99,14 @@ const routes = [
       loading: Loading,
         meta: {
             requiresAuth: true,
-          title: 'Statping - Users',
+            titleKey: 'page_title_users',
         }
     },{
       path: 'services',
       component: DashboardServices,
         meta: {
             requiresAuth: true,
-          title: 'Statping - Services',
+          titleKey: 'page_title_services',
         }
     },{
       path: 'create_service',
@@ -119,7 +120,7 @@ const routes = [
       component: EditService,
       meta: {
         requiresAuth: true,
-        title: 'Statping - Edit Service',
+        titleKey: 'page_title_edit_service',
       }
     },{
       path: 'service/:id/incidents',
@@ -136,7 +137,7 @@ const routes = [
       component: Failures,
       meta: {
         requiresAuth: true,
-        title: 'Statping - Service Failures',
+        titleKey: 'page_title_service_failures',
       }
     },{
       path: 'incidents',
@@ -150,7 +151,7 @@ const routes = [
       component: Settings,
         meta: {
             requiresAuth: true,
-          title: 'Statping - Settings',
+          titleKey: 'page_title_settings',
         }
     },{
       path: 'logs',
@@ -164,7 +165,7 @@ const routes = [
       component: Help,
         meta: {
             requiresAuth: true,
-          title: 'Statping - Help',
+          titleKey: 'page_title_help',
         }
     },{
       path: 'import',
@@ -180,7 +181,7 @@ const routes = [
     name: 'Login',
     component: Login,
     meta: {
-      title: 'Statping - Login',
+      titleKey: 'page_title_login',
     }
   },
   { path: '/logout', redirect: '/' },
@@ -194,7 +195,7 @@ const routes = [
     path: '/incidents',
     name: 'IncidentHistory',
     component: IncidentHistory,
-    meta: { title: 'Incident History' }
+    meta: { titleKey: 'incident_history' }
   },
   {
     path: '*',
@@ -216,13 +217,13 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
+  const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && (r.meta.title || r.meta.titleKey));
   const nearestWithMeta = to.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
   const previousNearestWithMeta = from.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
   if (nearestWithTitle) {
-    document.title = nearestWithTitle.meta.title;
+    document.title = nearestWithTitle.meta.titleKey ? i18n.t(nearestWithTitle.meta.titleKey) : nearestWithTitle.meta.title;
   } else if (to.path === '/' || to.name === 'Index') {
-    document.title = (store.getters.core && store.getters.core.name) ? store.getters.core.name : 'Statping';
+    document.title = (store.getters.core && store.getters.core.name) ? store.getters.core.name : i18n.t('app_name');
   }
   Array.from(document.querySelectorAll('[data-vue-router-controlled]')).map(el => el.parentNode.removeChild(el));
   if (!nearestWithMeta) return next();

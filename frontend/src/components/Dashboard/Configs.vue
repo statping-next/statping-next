@@ -1,11 +1,11 @@
 <template>
 <div>
-  <h3>Configuration</h3>
-  For security reasons, all database credentials cannot be editted from this page.
+  <h3>{{ $t('configuration') }}</h3>
+  <p>{{ $t('config_security_note') }}</p>
 
   <codemirror v-show="loaded" v-model="configs" ref="configs" :options="cmOptions" class="mt-4 codemirrorInput"/>
 
-  <button @click.prevent="save" class="btn col-12 btn-primary mt-3">Save</button>
+  <button @click.prevent="save" class="btn col-12 btn-primary mt-3">{{ $t('save') }}</button>
 </div>
 </template>
 

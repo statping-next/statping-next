@@ -1,7 +1,7 @@
 <template>
     <div id="header">
         <router-link to="/" class="header-logo-link">
-            <img id="logo" class="header-logo-img col-12 pt-4 mb-3 header-title font-6" :src="displayLogo" :alt="core.name || 'Statping'" :title="core.name || 'Statping'">
+            <img id="logo" class="header-logo-img col-12 pt-4 mb-3 header-title font-6" :src="displayLogo" :alt="core.name || $t('app_name')" :title="core.name || $t('app_name')">
         </router-link>
         <h5 id="description" class="col-12 text-center mb-5 header-desc font-3">{{core.description}}</h5>
     </div>

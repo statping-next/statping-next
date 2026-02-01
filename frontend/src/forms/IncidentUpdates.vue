@@ -2,7 +2,7 @@
     <div class="incident-updates-body">
 
         <div v-if="updates.length === 0" class="incident-updates-empty">
-            No updates yet. Add one below.
+            {{ $t('no_updates_yet') }}
         </div>
 
         <div class="incident-updates-list">
@@ -19,13 +19,13 @@
                 </select>
             </div>
             <div class="col-12 col-md-7 mb-2 mb-md-0">
-                <input v-model="incident_update.message" name="description" class="form-control form-control-sm" placeholder="Update message..." required>
+                <input v-model="incident_update.message" name="description" class="form-control form-control-sm" :placeholder="$t('update_message_placeholder')" required>
             </div>
             <div class="col-12 col-md-2">
                 <button @click.prevent="createIncidentUpdate"
                         :disabled="!incident_update.message"
                         type="submit" class="btn btn-sm btn-primary btn-block">
-                    Add
+                    {{ $t('add') }}
                 </button>
             </div>
         </form>

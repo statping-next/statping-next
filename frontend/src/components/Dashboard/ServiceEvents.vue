@@ -2,14 +2,14 @@
   <div class="row p-2">
 
     <div v-if="loaded && last_failure && failureBefore" class="col-12 text-danger font-2 m-0 mb-2">
-      <font-awesome-icon icon="exclamation" class="mr-1 text-danger font-weight-bold" size="1x"/> Recent Failure<br>
+      <font-awesome-icon icon="exclamation" class="mr-1 text-danger font-weight-bold" size="1x"/> {{ $t('recent_failure') }}<br>
       <span class="font-italic font-weight-light text-dim mt-1" style="max-width: 270px">
-      Last failure was {{ago(last_failure.created_at)}} ago. {{last_failure.issue}}
+      {{ $t('last_failure_was') }} {{ago(last_failure.created_at)}} ago. {{last_failure.issue}}
       </span>
     </div>
 
     <div v-if="loaded" v-for="message in messages" class="col-12 font-2 m-0 mb-2">
-      <font-awesome-icon icon="calendar" class="mr-1" size="1x"/> Upcoming Announcement<br>
+      <font-awesome-icon icon="calendar" class="mr-1" size="1x"/> {{ $t('upcoming_announcement') }}<br>
       <span class="font-italic font-weight-light text-dim mt-1">{{message.description}}</span>
       <span class="font-0 text-dim float-right font-weight-light mt-1">@ <strong>{{niceDate(message.start_on)}}</strong>
       </span>

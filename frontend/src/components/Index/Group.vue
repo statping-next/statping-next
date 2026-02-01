@@ -77,19 +77,19 @@ export default {
           const diffInSeconds = Math.floor((now - lastCheck) / 1000);
           // Sanity check: if the difference is more than 10 years, something is wrong
           if (diffInSeconds > 0 && diffInSeconds < 315360000) {
-            lastCheckedText = `last checked ${this.formatDuration(diffInSeconds)} ago`;
+            lastCheckedText = this.$t('last_checked_ago', { duration: this.formatDuration(diffInSeconds) });
           } else {
             // Fallback to last_success if last_check is invalid
             const lastSuccess = parseDate(service.last_success);
             if (lastSuccess && lastSuccess > 0) {
               const diffInSeconds = Math.floor((now - lastSuccess) / 1000);
               if (diffInSeconds > 0 && diffInSeconds < 315360000) {
-                lastCheckedText = `last checked ${this.formatDuration(diffInSeconds)} ago`;
+                lastCheckedText = this.$t('last_checked_ago', { duration: this.formatDuration(diffInSeconds) });
               } else {
-                lastCheckedText = 'never checked';
+                lastCheckedText = this.$t('never_checked');
               }
             } else {
-              lastCheckedText = 'never checked';
+              lastCheckedText = this.$t('never_checked');
             }
           }
         } else {
@@ -98,12 +98,12 @@ export default {
           if (lastSuccess && lastSuccess > 0) {
             const diffInSeconds = Math.floor((now - lastSuccess) / 1000);
             if (diffInSeconds > 0 && diffInSeconds < 315360000) {
-              lastCheckedText = `last checked ${this.formatDuration(diffInSeconds)} ago`;
+              lastCheckedText = this.$t('last_checked_ago', { duration: this.formatDuration(diffInSeconds) });
             } else {
-              lastCheckedText = 'never checked';
+              lastCheckedText = this.$t('never_checked');
             }
           } else {
-            lastCheckedText = 'never checked';
+            lastCheckedText = this.$t('never_checked');
           }
         }
 
@@ -119,7 +119,7 @@ export default {
           // Sanity check for downForSeconds too
           if (downForSeconds > 0 && downForSeconds < 315360000) {
             acc[service.id] = {
-              downFor: `down for ${this.formatDuration(downForSeconds)}`,
+              downFor: this.$t('down_for_duration', { duration: this.formatDuration(downForSeconds) }),
               lastChecked: lastCheckedText
             };
           } else {

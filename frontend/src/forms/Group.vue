@@ -12,7 +12,7 @@
         <div class="form-group row">
             <label for="title" class="col-sm-4 col-form-label">{{ $t('group') }} {{ $t('name') }}</label>
             <div class="col-sm-8">
-                <input v-model="group.name" type="text" class="form-control" id="title" placeholder="Group Name" required>
+                <input v-model="group.name" type="text" class="form-control" id="title" :placeholder="$t('group_name_placeholder')" required>
             </div>
         </div>
         <div class="form-group row">
@@ -27,7 +27,7 @@
         <div class="form-group row">
             <div class="col-sm-12">
                 <button @click.prevent="saveGroup" type="submit" :disabled="loading || group.name === ''" class="btn btn-block" :class="{'btn-primary': !group.id, 'btn-secondary': group.id}">
-                    {{loading ? "Loading..." : group.id ? $t('group_update') : $t('group_create')}}
+                    {{loading ? $t('loading_dots') : group.id ? $t('group_update') : $t('group_create')}}
                 </button>
             </div>
         </div>

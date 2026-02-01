@@ -7,11 +7,11 @@
 
       <div v-if="loading" class="text-center py-5">
         <font-awesome-icon icon="circle-notch" class="text-dim" size="2x" spin/>
-        <p class="mt-3 text-dim">{{ $t('loading') || 'Loading...' }}</p>
+        <p class="mt-3 text-dim">{{ $t('loading') }}</p>
       </div>
 
       <div v-else-if="archivedIncidents.length === 0" class="incident-history-empty text-center py-5 text-dim">
-        <p>{{ $t('incident_history_empty') || 'No archived incidents.' }}</p>
+        <p>{{ $t('incident_history_empty') }}</p>
       </div>
 
       <div v-else class="incident-history-timeline">

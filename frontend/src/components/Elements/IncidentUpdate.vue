@@ -3,7 +3,7 @@
         <div class="incident-update-main">
             <span class="incident-update-type" :class="updateTypeClass">{{ update.type }}</span>
             <span class="incident-update-message">{{ update.message }}</span>
-            <button v-if="admin" @click="delete_update(update)" type="button" class="incident-update-delete" aria-label="Delete update">
+            <button v-if="admin" @click="delete_update(update)" type="button" class="incident-update-delete" :aria-label="$t('delete_update_aria')">
                 <font-awesome-icon icon="times" />
             </button>
         </div>

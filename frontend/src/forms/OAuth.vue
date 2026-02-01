@@ -2,61 +2,61 @@
     <form @submit.prevent="saveOAuth">
         <div class="card mb-3">
             <div class="card-header">
-                Internal Login
+                {{ $t('internal_login') }}
                 <span @click="local_enabled = !!local_enabled" class="switch switch-sm switch-rd-gr float-right">
                     <input v-model="local_enabled" type="checkbox" id="switch-internal-oauth" :checked="local_enabled">
                     <label for="switch-internal-oauth" class="mb-0"> </label>
                 </span>
             </div>
             <div class="card-body">
-                Use Statping's default authentication to allow users you've created to login.
+                {{ $t('default_auth_desc') }}
             </div>
         </div>
         <div class="card mb-3">
             <div class="card-header text-capitalize">
                 <font-awesome-icon @click="expanded.github = !expanded.github" :icon="expanded.github ? 'minus' : 'plus'" class="mr-2 pointer"/>
-                Github Settings
+                {{ $t('github_settings') }}
                 <span @click="github_enabled = !!github_enabled" class="switch switch-sm switch-rd-gr float-right">
                     <input v-model="github_enabled" type="checkbox" id="switch-gh-oauth" :checked="github_enabled">
                     <label class="mb-0" for="switch-gh-oauth"> </label>
                 </span>
             </div>
             <div class="card-body" :class="{'d-none': !expanded.github}">
-                <span>You will need to create a new <a href="https://github.com/settings/developers">OAuth App</a> within Github.</span>
+                <span>{{ $t('oauth_create_github') }} <a href="https://github.com/settings/developers">OAuth App</a></span>
 
                 <div class="form-group row mt-3">
-                    <label for="github_client" class="col-sm-4 col-form-label">Github Client ID</label>
+                    <label for="github_client" class="col-sm-4 col-form-label">{{ $t('github_client_id') }}</label>
                     <div class="col-sm-8">
                         <input v-model="oauth.gh_client_id" type="text" class="form-control" id="github_client" required>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="github_secret" class="col-sm-4 col-form-label">Github Client Secret</label>
+                    <label for="github_secret" class="col-sm-4 col-form-label">{{ $t('github_client_secret') }}</label>
                     <div class="col-sm-8">
                         <input v-model="oauth.gh_client_secret" type="text" class="form-control" id="github_secret" required>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="github_secret" class="col-sm-4 col-form-label">Restrict Users</label>
+                    <label for="github_secret" class="col-sm-4 col-form-label">{{ $t('restrict_users') }}</label>
                     <div class="col-sm-8">
-                        <input v-model="oauth.gh_users" type="text" class="form-control" id="github_users" placeholder="octocat,hunterlong,jimbo123">
-                        <small>Optional comma delimited list of usernames</small>
+                        <input v-model="oauth.gh_users" type="text" class="form-control" id="github_users" :placeholder="$t('oauth_placeholder_users')">
+                        <small>{{ $t('optional_comma_usernames') }}</small>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="github_secret" class="col-sm-4 col-form-label">Restrict Organizations</label>
+                    <label for="github_secret" class="col-sm-4 col-form-label">{{ $t('restrict_organizations') }}</label>
                     <div class="col-sm-8">
-                        <input v-model="oauth.gh_orgs" type="text" class="form-control" id="github_orgs" placeholder="statping,github">
-                        <small>Optional comma delimited list of Github Organizations</small>
+                        <input v-model="oauth.gh_orgs" type="text" class="form-control" id="github_orgs" :placeholder="$t('oauth_placeholder_orgs')">
+                        <small>{{ $t('optional_comma_orgs') }}</small>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="gh_callback" class="col-sm-4 col-form-label">Callback URL</label>
+                    <label for="gh_callback" class="col-sm-4 col-form-label">{{ $t('callback_url') }}</label>
                     <div class="col-sm-8">
                         <div class="input-group">
                             <input v-bind:value="`${core.domain}/oauth/github`" type="text" class="form-control" id="gh_callback" readonly>
                             <div class="input-group-append copy-btn">
-                                <button @click.prevent="copy(`${core.domain}/oauth/github`)" class="btn btn-outline-secondary" type="button">Copy</button>
+                                <button @click.prevent="copy(`${core.domain}/oauth/github`)" class="btn btn-outline-secondary" type="button">{{ $t('copy') }}</button>
                             </div>
                         </div>
                     </div>
@@ -73,34 +73,34 @@
                 </span>
             </div>
             <div class="card-body" :class="{'d-none': !expanded.google}">
-                <span>Go to <a href="https://console.cloud.google.com/apis/credentials">OAuth Consent Screen</a> on Google Console to create a new "Web Application" OAuth application. </span>
+                <span>{{ $t('oauth_google_consent') }}</span>
 
                 <div class="form-group row mt-3">
-                    <label for="github_client" class="col-sm-4 col-form-label">Google Client ID</label>
+                    <label for="github_client" class="col-sm-4 col-form-label">{{ $t('google_client_id') }}</label>
                     <div class="col-sm-8">
                         <input v-model="oauth.google_client_id" type="text" class="form-control" id="google_client" required>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="github_secret" class="col-sm-4 col-form-label">Google Client Secret</label>
+                    <label for="github_secret" class="col-sm-4 col-form-label">{{ $t('google_client_secret') }}</label>
                     <div class="col-sm-8">
                         <input v-model="oauth.google_client_secret" type="text" class="form-control" id="google_secret" required>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="github_secret" class="col-sm-4 col-form-label">Restrict Users</label>
+                    <label for="github_secret" class="col-sm-4 col-form-label">{{ $t('restrict_users') }}</label>
                     <div class="col-sm-8">
-                        <input v-model="oauth.google_users" type="text" class="form-control" id="google_users" placeholder="info@gmail.com,example.com">
-                        <small>Optional comma delimited list of emails and/or domains</small>
+                        <input v-model="oauth.google_users" type="text" class="form-control" id="google_users" :placeholder="$t('oauth_placeholder_emails')">
+                        <small>{{ $t('optional_comma_emails') }}</small>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="google_callback" class="col-sm-4 col-form-label">Callback URL</label>
+                    <label for="google_callback" class="col-sm-4 col-form-label">{{ $t('callback_url') }}</label>
                     <div class="col-sm-8">
                         <div class="input-group">
                             <input v-bind:value="`${core.domain}/oauth/google`" type="text" class="form-control" id="google_callback" readonly>
                             <div class="input-group-append copy-btn">
-                                <button @click.prevent="copy(`${core.domain}/oauth/google`)" class="btn btn-outline-secondary" type="button">Copy</button>
+                                <button @click.prevent="copy(`${core.domain}/oauth/google`)" class="btn btn-outline-secondary" type="button">{{ $t('copy') }}</button>
                             </div>
                         </div>
                     </div>
@@ -117,41 +117,41 @@
                 </span>
             </div>
             <div class="card-body" :class="{'d-none': !expanded.slack}">
-                <span>Go to <a href="https://api.slack.com/apps">Slack Apps</a> and create a new Application.</span>
+                <span>{{ $t('oauth_slack_create') }} <a href="https://api.slack.com/apps">Slack Apps</a></span>
 
                 <div class="form-group row mt-3">
-                    <label for="slack_client" class="col-sm-4 col-form-label">Slack Client ID</label>
+                    <label for="slack_client" class="col-sm-4 col-form-label">{{ $t('slack_client_id') }}</label>
                     <div class="col-sm-8">
                         <input v-model="oauth.slack_client_id" type="text" class="form-control" id="slack_client" required>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="slack_secret" class="col-sm-4 col-form-label">Slack Client Secret</label>
+                    <label for="slack_secret" class="col-sm-4 col-form-label">{{ $t('slack_client_secret') }}</label>
                     <div class="col-sm-8">
                         <input v-model="oauth.slack_client_secret" type="text" class="form-control" id="slack_secret" required>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="slack_secret" class="col-sm-4 col-form-label">Team ID</label>
+                    <label for="slack_secret" class="col-sm-4 col-form-label">{{ $t('team_id') }}</label>
                     <div class="col-sm-8">
                         <input v-model="oauth.slack_team" type="text" class="form-control" id="slack_team">
-                        <small>Optional Slack Team ID</small>
+                        <small>{{ $t('optional_slack_team_id') }}</small>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="slack_secret" class="col-sm-4 col-form-label">Restrict Users</label>
+                    <label for="slack_secret" class="col-sm-4 col-form-label">{{ $t('restrict_users') }}</label>
                     <div class="col-sm-8">
-                        <input v-model="oauth.slack_users" type="text" class="form-control" id="slack_users" placeholder="info@example.com,info@domain.net">
-                        <small>Optional comma delimited list of email addresses</small>
+                        <input v-model="oauth.slack_users" type="text" class="form-control" id="slack_users" :placeholder="$t('oauth_placeholder_emails')">
+                        <small>{{ $t('optional_comma_emails_list') }}</small>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="slack_callback" class="col-sm-4 col-form-label">Callback URL</label>
+                    <label for="slack_callback" class="col-sm-4 col-form-label">{{ $t('callback_url') }}</label>
                     <div class="col-sm-8">
                         <div class="input-group">
                             <input v-bind:value="`${core.domain}/oauth/slack`" type="text" class="form-control" id="slack_callback" readonly>
                             <div class="input-group-append copy-btn">
-                                <button @click.prevent="copy(`${core.domain}/oauth/slack`)" class="btn btn-outline-secondary" type="button">Copy</button>
+                                <button @click.prevent="copy(`${core.domain}/oauth/slack`)" class="btn btn-outline-secondary" type="button">{{ $t('copy') }}</button>
                             </div>
                         </div>
                     </div>
@@ -162,7 +162,7 @@
         <div class="card mb-3">
             <div class="card-header">
                 <font-awesome-icon @click="expanded.custom = !expanded.custom" :icon="expanded.custom ? 'minus' : 'plus'" class="mr-2 pointer"/>
-                Custom oAuth Settings
+                {{ $t('custom_oauth_settings') }}
                 <span @click="custom_enabled = !!custom_enabled" class="switch switch-sm switch-rd-gr float-right">
                     <input v-model="custom_enabled" type="checkbox" id="switch-custom-oauth" :checked="custom_enabled">
                     <label for="switch-custom-oauth" class="mb-0"> </label>
@@ -170,60 +170,60 @@
             </div>
             <div class="card-body" :class="{'d-none': !expanded.custom || !custom_enabled}">
                 <div class="form-group row">
-                    <label for="custom_name" class="col-sm-4 col-form-label">Custom Name</label>
+                    <label for="custom_name" class="col-sm-4 col-form-label">{{ $t('custom_name') }}</label>
                     <div class="col-sm-8">
                         <input v-model="oauth.custom_name" type="text" class="form-control" id="custom_name" required>
                     </div>
                 </div>
                 <div class="form-group row mt-3">
-                    <label for="custom_client" class="col-sm-4 col-form-label">Client ID</label>
+                    <label for="custom_client" class="col-sm-4 col-form-label">{{ $t('client_id') }}</label>
                     <div class="col-sm-8">
                         <input v-model="oauth.custom_client_id" type="text" class="form-control" id="custom_client" required>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="custom_secret" class="col-sm-4 col-form-label">Client Secret</label>
+                    <label for="custom_secret" class="col-sm-4 col-form-label">{{ $t('client_secret') }}</label>
                     <div class="col-sm-8">
                         <input v-model="oauth.custom_client_secret" type="text" class="form-control" id="custom_secret" required>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="custom_endpoint" class="col-sm-4 col-form-label">Auth Endpoint</label>
+                    <label for="custom_endpoint" class="col-sm-4 col-form-label">{{ $t('auth_endpoint') }}</label>
                     <div class="col-sm-8">
                         <input v-model="oauth.custom_endpoint_auth" type="text" class="form-control" id="custom_endpoint" required>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="custom_endpoint_token" class="col-sm-4 col-form-label">Token Endpoint</label>
+                    <label for="custom_endpoint_token" class="col-sm-4 col-form-label">{{ $t('token_endpoint') }}</label>
                     <div class="col-sm-8">
                         <input v-model="oauth.custom_endpoint_token" type="text" class="form-control" id="custom_endpoint_token" required>
                     </div>
                 </div>
               <div class="form-group row">
-                <label for="custom_scopes" class="col-sm-4 col-form-label">Scopes</label>
+                <label for="custom_scopes" class="col-sm-4 col-form-label">{{ $t('scopes') }}</label>
                 <div class="col-sm-8">
                   <input v-model="oauth.custom_scopes" type="text" class="form-control" id="custom_scopes">
-                  <small>Optional comma delimited list of oauth scopes</small>
+                  <small>{{ $t('optional_comma_scopes') }}</small>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="custom_scopes" class="col-sm-4 col-form-label">Open ID</label>
+                <label for="custom_scopes" class="col-sm-4 col-form-label">{{ $t('open_id') }}</label>
                 <div class="col-sm-8">
                   <span @click="oauth.custom_open_id = !!oauth.custom_open_id" class="switch switch-rd-gr float-right">
                     <input v-model="oauth.custom_open_id" type="checkbox" id="switch-custom-openid" :checked="oauth.custom_open_id">
                     <label for="switch-custom-openid" class="mb-0"> </label>
                 </span>
-                  <small>Enable if provider is OpenID</small>
+                  <small>{{ $t('enable_if_openid') }}</small>
                 </div>
               </div>
 
                 <div class="form-group row">
-                    <label for="slack_callback" class="col-sm-4 col-form-label">Callback URL</label>
+                    <label for="slack_callback" class="col-sm-4 col-form-label">{{ $t('callback_url') }}</label>
                     <div class="col-sm-8">
                         <div class="input-group">
                             <input v-bind:value="`${core.domain}/oauth/custom`" type="text" class="form-control" id="custom_callback" readonly>
                             <div class="input-group-append copy-btn">
-                                <button @click.prevent="copy(`${core.domain}/oauth/custom`)" class="btn btn-outline-secondary" type="button">Copy</button>
+                                <button @click.prevent="copy(`${core.domain}/oauth/custom`)" class="btn btn-outline-secondary" type="button">{{ $t('copy') }}</button>
                             </div>
                         </div>
                     </div>
@@ -232,7 +232,7 @@
         </div>
 
         <button class="btn btn-primary btn-block" @click.prevent="saveOAuth" type="submit" :disabled="loading">
-            <font-awesome-icon v-if="loading" icon="circle-notch" class="mr-2" spin/> Save OAuth Settings
+            <font-awesome-icon v-if="loading" icon="circle-notch" class="mr-2" spin/> {{ $t('save_settings') }}
         </button>
 
     </form>

@@ -5,13 +5,13 @@
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 
                     <div v-if="version_below" class="col-12 small text-center mt-0 pt-0 pb-0 mb-3">
-                      Update {{github.tag_name}} Available
+                      {{ $t('update_available', { version: github.tag_name }) }}
                       <div class="row">
                         <div class="col-6">
-                          <a href="https://github.com/statping-next/statping-next/releases/latest" class="btn btn-sm text-success mt-2">Download</a>
+                          <a href="https://github.com/statping-next/statping-next/releases/latest" class="btn btn-sm text-success mt-2">{{ $t('download') }}</a>
                         </div>
                         <div class="col-6">
-                          <a href="https://github.com/statping-next/statping-next/blob/master/CHANGELOG.md" class="btn btn-sm text-dim mt-2">Changelog</a>
+                          <a href="https://github.com/statping-next/statping-next/blob/master/CHANGELOG.md" class="btn btn-sm text-dim mt-2">{{ $t('changelog') }}</a>
                         </div>
                       </div>
                     </div>
@@ -46,10 +46,10 @@
                         </a>
                     </div>
 
-                    <h6 class="mt-4 mb-3 text-muted">Statping NEXT {{$t('links')}}</h6>
+                    <h6 class="mt-4 mb-3 text-muted">{{ $t('statping_links') }}</h6>
 
                     <a href="https://statping-next.github.io" class="mb-2 font-2 text-decoration-none text-muted">
-                        <font-awesome-icon icon="globe" class="mr-3"/> Statping NEXT
+                        <font-awesome-icon icon="globe" class="mr-3"/> {{ $t('statping_next') }}
                     </a>
 
                     <a href="https://github.com/statping-next/statping-next/wiki" class="mb-2 font-2 text-decoration-none text-muted">
@@ -82,10 +82,10 @@
                     <CoreSettings/>
 
                     <div class="card mt-3">
-                        <div class="card-header">API {{$t('settings')}}</div>
+                        <div class="card-header">{{ $t('api_settings') }}</div>
                         <div class="card-body">
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">API {{$t('secret')}}</label>
+                                <label class="col-sm-3 col-form-label">API {{ $t('secret') }}</label>
                                 <div class="col-sm-9">
                                     <div class="input-group">
                                     <input v-model="core.api_secret" @focus="$event.target.select()" type="text" class="form-control select-input" id="api_secret" readonly>
@@ -225,10 +225,10 @@
         async renewApiKeys() {
           const modal = {
             visible: true,
-            title: "Reset API Key",
-            body: `Are you sure you want to reset the API keys? You will be logged out.`,
+            title: this.$t('reset_api_key'),
+            body: this.$t('confirm_reset_api_keys'),
             btnColor: "btn-danger",
-            btnText: "Reset",
+            btnText: this.$t('reset'),
             func: () => this.renew(),
           }
           this.$store.commit("setModal", modal)

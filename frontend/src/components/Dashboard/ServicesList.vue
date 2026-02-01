@@ -173,10 +173,10 @@ export default {
           async deleteService(s) {
             const modal = {
               visible: true,
-              title: "Delete Service",
-              body: `Are you sure you want to delete service ${s.name}? This will also delete all failures, checkins, and incidents for this service.`,
+              title: this.$t('delete_service'),
+              body: this.$t('confirm_delete_service', { name: s.name }),
               btnColor: "btn-danger",
-              btnText: "Delete Service",
+              btnText: this.$t('delete_service'),
               func: () => this.delete(s),
             }
             this.$store.commit("setModal", modal)

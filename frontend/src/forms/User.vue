@@ -2,7 +2,7 @@
     <div class="card contain-card mb-3">
         <div class="card-header"> {{user.id ? `${$t('update')} ${user.username}` : $t('user_create')}}
             <transition name="slide-fade">
-                <button @click.prevent="removeEdit" v-if="user.id" class="btn btn-sm float-right btn-danger btn-sm">Close</button>
+                <button @click.prevent="removeEdit" v-if="user.id" class="btn btn-sm float-right btn-danger btn-sm">{{ $t('close') }}</button>
             </transition>
         </div>
         <div class="card-body">
@@ -10,7 +10,7 @@
         <div class="form-group row">
             <label class="col-sm-4 col-form-label">{{$t('username')}}</label>
             <div class="col-6 col-md-4">
-                <input v-model="user.username" type="text" class="form-control" id="username" placeholder="Username" required autocorrect="off" autocapitalize="none" v-bind:readonly="user.id">
+                <input v-model="user.username" type="text" class="form-control" id="username" :placeholder="$t('username')" required autocorrect="off" autocapitalize="none" v-bind:readonly="user.id">
             </div>
             <div class="col-6 col-md-4">
                   <span id="admin_switch" @click="user.admin = !!user.admin" class="switch">
@@ -22,7 +22,7 @@
         <div class="form-group row">
             <label for="email" class="col-sm-4 col-form-label">{{$t('email')}}</label>
             <div class="col-sm-8">
-                <input v-model="user.email" type="email" class="form-control" id="email" placeholder="user@domain.com" required autocapitalize="none" spellcheck="false">
+                <input v-model="user.email" type="email" class="form-control" id="email" :placeholder="$t('user_email_placeholder')" required autocapitalize="none" spellcheck="false">
             </div>
         </div>
         <div class="form-group row">
@@ -34,7 +34,7 @@
         <div class="form-group row">
             <label class="col-sm-4 col-form-label">{{$t('confirm_password')}}</label>
             <div class="col-sm-8">
-                <input v-model="user.confirm_password" type="password" id="password_confirm" class="form-control" placeholder="Confirm Password" required>
+                <input v-model="user.confirm_password" type="password" id="password_confirm" class="form-control" :placeholder="$t('confirm_password')" required>
             </div>
         </div>
         <div v-if="user.api_key" class="form-group row">

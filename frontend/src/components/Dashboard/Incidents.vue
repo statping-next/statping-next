@@ -2,7 +2,7 @@
     <div class="col-12">
 
         <div v-for="incident in incidents" :key="incident.id" class="card contain-card mb-4">
-            <div class="card-header">Incident: {{incident.title}}
+            <div class="card-header">{{ $t('incident_label') }}{{incident.title}}
                 <button @click="deleteIncident(incident)" class="btn btn-sm btn-danger float-right">
                     <font-awesome-icon icon="times" />
                 </button>
@@ -10,7 +10,7 @@
 
             <FormIncidentUpdates :incident="incident"/>
 
-            <span class="font-2 p-2 pl-3">Created: {{niceDate(incident.created_at)}} | Last Update: {{niceDate(incident.updated_at)}}</span>
+            <span class="font-2 p-2 pl-3">{{ $t('created_meta') }} {{niceDate(incident.created_at)}} | {{ $t('last_update_label') }}: {{niceDate(incident.updated_at)}}</span>
         </div>
 
 
@@ -21,12 +21,12 @@
                     <div class="form-group row">
                         <label class="col-sm-4 col-form-label">Title</label>
                         <div class="col-sm-8">
-                            <input v-model="incident.title" type="text" name="title" class="form-control" id="title" placeholder="Incident Title" required>
+                            <input v-model="incident.title" type="text" name="title" class="form-control" id="title" :placeholder="$t('incident_title_placeholder')" required>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-4 col-form-label">Description</label>
+                        <label class="col-sm-4 col-form-label">{{ $t('description') }}</label>
                         <div class="col-sm-8">
                             <textarea v-model="incident.description" rows="5" name="description" class="form-control" id="description" required></textarea>
                         </div>
@@ -37,7 +37,7 @@
                             <button @click.prevent="createIncident"
                                     :disabled="!incident.title || !incident.description"
                                     type="submit" class="btn btn-block btn-primary">
-                                Create Incident
+                                {{ $t('create_incident') }}
                             </button>
                         </div>
                     </div>
@@ -90,10 +90,10 @@ const FormIncidentUpdates = () => import(/* webpackChunkName: "dashboard" */ '@/
         async deleteIncident(incident) {
           const modal = {
             visible: true,
-            title: "Delete Incident",
-            body: `Are you sure you want to delete Incident ${incident.title}?`,
+            title: this.$t('delete_incident'),
+            body: this.$t('confirm_delete_incident', { title: incident.title }),
             btnColor: "btn-danger",
-            btnText: "Delete Incident",
+            btnText: this.$t('delete_incident'),
             func: () => this.delete(incident),
           }
           this.$store.commit("setModal", modal)

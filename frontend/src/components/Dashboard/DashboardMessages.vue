@@ -10,7 +10,7 @@
       </div>
       <div class="card-body pt-0">
         <div v-if="messages.length === 0" class="alert alert-dark d-block mt-3 mb-3">
-          No announcements. Create a global or service-specific announcement.
+          {{ $t('no_announcements') }}
         </div>
         <table v-else class="table table-striped">
           <thead>
@@ -50,7 +50,7 @@
         <div class="incidents-modal-content">
           <div class="incidents-modal-header">
             <h5 class="incidents-modal-title">{{ messageToEdit.id ? $t('message_edit') : $t('message_create') }}</h5>
-            <button type="button" class="incidents-modal-close" @click="closeAnnouncementModal" aria-label="Close">
+            <button type="button" class="incidents-modal-close" @click="closeAnnouncementModal" :aria-label="$t('close_aria')">
               <font-awesome-icon icon="times" />
             </button>
           </div>
@@ -71,7 +71,7 @@
       </div>
       <div class="card-body pt-0">
         <div v-if="incidents.length === 0" class="alert alert-dark d-block mt-3 mb-3">
-          No incidents. Create a global or service-specific incident.
+          {{ $t('no_incidents') }}
         </div>
 
         <template v-else>
@@ -81,9 +81,9 @@
           <div v-for="incident in activeIncidents" :key="incident.id" class="card incident-card mb-4">
             <div class="card-header incident-card-header">
               <div class="d-flex align-items-center flex-wrap incident-header-left">
-                <span class="incident-title">Incident: {{ incident.title }}</span>
+                <span class="incident-title">{{ $t('incident_label') }}{{ incident.title }}</span>
                 <span class="incident-service-name">({{ serviceName(serviceById(incident.service)) }})</span>
-                <span class="ml-2 incident-auto-archive-icon" :title="incident.auto_archive_enabled ? $t('auto_archive_after_resolution') + (incident.auto_archive_delay_minutes ? ' (' + (incident.auto_archive_delay_minutes >= 60 ? Math.floor(incident.auto_archive_delay_minutes / 60) + 'h' : incident.auto_archive_delay_minutes + 'm') + ')' : ' (immediate)') : $t('auto_archive_disabled')">
+                <span class="ml-2 incident-auto-archive-icon" :title="incident.auto_archive_enabled ? $t('auto_archive_after_resolution') + (incident.auto_archive_delay_minutes ? ' (' + (incident.auto_archive_delay_minutes >= 60 ? Math.floor(incident.auto_archive_delay_minutes / 60) + 'h' : incident.auto_archive_delay_minutes + 'm') + ')' : ' ' + $t('auto_archive_immediate')) : $t('auto_archive_disabled')">
                   <font-awesome-icon icon="clock" :class="{ 'incident-auto-archive-off': !incident.auto_archive_enabled }" />
                 </span>
               </div>
@@ -100,7 +100,7 @@
               </div>
             </div>
             <FormIncidentUpdates :incident="incident" @updated="onIncidentUpdated" />
-            <div class="incident-meta">Created: {{ niceDate(incident.created_at) }} | Last Update: {{ niceDate(incident.updated_at) }}</div>
+            <div class="incident-meta">{{ $t('created_meta') }} {{ niceDate(incident.created_at) }} | {{ $t('last_update_meta') }} {{ niceDate(incident.updated_at) }}</div>
           </div>
 
           <div v-if="archivedIncidentsList.length > 0" class="archived-incidents-drawer mt-4">
@@ -112,10 +112,10 @@
               <div v-for="incident in archivedIncidentsList" :key="incident.id" class="card incident-card mb-4">
                 <div class="card-header incident-card-header">
                   <div class="d-flex align-items-center flex-wrap incident-header-left">
-                    <span class="incident-title">Incident: {{ incident.title }}</span>
+                    <span class="incident-title">{{ $t('incident_label') }}{{ incident.title }}</span>
                     <span class="incident-service-name">({{ serviceName(serviceById(incident.service)) }})</span>
                     <span class="badge badge-secondary ml-2">{{ $t('incident_archived') }}</span>
-                    <span class="ml-2 incident-auto-archive-icon" :title="incident.auto_archive_enabled ? $t('auto_archive_after_resolution') + (incident.auto_archive_delay_minutes ? ' (' + (incident.auto_archive_delay_minutes >= 60 ? Math.floor(incident.auto_archive_delay_minutes / 60) + 'h' : incident.auto_archive_delay_minutes + 'm') + ')' : ' (immediate)') : $t('auto_archive_disabled')">
+                    <span class="ml-2 incident-auto-archive-icon" :title="incident.auto_archive_enabled ? $t('auto_archive_after_resolution') + (incident.auto_archive_delay_minutes ? ' (' + (incident.auto_archive_delay_minutes >= 60 ? Math.floor(incident.auto_archive_delay_minutes / 60) + 'h' : incident.auto_archive_delay_minutes + 'm') + ')' : ' ' + $t('auto_archive_immediate')) : $t('auto_archive_disabled')">
                       <font-awesome-icon icon="clock" :class="{ 'incident-auto-archive-off': !incident.auto_archive_enabled }" />
                     </span>
                   </div>
@@ -132,7 +132,7 @@
                   </div>
                 </div>
                 <FormIncidentUpdates :incident="incident" @updated="onIncidentUpdated" />
-                <div class="incident-meta">Created: {{ niceDate(incident.created_at) }} | Last Update: {{ niceDate(incident.updated_at) }}</div>
+                <div class="incident-meta">{{ $t('created_meta') }} {{ niceDate(incident.created_at) }} | {{ $t('last_update_meta') }} {{ niceDate(incident.updated_at) }}</div>
               </div>
             </div>
           </div>
@@ -146,7 +146,7 @@
         <div class="incidents-modal-content">
           <div class="incidents-modal-header">
             <h5 class="incidents-modal-title">{{ $t('incident_create') }}</h5>
-            <button type="button" class="incidents-modal-close" @click="closeIncidentModal" aria-label="Close">
+            <button type="button" class="incidents-modal-close" @click="closeIncidentModal" :aria-label="$t('close_aria')">
               <font-awesome-icon icon="times" />
             </button>
           </div>
@@ -164,7 +164,7 @@
               <div class="form-group row">
                 <label class="col-sm-4 col-form-label">{{ $t('title') }}</label>
                 <div class="col-sm-8">
-                  <input v-model="newIncident.title" type="text" class="form-control" placeholder="Incident Title" required>
+                  <input v-model="newIncident.title" type="text" class="form-control" :placeholder="$t('incident_title_placeholder')" required>
                 </div>
               </div>
               <div class="form-group row">
@@ -207,7 +207,7 @@
         <div class="incidents-modal-content">
           <div class="incidents-modal-header">
             <h5 class="incidents-modal-title">{{ $t('incident_edit') }}</h5>
-            <button type="button" class="incidents-modal-close" @click="closeEditIncidentModal" aria-label="Close">
+            <button type="button" class="incidents-modal-close" @click="closeEditIncidentModal" :aria-label="$t('close_aria')">
               <font-awesome-icon icon="times" />
             </button>
           </div>
@@ -426,7 +426,7 @@
         return this.$store.getters.serviceById(id) || {}
       },
       serviceName(svc) {
-        if (!svc || !svc.name) return 'Global'
+        if (!svc || !svc.name) return this.$t('global_service')
         return svc.name
       },
       async loadMessages() {
@@ -454,10 +454,10 @@
       async deleteIncident(incident) {
         const modal = {
           visible: true,
-          title: this.$t('incident_delete') || 'Delete Incident',
-          body: `Are you sure you want to delete incident "${incident.title}"?`,
+          title: this.$t('incident_delete'),
+          body: this.$t('confirm_delete_incident', { title: incident.title }),
           btnColor: 'btn-danger',
-          btnText: this.$t('delete') || 'Delete',
+          btnText: this.$t('delete'),
           func: async () => {
             await Api.incident_delete(incident)
             await this.loadIncidents()

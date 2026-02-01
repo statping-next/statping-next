@@ -1,26 +1,26 @@
 <template>
     <form @submit.prevent="saveSettings">
     <div class="card">
-        <div class="card-header">Statping-ng Settings</div>
+        <div class="card-header">{{ $t('core_settings_header') }}</div>
         <div class="card-body">
                 <div class="form-group">
                     <label>{{ $t('project_name') }}</label>
-                    <input v-model="core.name" type="text" class="form-control" placeholder="Great Uptime" id="project">
+                    <input v-model="core.name" type="text" class="form-control" :placeholder="$t('great_uptime_placeholder')" id="project">
                 </div>
 
                 <div class="form-group">
                     <label>{{ $t('project_logo') }}</label>
                     <div class="form-control-plaintext">
                         <small class="text-muted">
-                            Configure logos and favicon in
-                            <a href="#" @click.prevent="goToThemeSettings">Theme settings</a>
+                            {{ $t('configure_logos_in') }}
+                            <a href="#" @click.prevent="goToThemeSettings">{{ $t('theme_settings') }}</a>
                         </small>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>{{ $t('description') }}</label>
-                    <input v-model="core.description" type="text" class="form-control" placeholder="Great Uptime" id="description">
+                    <input v-model="core.description" type="text" class="form-control" :placeholder="$t('description_placeholder')" id="description">
                 </div>
 
                 <div class="form-group row">
@@ -62,17 +62,17 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Default Refresh Rate</label>
+                    <label>{{ $t('default_refresh_rate') }}</label>
                     <select v-model="core.default_refresh_rate" class="form-control">
-                        <option :value="15">15 seconds</option>
-                        <option :value="60">60 seconds</option>
-                        <option :value="0">Off</option>
+                        <option :value="15">{{ $t('seconds_15') }}</option>
+                        <option :value="60">{{ $t('seconds_60') }}</option>
+                        <option :value="0">{{ $t('off') }}</option>
                     </select>
-                    <small class="form-text text-muted">Default auto-refresh interval for new users. Users can override this in their browser.</small>
+                    <small class="form-text text-muted">{{ $t('default_refresh_desc') }}</small>
                 </div>
 
                 <div class="form-group row mt-3">
-                    <label class="col-sm-10 col-form-label">Show failure details to unauthenticated users?</label>
+                    <label class="col-sm-10 col-form-label">{{ $t('show_failure_details') }}</label>
                     <div class="col-sm-2 float-right">
                         <span @click="core.show_failures_to_unauthenticated = !!core.show_failures_to_unauthenticated" class="switch" id="show_failures_to_unauthenticated">
                         <input v-model="core.show_failures_to_unauthenticated" type="checkbox" name="show_failures_to_unauthenticated" class="switch" id="switch-show-failures" :checked="core.show_failures_to_unauthenticated">
@@ -80,7 +80,7 @@
                       </span>
                     </div>
                     <div class="col-12">
-                        <small class="form-text text-muted">By default failure details are only visible to authenticated users. Enable this to allow all visitors to view failure details. WARNING: Will expose check endpoints from error messages!</small>
+                        <small class="form-text text-muted">{{ $t('show_failure_details_desc') }}</small>
                     </div>
                 </div>
 

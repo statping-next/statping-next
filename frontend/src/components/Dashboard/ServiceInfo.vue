@@ -12,7 +12,7 @@
         <div class="card-body pb-1">
             <div v-if="loaded" class="row pl-2">
               <div class="col-md-12 col-sm-12 pl-2 mt-2 mt-md-0 mb-3">
-                  <ServiceSparkLine :title="set2_name" subtitle="Latency Last 24 Hours" :series="set2"/>
+                  <ServiceSparkLine :title="set2_name" :subtitle="$t('latency_last_24h')" :series="set2"/>
               </div>
               <ServiceEvents :service="service"/>
             </div>

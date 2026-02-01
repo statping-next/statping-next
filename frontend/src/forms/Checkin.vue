@@ -7,7 +7,7 @@
             <span class="float-right font-2 mr-3">Grace Period {{checkin.grace}} seconds</span>
             <span class="d-block mt-2">
                 <input type="text" class="form-control" :value="`${core.domain}/checkin/${checkin.api_key}`" readonly>
-                <span class="small">Send a GET request to this URL every {{checkin.interval}} seconds
+                <span class="small">{{ $t('send_get_every_seconds', { interval: checkin.interval }) }}
                     <button @click.prevent="deleteCheckin(checkin)" type="button" class="btn btn-danger btn-xs float-right mt-1">Delete</button>
                 </span>
             </span>
@@ -17,16 +17,16 @@
             <form @submit.prevent="saveCheckin">
                 <div class="form-group row">
                     <div class="col-12 col-md-5">
-                        <label for="checkin_interval" class="col-form-label">Checkin Name</label>
-                        <input v-model="checkin.name" type="text" name="name" class="form-control" id="checkin_name" placeholder="New Checkin">
+                        <label for="checkin_interval" class="col-form-label">{{ $t('checkin_name_label') }}</label>
+                        <input v-model="checkin.name" type="text" name="name" class="form-control" id="checkin_name" :placeholder="$t('new_checkin_placeholder')">
                     </div>
                     <div class="col-12 col-md-5">
-                        <label for="checkin_interval" class="col-form-label">Interval (minutes)</label>
-                        <input v-model.number="checkin.interval" type="number" name="interval" class="form-control" id="checkin_interval" placeholder="1" min="1">
+                        <label for="checkin_interval" class="col-form-label">{{ $t('interval_minutes_label') }}</label>
+                        <input v-model.number="checkin.interval" type="number" name="interval" class="form-control" id="checkin_interval" :placeholder="$t('checkin_interval_placeholder')" min="1">
                     </div>
                     <div class="col-12 col-md-5">
                         <label class="col-form-label"></label>
-                        <button @click.prevent="saveCheckin" type="submit" id="submit" class="btn btn-success d-block mt-2">Save Checkin</button>
+                        <button @click.prevent="saveCheckin" type="submit" id="submit" class="btn btn-success d-block mt-2">{{ $t('save_checkin') }}</button>
                     </div>
                 </div>
             </form>

@@ -82,10 +82,10 @@
     async deleteUser(u) {
       const modal = {
         visible: true,
-        title: "Delete User",
-        body: `Are you sure you want to delete user ${u.username}?`,
+        title: this.$t('delete_user'),
+        body: this.$t('confirm_delete_user', { username: u.username }),
         btnColor: "btn-danger",
-        btnText: "Delete User",
+        btnText: this.$t('delete_user'),
         func: () => this.delete(u),
       }
       this.$store.commit("setModal", modal)

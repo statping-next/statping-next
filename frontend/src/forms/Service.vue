@@ -6,7 +6,7 @@
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">{{ $t('service_name') }}</label>
                 <div class="col-sm-8">
-                    <input v-model="service.name" @input="updatePermalink" id="name" type="text" name="name" class="form-control" placeholder="Server Name" required spellcheck="false" autocorrect="off">
+                    <input v-model="service.name" @input="updatePermalink" id="name" type="text" name="name" class="form-control" :placeholder="$t('server_name_placeholder')" required spellcheck="false" autocorrect="off">
                     <small class="form-text text-muted">Give your service a name you can recognize</small>
                 </div>
             </div>
@@ -79,7 +79,7 @@
                   {{ $t('service_endpoint') }} {{service.type === 'http' ? "(URL)" : "(Domain)"}}
                 </label>
                 <div class="col-sm-8">
-                    <input v-model="service.domain" type="url" class="form-control" id="service_url" :placeholder="service.type === 'http' ? 'https://google.com' : '192.168.1.1'" required autocapitalize="none" spellcheck="false">
+                    <input v-model="service.domain" type="url" class="form-control" id="service_url" :placeholder="service.type === 'http' ? $t('service_url_placeholder_http') : $t('service_url_placeholder_tcp')" required autocapitalize="none" spellcheck="false">
                     <small class="form-text text-muted">Statping will attempt to connect to this address</small>
                 </div>
             </div>

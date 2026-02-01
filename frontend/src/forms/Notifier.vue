@@ -14,30 +14,30 @@
 
             <div v-if="notifier.method==='mobile'">
                 <div class="form-group row mt-3">
-                    <label for="statping_domain" class="col-sm-4 col-form-label">Statping Domain</label>
+                    <label for="statping_domain" class="col-sm-4 col-form-label">{{ $t('statping_domain') }}</label>
                     <div class="col-sm-8">
                         <div class="input-group">
                             <input v-bind:value="$store.getters.core.domain" type="text" class="form-control" id="statping_domain" readonly>
                             <div class="input-group-append copy-btn">
-                                <button @click.prevent="copy($store.getters.core.domain)" class="btn btn-outline-secondary" type="button">Copy</button>
+                                <button @click.prevent="copy($store.getters.core.domain)" class="btn btn-outline-secondary" type="button">{{ $t('copy') }}</button>
                             </div>
                         </div>
                     </div>
                 </div>
             <div class="form-group row mt-3">
-                <label for="apisecret" class="col-sm-4 col-form-label">API Secret</label>
+                <label for="apisecret" class="col-sm-4 col-form-label">{{ $t('secret') }}</label>
                 <div class="col-sm-8">
                     <div class="input-group">
                         <input v-bind:value="$store.getters.core.api_secret" type="text" class="form-control" id="apisecret" readonly>
                         <div class="input-group-append copy-btn">
-                            <button @click.prevent="copy($store.getters.core.api_secret)" class="btn btn-outline-secondary" type="button">Copy</button>
+                            <button @click.prevent="copy($store.getters.core.api_secret)" class="btn btn-outline-secondary" type="button">{{ $t('copy') }}</button>
                         </div>
                     </div>
                 </div>
             </div>
                 <div class="col-12 col-md-6 offset-0 offset-md-3">
                     <img :src="qrcode" class="img-thumbnail">
-                    <span class="text-muted small center">Scan this QR Code on the Statping Mobile App for quick setup</span>
+                    <span class="text-muted small center">{{ $t('scan_qr_setup') }}</span>
                 </div>
             </div>
 
@@ -60,9 +60,9 @@
         <div class="row mt-4">
 
             <div class="col-sm-12">
-                <span class="slider-info">Limit {{notifier.limits}} per hour</span>
+                <span class="slider-info">{{ $t('limit_per_hour', { limit: notifier.limits }) }}</span>
                 <input v-model.number="notifier.limits" type="range" name="limits" class="slider" min="1" max="300">
-                <small class="form-text text-muted">Notifier '{{notifier.title}}' will send a maximum of {{notifier.limits}} notifications per hour.</small>
+                <small class="form-text text-muted">{{ $t('notifier_max_per_hour', { title: notifier.title, limit: notifier.limits }) }}</small>
             </div>
 
         </div>
@@ -90,7 +90,7 @@
 
         <div class="row mt-4">
             <div class="col-12">
-                <h5 class="text-capitalize">Failure Data</h5>
+                <h5 class="text-capitalize">{{ $t('failure_data') }}</h5>
                 <codemirror v-model="failure_data"
                             ref="cmfailure"
                             :options="cmOptions"
@@ -110,10 +110,10 @@
                 {{error}}
             </div>
             <div v-if="success" class="alert alert-success col-12" role="alert">
-                <span class="text-capitalize">{{notifier.title}}</span> appears to be working!
+                {{ $t('notifier_working', { title: notifier.title }) }}
             </div>
 
-                <h5>Response</h5>
+                <h5>{{ $t('response_label') }}</h5>
                 <codemirror :value="response"/>
 
             </div>
@@ -124,7 +124,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-4 mb-2 mb-sm-0 mt-2 mt-sm-0">
                         <button @click.prevent="saveNotifier" :disabled="loading" type="submit" class="btn btn-block text-capitalize btn-primary save-notifier">
-                            <font-awesome-icon v-if="loading" icon="circle-notch" class="mr-2" spin/> {{loading ? "Loading..." : saved ? "Saved" : "Save"}}
+                            <font-awesome-icon v-if="loading" icon="circle-notch" class="mr-2" spin/> {{loading ? $t('loading_dots') : saved ? $t('saved') : $t('save')}}
                         </button>
                     </div>
                     <div class="col-12 col-md-4 mb-2 mb-sm-0 mt-2 mt-sm-0">
@@ -133,7 +133,7 @@
                     </div>
                     <div class="col-12 col-md-4 mb-2 mb-sm-0 mt-2 mt-sm-0">
                         <button @click.prevent="testNotifier('failure')" :disabled="loadingTest" class="btn btn-secondary btn-block text-capitalize test-notifier">
-                            <font-awesome-icon v-if="loadingTest" icon="circle-notch" class="mr-2" spin/>{{loadingTest ? "Loading..." : "Test Failure"}}</button>
+                            <font-awesome-icon v-if="loadingTest" icon="circle-notch" class="mr-2" spin/>{{loadingTest ? $t('loading_dots') : $t('test_failure')}}</button>
                     </div>
                 </div>
             </div>
@@ -142,7 +142,7 @@
         <div v-if="notifier.logs" class="card mb-3">
             <div class="card-header text-capitalize">
                 <font-awesome-icon @click="expanded_logs = !expanded_logs" :icon="expanded_logs ? 'minus' : 'plus'" class="mr-2 pointer"/>
-                {{notifier.title}} Logs
+                {{ $t('notifier_logs_title', { title: notifier.title }) }}
                 <span class="badge badge-info float-right text-uppercase mt-1">{{notifier.logs.length}}</span>
             </div>
             <div class="card-body" :class="{'d-none': !expanded_logs}">
@@ -165,7 +165,7 @@
         </div>
 
         <span class="d-block small text-center mb-3">
-            <span class="text-capitalize">{{notifier.title}}</span> Notifier created by <a :href="notifier.author_url" target="_blank">{{notifier.author}}</a>
+            <span class="text-capitalize">{{notifier.title}}</span> {{ $t('notifier_created_by') }} <a :href="notifier.author_url" target="_blank">{{notifier.author}}</a>
         </span>
 
     </div>

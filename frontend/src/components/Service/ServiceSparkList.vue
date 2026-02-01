@@ -87,7 +87,8 @@ export default {
             if ((dataPointIndex-12) * -1 === 0) {
               ago = `Current hour`
             }
-            return `<div class="chart_list_tooltip">${val-1} Failures<br>${dt}</div>`
+            const failuresLabel = this.$t ? this.$t('failures') : 'Failures'
+            return `<div class="chart_list_tooltip">${val-1} ${failuresLabel}<br>${dt}</div>`
           },
           fixed: {
             enabled: true,

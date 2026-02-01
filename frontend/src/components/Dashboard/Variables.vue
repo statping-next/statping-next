@@ -1,23 +1,26 @@
 <template>
 <div>
-    <h2>Notifier Variables</h2>
-    You can insert dynamic fields within the notifier payloads for some notifiers.
+    <h2>{{ $t('notifier_variables') }}</h2>
+    {{ $t('variables_insert_desc') }}
 
     <p class="mt-2">
-        Checkout the <a href="https://github.com/statping-next/statping-next/blob/master/types/services/struct.go">Service struct</a> and the <a href="https://github.com/statping-next/statping-next/blob/master/types/failures/struct.go">Failures struct</a> and create variables in golang template format.
+        {{ $t('variables_intro') }}
+    </p>
+    <p class="mt-1">
+        <a href="https://github.com/statping-next/statping-next/blob/master/types/services/struct.go">Service struct</a> · <a href="https://github.com/statping-next/statping-next/blob/master/types/failures/struct.go">Failures struct</a>
     </p>
 
     <p class="mt-2">
-        For example, if you have <b>{{"\{\{.Service.Name\}\}"}}</b> it will return the service name.
+        {{ $t('variables_for_example', { template: '{{.Service.Name}}' }) }}
     </p>
 
-    <h2 class="mt-3">Service Variables</h2>
+    <h2 class="mt-3">{{ $t('service_variables') }}</h2>
 
     <table class="table">
         <thead>
         <tr>
-            <th scope="col">Variable</th>
-            <th scope="col">True Value</th>
+            <th scope="col">{{ $t('variable') }}</th>
+            <th scope="col">{{ $t('true_value') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -112,16 +115,16 @@
             <td>2020-05-02 09:14:43.66381 +0000 UTC</td>
         </tr>
         </tbody>
-        <small>Additional variables within the Failures struct</small>
+        <small>{{ $t('failure_struct_vars') }}</small>
     </table>
 
-    <h2 class="mt-3">Core Variables</h2>
+    <h2 class="mt-3">{{ $t('core_variables') }}</h2>
 
     <table class="table">
         <thead>
         <tr>
-            <th scope="col">Variable</th>
-            <th scope="col">True Value</th>
+            <th scope="col">{{ $t('variable') }}</th>
+            <th scope="col">{{ $t('true_value') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -131,11 +134,11 @@
         </tr>
         <tr>
             <td><kbd>{{"\{\{.Core.Name\}\}"}}</kbd></td>
-            <td>Statping Demo</td>
+            <td>{{ $t('core_example_name') }}</td>
         </tr>
         <tr>
             <td><kbd>{{"\{\{.Core.Description\}\}"}}</kbd></td>
-            <td>Statping will monitor your stuff!</td>
+            <td>{{ $t('core_example_desc') }}</td>
         </tr>
         <tr>
             <td><kbd>{{"\{\{.Core.Version\}\}"}}</kbd></td>
@@ -146,7 +149,7 @@
             <td>2020-05-02 09:14:43.66381 +0000 UTC</td>
         </tr>
         </tbody>
-        <small>Additional variables within the Core struct</small>
+        <small>{{ $t('core_struct_vars') }}</small>
     </table>
 </div>
 </template>

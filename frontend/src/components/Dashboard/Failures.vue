@@ -1,12 +1,12 @@
 <template>
     <div v-if="service" class="col-12">
-        <h3>{{service.name}} Failures
-            <button v-if="failures.length>0" @click="deleteFailures" class="btn btn-danger float-right">Delete All</button>
+        <h3>{{service.name}} {{ $t('failures') }}
+            <button v-if="failures.length>0" @click="deleteFailures" class="btn btn-danger float-right">{{ $t('delete_all') }}</button>
         </h3>
 
         <div class="card mt-4 mb-4">
             <div class="card-header">
-                Search and Filter
+                {{ $t('search_and_filter') }}
                 <span class="float-right">
                     <font-awesome-icon v-if="loading" icon="circle-notch" spin/>
                 </span>
@@ -15,19 +15,19 @@
                 <form @submit.prevent="performSearch">
                     <div class="form-row">
                         <div class="col">
-                            <label for="fromdate">From Date</label>
+                            <label for="fromdate">{{ $t('from_date') }}</label>
                             <flatPickr id="fromdate" :disabled="loading" v-model="start_time" :config="{ wrap: true, allowInput: true, enableTime: true, dateFormat: 'Z', altInput: true, altFormat: 'Y-m-d h:i K', maxDate: new Date() }" type="text" class="form-control text-left d-block" required />
                         </div>
                         <div class="col">
-                            <label for="todate">To Date</label>
+                            <label for="todate">{{ $t('to_date') }}</label>
                             <flatPickr id="todate" :disabled="loading" v-model="end_time" :config="{ wrap: true, allowInput: true, enableTime: true, dateFormat: 'Z', altInput: true, altFormat: 'Y-m-d h:i K', maxDate: new Date() }" type="text" class="form-control text-left d-block" required />
                         </div>
                         <div class="col">
-                            <label for="search">Search Terms</label>
+                            <label for="search">{{ $t('search_terms') }}</label>
                             <div class="d-flex">
                                 <input id="search" type="text" v-model="search" class="form-control" @keyup.enter="performSearch">
                                 <button type="submit" class="btn btn-primary ml-2" :disabled="loading">
-                                    Search
+                                    {{ $t('search_btn') }}
                                 </button>
                             </div>
                         </div>
@@ -36,8 +36,8 @@
                         <div class="col">
                             <span @click="show_checkins = !!show_checkins" class="switch float-left">
                                 <input v-model="show_checkins" type="checkbox" class="switch" id="showcheckins" v-bind:checked="show_checkins">
-                                 <label v-if="show_checkins" for="showcheckins">Showing Checkin Failures</label>
-                                 <label v-else for="showcheckins">View Checkin Failures</label>
+                                 <label v-if="show_checkins" for="showcheckins">{{ $t('showing_checkin_failures') }}</label>
+                                 <label v-else for="showcheckins">{{ $t('view_checkin_failures') }}</label>
                             </span>
                         </div>
                     </div>
@@ -58,10 +58,10 @@
             <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Issue</th>
-                <th scope="col">Status Code</th>
-                <th scope="col">Ping</th>
-                <th scope="col">Created</th>
+                <th scope="col">{{ $t('failure_issue') }}</th>
+                <th scope="col">{{ $t('failure_status_code') }}</th>
+                <th scope="col">{{ $t('failure_ping') }}</th>
+                <th scope="col">{{ $t('created') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -79,25 +79,25 @@
         <nav v-if="fails.length >= limit && failures.length !== 0" class="mt-3">
             <ul class="pagination justify-content-center">
                 <li class="page-item" :class="{'disabled': page===1}">
-                    <a @click.prevent="gotoPage(page-1)" :disabled="page===1" class="page-link" href="#" aria-label="Previous">
+                    <a @click.prevent="gotoPage(page-1)" :disabled="page===1" class="page-link" href="#" :aria-label="$t('aria_previous')">
                         <span aria-hidden="true">&laquo;</span>
-                        <span class="sr-only">Previous</span>
+                        <span class="sr-only">{{ $t('aria_previous') }}</span>
                     </a>
                 </li>
                 <li v-for="n in maxPages" class="page-item" :class="{'active': page === n}">
                     <a @click.prevent="gotoPage(n)" class="page-link" href="#">{{n}}</a>
                 </li>
                 <li class="page-item" :class="{'disabled': fails.length < limit}">
-                    <a @click.prevent="gotoPage(page+1)" :disabled="fails.length < limit" class="page-link" href="#" aria-label="Next">
+                    <a @click.prevent="gotoPage(page+1)" :disabled="fails.length < limit" class="page-link" href="#" :aria-label="$t('aria_next')">
                         <span aria-hidden="true">&raquo;</span>
-                        <span class="sr-only">Next</span>
+                        <span class="sr-only">{{ $t('aria_next') }}</span>
                     </a>
                 </li>
             </ul>
         </nav>
         <div v-if="failures.length > 0" class="text-center mt-3">
-            <span>{{failures.length}} {{failures.length === 1 ? 'Failure' : 'Failures'}} displayed</span>
-            <span v-if="search || show_checkins" class="text-muted ml-2">(filtered from {{fails.length}} in date range)</span>
+            <span>{{failures.length}} {{failures.length === 1 ? $t('failure_singular') : $t('failures')}} {{ $t('displayed') }}</span>
+            <span v-if="search || show_checkins" class="text-muted ml-2">{{ $t('filtered_from_in_date_range', { count: fails.length }) }}</span>
         </div>
 
     </div>
@@ -176,10 +176,10 @@ export default {
       async deleteFailures() {
         const modal = {
           visible: true,
-          title: "Delete All Failures",
-          body: `Are you sure you want to delete all Failures for service ${this.service.title}?`,
+          title: this.$t('delete_failures'),
+          body: this.$t('confirm_delete_all_failures', { title: this.service.title }),
           btnColor: "btn-danger",
-          btnText: "Delete Failures",
+          btnText: this.$t('delete_failures'),
           func: () => this.delete(),
         }
         this.$store.commit("setModal", modal)
