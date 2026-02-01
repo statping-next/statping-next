@@ -74,31 +74,69 @@
           No incidents. Create a global or service-specific incident.
         </div>
 
-        <div v-for="incident in filteredIncidents" :key="incident.id" class="card incident-card mb-4">
-          <div class="card-header incident-card-header">
-            <div class="d-flex align-items-center flex-wrap incident-header-left">
-              <span class="incident-title">Incident: {{ incident.title }}</span>
-              <span class="incident-service-name">({{ serviceName(serviceById(incident.service)) }})</span>
-              <span v-if="incident.archived" class="badge badge-secondary ml-2">{{ $t('incident_archived') }}</span>
-              <span class="ml-2 incident-auto-archive-icon" :title="incident.auto_archive_enabled ? $t('auto_archive_after_resolution') + (incident.auto_archive_delay_minutes ? ' (' + (incident.auto_archive_delay_minutes >= 60 ? Math.floor(incident.auto_archive_delay_minutes / 60) + 'h' : incident.auto_archive_delay_minutes + 'm') + ')' : ' (immediate)') : $t('auto_archive_disabled')">
-                <font-awesome-icon icon="clock" :class="{ 'incident-auto-archive-off': !incident.auto_archive_enabled }" />
-              </span>
+        <template v-else>
+          <div v-if="activeIncidents.length === 0" class="alert alert-dark d-block mt-3 mb-0">
+            {{ $t('no_active_incidents') }}
+          </div>
+          <div v-for="incident in activeIncidents" :key="incident.id" class="card incident-card mb-4">
+            <div class="card-header incident-card-header">
+              <div class="d-flex align-items-center flex-wrap incident-header-left">
+                <span class="incident-title">Incident: {{ incident.title }}</span>
+                <span class="incident-service-name">({{ serviceName(serviceById(incident.service)) }})</span>
+                <span class="ml-2 incident-auto-archive-icon" :title="incident.auto_archive_enabled ? $t('auto_archive_after_resolution') + (incident.auto_archive_delay_minutes ? ' (' + (incident.auto_archive_delay_minutes >= 60 ? Math.floor(incident.auto_archive_delay_minutes / 60) + 'h' : incident.auto_archive_delay_minutes + 'm') + ')' : ' (immediate)') : $t('auto_archive_disabled')">
+                  <font-awesome-icon icon="clock" :class="{ 'incident-auto-archive-off': !incident.auto_archive_enabled }" />
+                </span>
+              </div>
+              <div v-if="$store.state.admin" class="btn-group incident-header-actions">
+                <button @click="toggleArchiveIncident(incident)" class="btn btn-sm btn-outline-secondary" :title="$t('incident_archive')">
+                  <font-awesome-icon icon="archive" />
+                </button>
+                <button @click="editIncident(incident)" class="btn btn-sm btn-outline-secondary" :title="$t('incident_edit')">
+                  <font-awesome-icon icon="edit" />
+                </button>
+                <button @click="deleteIncident(incident)" class="btn btn-sm btn-danger" :title="$t('incident_delete')">
+                  <font-awesome-icon icon="times" />
+                </button>
+              </div>
             </div>
-            <div v-if="$store.state.admin" class="btn-group incident-header-actions">
-              <button @click="toggleArchiveIncident(incident)" class="btn btn-sm btn-outline-secondary" :title="incident.archived ? $t('incident_unarchive') : $t('incident_archive')">
-                <font-awesome-icon :icon="incident.archived ? 'folder-open' : 'archive'" />
-              </button>
-              <button @click="editIncident(incident)" class="btn btn-sm btn-outline-secondary" :title="$t('incident_edit')">
-                <font-awesome-icon icon="edit" />
-              </button>
-              <button @click="deleteIncident(incident)" class="btn btn-sm btn-danger" :title="$t('incident_delete')">
-                <font-awesome-icon icon="times" />
-              </button>
+            <FormIncidentUpdates :incident="incident" @updated="onIncidentUpdated" />
+            <div class="incident-meta">Created: {{ niceDate(incident.created_at) }} | Last Update: {{ niceDate(incident.updated_at) }}</div>
+          </div>
+
+          <div v-if="archivedIncidentsList.length > 0" class="archived-incidents-drawer mt-4">
+            <button type="button" class="archived-incidents-toggle btn btn-link p-0 text-left d-flex align-items-center" @click="archivedDrawerOpen = !archivedDrawerOpen" :aria-expanded="archivedDrawerOpen">
+              <font-awesome-icon :icon="archivedDrawerOpen ? 'chevron-down' : 'chevron-right'" class="archived-incidents-chevron mr-2" />
+              <span class="archived-incidents-label">{{ $t('archived_incidents') }}</span>
+            </button>
+            <div v-show="archivedDrawerOpen" class="archived-incidents-content mt-2">
+              <div v-for="incident in archivedIncidentsList" :key="incident.id" class="card incident-card mb-4">
+                <div class="card-header incident-card-header">
+                  <div class="d-flex align-items-center flex-wrap incident-header-left">
+                    <span class="incident-title">Incident: {{ incident.title }}</span>
+                    <span class="incident-service-name">({{ serviceName(serviceById(incident.service)) }})</span>
+                    <span class="badge badge-secondary ml-2">{{ $t('incident_archived') }}</span>
+                    <span class="ml-2 incident-auto-archive-icon" :title="incident.auto_archive_enabled ? $t('auto_archive_after_resolution') + (incident.auto_archive_delay_minutes ? ' (' + (incident.auto_archive_delay_minutes >= 60 ? Math.floor(incident.auto_archive_delay_minutes / 60) + 'h' : incident.auto_archive_delay_minutes + 'm') + ')' : ' (immediate)') : $t('auto_archive_disabled')">
+                      <font-awesome-icon icon="clock" :class="{ 'incident-auto-archive-off': !incident.auto_archive_enabled }" />
+                    </span>
+                  </div>
+                  <div v-if="$store.state.admin" class="btn-group incident-header-actions">
+                    <button @click="toggleArchiveIncident(incident)" class="btn btn-sm btn-outline-secondary" :title="$t('incident_unarchive')">
+                      <font-awesome-icon icon="folder-open" />
+                    </button>
+                    <button @click="editIncident(incident)" class="btn btn-sm btn-outline-secondary" :title="$t('incident_edit')">
+                      <font-awesome-icon icon="edit" />
+                    </button>
+                    <button @click="deleteIncident(incident)" class="btn btn-sm btn-danger" :title="$t('incident_delete')">
+                      <font-awesome-icon icon="times" />
+                    </button>
+                  </div>
+                </div>
+                <FormIncidentUpdates :incident="incident" @updated="onIncidentUpdated" />
+                <div class="incident-meta">Created: {{ niceDate(incident.created_at) }} | Last Update: {{ niceDate(incident.updated_at) }}</div>
+              </div>
             </div>
           </div>
-          <FormIncidentUpdates :incident="incident" @updated="onIncidentUpdated" />
-          <div class="incident-meta">Created: {{ niceDate(incident.created_at) }} | Last Update: {{ niceDate(incident.updated_at) }}</div>
-        </div>
+        </template>
       </div>
     </div>
 
@@ -231,6 +269,7 @@
         showIncidentModal: false,
         showEditIncidentModal: false,
         editingIncident: null,
+        archivedDrawerOpen: false,
         newIncident: {
           title: '',
           description: '',
@@ -260,6 +299,12 @@
         const serviceId = this.$route.query.service ? Number(this.$route.query.service) : null
         const list = serviceId ? this.incidents.filter(i => i.service === serviceId) : this.incidents
         return [...list].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+      },
+      activeIncidents() {
+        return this.filteredIncidents.filter(i => !i.archived)
+      },
+      archivedIncidentsList() {
+        return this.filteredIncidents.filter(i => i.archived)
       },
     },
     async mounted() {
@@ -502,6 +547,33 @@
     padding: 0.5rem 1rem;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     background: rgba(0, 0, 0, 0.03);
+  }
+
+  .archived-incidents-drawer {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 0.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .archived-incidents-toggle {
+    text-decoration: none;
+    color: var(--secondary, #6c757d);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .archived-incidents-toggle:hover {
+    text-decoration: none;
+    color: var(--primary, #007bff);
+  }
+
+  .archived-incidents-chevron {
+    width: 0.75rem;
+    color: inherit;
+  }
+
+  .archived-incidents-label {
+    user-select: none;
   }
 
   /* Modals */

@@ -127,6 +127,8 @@ const english = {
     incident_archive: "Archive",
     incident_unarchive: "Unarchive",
     incident_archived: "Archived",
+    archived_incidents: "Archived Incidents",
+    no_active_incidents: "No active incidents. Create a global or service-specific incident.",
     incident_history: "Incident History",
     incident_history_empty: "No archived incidents.",
     return_to_home: "Return to home page",
