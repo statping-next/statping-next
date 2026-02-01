@@ -13,7 +13,7 @@ Statping NEXT features several significant changes from the parent project, incl
 * Customized favicon and logo image support, with both light and dark images supported, and a nice following navbar with your logo always visible during page scrolling (SVG highly recommended).
 * Significantly improved main-page loading time over `statping-ng` due to eliminating most of the heavy DB queries that were required for the original home page to show its multiple graphs.
 * An improved per-service heatmap with per-day failure reporting (private by default, optionally public).
-* Significantly improved and streamlined incident support, including global incidents (in addition to per-service incidents), archiving of incidents, and auto-archiving on resolution.
+* Significantly improved and streamlined incident support, including global incidents (in addition to per-service incidents), archiving of incidents with public history, and auto-archiving on resolution.
 * Rearrangement and reorganization of the admin dashboard, specifically in the top links - important day-to-day features are listed first, and incidents and announcements are consolidated in the "Incidents" page. The default dashboard page has also been renamed/moved to "Status".
 
 Statping NEXT is currently providing monitoring for [the Jellyfin Project](https://status.jellyfin.org) and the author's personal systems.
