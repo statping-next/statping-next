@@ -51,7 +51,7 @@ export default {
 
 .header-logo-img {
   display: block;
-  max-width: 60%;
+  max-width: 55%;
   max-height: 200px;
   margin-left: auto;
   margin-right: auto;

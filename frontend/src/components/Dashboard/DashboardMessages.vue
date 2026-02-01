@@ -258,8 +258,8 @@
       },
       filteredIncidents() {
         const serviceId = this.$route.query.service ? Number(this.$route.query.service) : null
-        if (!serviceId) return this.incidents
-        return this.incidents.filter(i => i.service === serviceId)
+        const list = serviceId ? this.incidents.filter(i => i.service === serviceId) : this.incidents
+        return [...list].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
       },
     },
     async mounted() {

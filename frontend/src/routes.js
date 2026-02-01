@@ -10,6 +10,7 @@ const Help = () => import(/* webpackChunkName: "dashboard" */ '@/pages/Help')
 const Settings = () => import(/* webpackChunkName: "dashboard" */ '@/pages/Settings')
 const Login = () => import(/* webpackChunkName: "index" */ '@/pages/Login')
 const Service = () => import(/* webpackChunkName: "index" */ '@/pages/Service')
+const IncidentHistory = () => import(/* webpackChunkName: "index" */ '@/pages/IncidentHistory')
 const Setup = () => import(/* webpackChunkName: "index" */ '@/forms/Setup')
 const Checkins = () => import(/* webpackChunkName: "dashboard" */ '@/components/Dashboard/Checkins')
 const Failures = () => import(/* webpackChunkName: "dashboard" */ '@/components/Dashboard/Failures')
@@ -188,6 +189,12 @@ const routes = [
     name: 'Service',
     component: Service,
     props: true
+  },
+  {
+    path: '/incidents',
+    name: 'IncidentHistory',
+    component: IncidentHistory,
+    meta: { title: 'Incident History' }
   },
   {
     path: '*',

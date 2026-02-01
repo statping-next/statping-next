@@ -3,7 +3,7 @@
         <div class="sticky-header-content">
             <!-- Left side: Logo (always on left) -->
             <div class="sticky-header-left">
-                <router-link to="/" class="sticky-logo-link" :class="{ 'visible': visible || adminMode }">
+                <router-link to="/" class="sticky-logo-link" :class="{ 'visible': visible || adminMode }" :title="$t('return_to_home')">
                     <img :src="displayLogo" :alt="core.name || 'Statping'" class="sticky-logo">
                 </router-link>
             </div>
@@ -11,6 +11,9 @@
             <!-- Right side: Controls and buttons -->
             <div class="sticky-header-right">
                 <div v-if="!adminMode" class="sticky-controls">
+                    <router-link to="/incidents" class="btn btn-sm incident-history-btn" :title="$t('incident_history')">
+                        <font-awesome-icon icon="exclamation-triangle" />
+                    </router-link>
                     <button @click="cycleRefresh" class="btn btn-sm refresh-btn" :title="refreshTitle">
                         <font-awesome-icon icon="sync-alt" />
                         <span v-if="refreshInterval > 0" class="refresh-badge">{{refreshInterval}}s</span>
@@ -392,6 +395,25 @@ export default {
 .admin-btn:hover {
   transform: scale(1.1);
   /* Background set by theme classes */
+}
+
+.incident-history-btn {
+  background: transparent;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  line-height: 1;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+}
+
+.incident-history-btn:hover {
+  transform: scale(1.1);
 }
 
 @media (max-width: 767px) {

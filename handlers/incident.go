@@ -40,6 +40,11 @@ func apiAllIncidentsHandlerScoped(r *http.Request) interface{} {
 	return incidents.AllPublic()
 }
 
+// apiArchivedIncidentsHandler returns archived incidents with updates (public incident history page).
+func apiArchivedIncidentsHandler(r *http.Request) interface{} {
+	return incidents.AllArchivedWithUpdates()
+}
+
 func apiServiceIncidentsHandler(w http.ResponseWriter, r *http.Request) {
 	service, err := findService(r)
 	if err != nil {

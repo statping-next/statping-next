@@ -109,7 +109,7 @@ func FindByService(id int64) []*Incident {
 
 func All() []*Incident {
 	var incidents []*Incident
-	db.Find(&incidents)
+	db.Order("created_at DESC").Find(&incidents)
 	return incidents
 }
 
@@ -161,6 +161,17 @@ func AllPublic() []*Incident {
 		loadUpdatesAsc(i)
 	}
 	return incidents
+}
+
+// AllArchivedWithUpdates returns archived incidents with updates (for public incident history). Newest first by creation date.
+func AllArchivedWithUpdates() []*Incident {
+	ProcessAutoArchive()
+	var list []*Incident
+	db.Where("archived = ?", true).Order("created_at DESC").Find(&list)
+	for _, i := range list {
+		loadUpdatesAsc(i)
+	}
+	return list
 }
 
 // FindByServicePublic returns non-archived incidents for a service (for public). Runs ProcessAutoArchive first.

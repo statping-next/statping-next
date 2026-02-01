@@ -162,6 +162,15 @@ body.dark-theme {
     background: rgba(255, 255, 255, 0.1) !important;
   }
 
+  .incident-history-btn {
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+  }
+
+  .incident-history-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+
   .logout-btn,
   .back-btn {
     border: 1px solid rgba(255, 255, 255, 0.25) !important;

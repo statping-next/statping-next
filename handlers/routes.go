@@ -155,6 +155,7 @@ func Router() *mux.Router {
 
 	// API INCIDENTS Routes (GET public via scoped for main page global incidents)
 	api.Handle("/api/incidents", scoped(apiAllIncidentsHandlerScoped)).Methods("GET")
+	api.Handle("/api/incidents/archived", scoped(apiArchivedIncidentsHandler)).Methods("GET")
 	api.Handle("/api/incidents", authenticated(apiCreateGlobalIncidentHandler, false)).Methods("POST")
 	api.Handle("/api/services/{id}/incidents", http.HandlerFunc(apiServiceIncidentsHandler)).Methods("GET")
 	api.Handle("/api/services/{id}/incidents", authenticated(apiCreateIncidentHandler, false)).Methods("POST")

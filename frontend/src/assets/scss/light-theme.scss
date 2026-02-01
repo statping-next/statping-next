@@ -116,6 +116,15 @@ body.light-theme {
     background: rgba(0, 0, 0, 0.05) !important;
   }
 
+  .incident-history-btn {
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    color: #2a2a2a !important;
+  }
+
+  .incident-history-btn:hover {
+    background: rgba(0, 0, 0, 0.05) !important;
+  }
+
   .logout-btn,
   .back-btn {
     border: 1px solid rgba(0, 0, 0, 0.15) !important;
