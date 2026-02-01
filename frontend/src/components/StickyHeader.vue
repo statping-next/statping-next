@@ -273,12 +273,12 @@ export default {
   pointer-events: none;
   transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   flex-shrink: 0;
-  /* Fixed 140x40px container to prevent layout shifts */
-  width: 140px;
+  /* Constrained by height only; width grows with logo/title */
+  width: auto;
+  min-width: 0;
+  max-width: 200px;
   height: 40px;
-  min-width: 140px;
   min-height: 40px;
-  max-width: 140px;
   max-height: 40px;
 }
 
@@ -291,43 +291,23 @@ export default {
 .sticky-logo {
   height: 40px;
   width: auto;
-  max-width: 140px;
+  max-width: 200px;
   object-fit: contain;
 }
 
 .sticky-title {
   font-weight: bold;
-  white-space: normal; /* Allow wrapping to two lines */
+  white-space: normal;
   line-height: 1.2;
   word-wrap: break-word;
   overflow-wrap: break-word;
   hyphens: auto;
-  /* Auto-scale font size to fit within 140x40px container */
   font-size: clamp(0.7rem, 2vw, 1rem);
-  /* Fit within fixed container */
-  width: 100%;
-  max-width: 140px;
   max-height: 40px;
   display: block;
   text-align: center;
   overflow: hidden;
   /* Color set by theme classes */
-}
-
-/* On main-page mobile (≤768px), smaller logo in sticky header */
-@media (max-width: 767px) {
-  .sticky-logo-link {
-    width: 120px;
-    min-width: 120px;
-    max-width: 120px;
-  }
-  .sticky-title {
-    max-width: 120px;
-    font-size: clamp(0.6rem, 3vw, 0.9rem);
-  }
-  .sticky-logo {
-    max-width: 120px;
-  }
 }
 
 .sticky-controls {
