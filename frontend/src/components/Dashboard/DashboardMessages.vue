@@ -70,12 +70,12 @@
         </button>
       </div>
       <div class="card-body pt-0">
-        <div v-if="incidents.length === 0" class="alert alert-dark d-block mt-3 mb-0">
+        <div v-if="incidents.length === 0" class="alert alert-dark d-block mt-3 mb-3">
           No incidents. Create a global or service-specific incident.
         </div>
 
         <template v-else>
-          <div v-if="activeIncidents.length === 0" class="alert alert-dark d-block mt-3 mb-0">
+          <div v-if="activeIncidents.length === 0" class="alert alert-dark d-block mt-3 mb-3">
             {{ $t('no_active_incidents') }}
           </div>
           <div v-for="incident in activeIncidents" :key="incident.id" class="card incident-card mb-4">
