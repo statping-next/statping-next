@@ -198,11 +198,16 @@ export default new Vuex.Store({
     setDarkTheme(state, darkTheme) {
       state.darkTheme = darkTheme
       localStorage.setItem('darkTheme', darkTheme)
-      // Apply theme to body element
+      // Apply theme to html and body (html prevents white strip at bottom)
+      const html = document.documentElement
       if (darkTheme) {
+        html.classList.remove('light-theme')
+        html.classList.add('dark-theme')
         document.body.classList.remove('light-theme')
         document.body.classList.add('dark-theme')
       } else {
+        html.classList.remove('dark-theme')
+        html.classList.add('light-theme')
         document.body.classList.remove('dark-theme')
         document.body.classList.add('light-theme')
       }

@@ -139,8 +139,31 @@
         font-size: 0.7rem;
     }
 
+    /* Chart row: remove Bootstrap negative margins so chart isn't cut off */
+    .chart-row {
+        margin-left: 0;
+        margin-right: 0;
+        max-width: 100%;
+    }
+
+    .chart-row .service-chart-container {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .service-latency-card .card-body {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+
     .service-chart-container {
-        height: 200px;
+        height: 300px;
+        padding-left: 0;
+        padding-right: 0;
+        width: 100%;
+        max-width: 100%;
+        overflow: visible;
+        box-sizing: border-box;
     }
 
 

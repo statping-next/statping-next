@@ -1,4 +1,9 @@
 /* Dark Theme */
+html.dark-theme {
+  background-color: #05070A !important;
+  min-height: 100%;
+}
+
 body.dark-theme {
   background-color: #05070A !important;
   color: #ffffff;
@@ -38,6 +43,13 @@ body.dark-theme {
 
   .card {
     background-color: #0f1114;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .card-header {
+    border-bottom: none !important;
+    background-color: transparent !important;
   }
 
   .card-body H4 A, .card-title A {
@@ -54,14 +66,44 @@ body.dark-theme {
 
   .list-group-item {
     background-color: #0f1114;
+    border: none !important;
+    border-top: none !important;
+    box-shadow: none !important;
   }
 
   .list-group-item:HOVER, .list-group-item-action:hover {
     background-color: #202328 !important;
+    border: none !important;
+    border-top: none !important;
+    box-shadow: none !important;
   }
 
   .list-group-item A {
     color: #ffffff;
+  }
+
+  /* Remove all list separators and shadows that create gray lines */
+  .list-group,
+  .online_list {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .list-group .list-group-item,
+  .online_list .list-group-item,
+  a.list-group-item,
+  a.list-group-item-action,
+  .list-group a.list-group-item-action {
+    border: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+  }
+
+  .group_header {
+    border: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
   }
 
   .container, .login_container {
@@ -71,6 +113,10 @@ body.dark-theme {
   }
 
   /* Sticky Header - override scoped styles */
+  .dashboard-nav--fixed {
+    background-color: #14161A !important;
+  }
+
   .sticky-header.active,
   .sticky-header.admin-mode {
     background-color: #14161A !important;
@@ -83,7 +129,7 @@ body.dark-theme {
   }
 
   .theme-toggle-btn {
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
     color: #ffffff !important;
   }
 
@@ -92,7 +138,7 @@ body.dark-theme {
   }
 
   .refresh-btn {
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
     color: #ffffff !important;
   }
 
@@ -108,7 +154,7 @@ body.dark-theme {
   }
 
   .admin-btn {
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
     color: #ffffff !important;
   }
 
@@ -118,7 +164,7 @@ body.dark-theme {
 
   .logout-btn,
   .back-btn {
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
     color: #ffffff !important;
   }
 
@@ -127,15 +173,18 @@ body.dark-theme {
     background: rgba(255, 255, 255, 0.1) !important;
   }
 
-  .sticky-nav .nav-link {
+  .sticky-nav .nav-link,
+  .dashboard-nav .nav-link {
     color: #ffffff !important;
   }
 
-  .sticky-nav .nav-link:hover {
+  .sticky-nav .nav-link:hover,
+  .dashboard-nav .nav-link:hover {
     background: rgba(255, 255, 255, 0.1) !important;
   }
 
-  .sticky-nav .nav-link.active {
+  .sticky-nav .nav-link.active,
+  .dashboard-nav .nav-link.active {
     background: rgba(255, 255, 255, 0.15) !important;
     color: #ffffff !important;
   }
@@ -242,6 +291,12 @@ body.dark-theme {
   /* Service page specific */
   .service-chart-container {
     background-color: transparent;
+  }
+
+  /* Service heatmap grid - remove grey grid lines */
+  .service-heatmap-grid th,
+  .service-heatmap-grid td {
+    border-color: transparent !important;
   }
 
   /* Table theming */

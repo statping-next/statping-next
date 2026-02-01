@@ -79,10 +79,10 @@
                 </div>
             </div>
 
-            <div class="card mt-3 mb-3">
+            <div class="card mt-3 mb-3 service-latency-card">
                 <div class="card-header text-capitalize">Service Latency</div>
                 <div v-if="loaded" class="card-body">
-                    <div class="row">
+                    <div class="row chart-row">
                       <AdvancedChart :group="group" :updated="updated_chart" :start="start_time.toString()" :end="end_time.toString()" :service="service"/>
                     </div>
                 </div>

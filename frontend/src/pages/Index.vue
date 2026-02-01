@@ -1,7 +1,7 @@
 <template>
     <div class="container col-md-7 col-sm-12 sm-container">
 
-      <StickyHeader :visible="showStickyHeader"/>
+      <StickyHeader :visible="showStickyHeader || isMobile"/>
       <Header/>
 
       <div v-if="!loaded" class="row mt-5 mb-5">
@@ -71,6 +71,7 @@ export default {
         return {
             logged_in: false,
             showStickyHeader: false,
+            isMobile: false,
         }
     },
     computed: {
@@ -132,13 +133,19 @@ export default {
         handleScroll() {
             // Show sticky header when logo would be fully covered (around 140px)
             this.showStickyHeader = window.scrollY > 140
+        },
+        updateMobile() {
+            this.isMobile = window.innerWidth < 768
         }
     },
     mounted() {
+        this.updateMobile()
         window.addEventListener('scroll', this.handleScroll)
+        window.addEventListener('resize', this.updateMobile)
     },
     beforeDestroy() {
         window.removeEventListener('scroll', this.handleScroll)
+        window.removeEventListener('resize', this.updateMobile)
     }
 }
 </script>

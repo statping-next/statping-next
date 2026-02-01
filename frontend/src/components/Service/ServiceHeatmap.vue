@@ -6,7 +6,7 @@
         </div>
 
         <div v-if="ready" style="margin-bottom: 1rem;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.65rem; table-layout: fixed;">
+            <table class="service-heatmap-grid" style="width: 100%; border-collapse: collapse; font-size: 0.65rem; table-layout: fixed;">
                 <thead>
                     <tr>
                         <th style="background-color: rgba(0, 0, 0, 0.3); font-weight: bold; border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.25rem; text-align: center; width: 80px;"></th>

@@ -57,4 +57,19 @@ export default {
   margin-right: auto;
 }
 
+/* Main page mobile (768px): hide big logo, show description with smaller font and padding */
+@media (max-width: 767px) {
+  #header .header-logo-link {
+    display: none;
+  }
+  #header {
+    padding-top: calc(3rem + 2em);
+  }
+  #header .header-desc {
+    font-size: 0.875rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+}
 </style>

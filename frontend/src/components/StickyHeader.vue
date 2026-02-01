@@ -8,17 +8,6 @@
                 </router-link>
             </div>
 
-            <!-- Middle: Navigation items (admin-only dashboard) -->
-            <nav v-if="adminMode" class="sticky-nav">
-                <router-link to="/dashboard/status" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/status') }" :data-text="$t('status')">{{ $t('status') }}</router-link>
-                <router-link to="/dashboard/incidents" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/incidents') }" :data-text="$t('incidents')">{{ $t('incidents') }}</router-link>
-                <router-link v-if="admin" to="/dashboard/logs" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/logs') }" :data-text="$t('logs')">{{ $t('logs') }}</router-link>
-                <router-link to="/dashboard/services" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/services') }" :data-text="$t('services')">{{ $t('services') }}</router-link>
-                <router-link v-if="admin" to="/dashboard/users" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/users') }" :data-text="$t('users')">{{ $t('users') }}</router-link>
-                <router-link v-if="admin" to="/dashboard/settings" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/settings') }" :data-text="$t('settings')">{{ $t('settings') }}</router-link>
-                <router-link v-if="admin" to="/dashboard/help" class="nav-link" :class="{ 'active': isActiveRoute('/dashboard/help') }" :data-text="$t('help')">{{ $t('help') }}</router-link>
-            </nav>
-
             <!-- Right side: Controls and buttons -->
             <div class="sticky-header-right">
                 <div v-if="!adminMode" class="sticky-controls">
@@ -143,15 +132,6 @@ export default {
       // Force a full page reload to ensure all state is cleared
       window.location.href = '/'
     },
-    isActiveRoute(path, exact = false) {
-      if (exact) {
-        // For Status, match /dashboard/status
-        return this.$route.path === path
-      } else {
-        // For other routes, match the path or any sub-path
-        return this.$route.path === path || this.$route.path.startsWith(path + '/')
-      }
-    },
     updateWidth() {
       if (window.innerWidth < 768) {
         this.containerWidth = null
@@ -237,50 +217,6 @@ export default {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-}
-
-.sticky-nav {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  flex: 1;
-  justify-content: center;
-  margin: 0 20px;
-}
-
-.sticky-nav .nav-link {
-  text-decoration: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  position: relative;
-  display: inline-block;
-  text-align: center;
-  /* Colors set by theme classes */
-}
-
-/* Use a pseudo-element to reserve space for bold text to prevent width shift */
-.sticky-nav .nav-link::before {
-  content: attr(data-text);
-  font-weight: bold;
-  display: block;
-  height: 0;
-  overflow: hidden;
-  visibility: hidden;
-  user-select: none;
-  pointer-events: none;
-  white-space: nowrap;
-}
-
-.sticky-nav .nav-link:hover {
-  /* Background set by theme classes */
-}
-
-.sticky-nav .nav-link.active {
-  font-weight: bold;
-  /* Background and color set by theme classes */
 }
 
 .logout-btn,
@@ -378,7 +314,7 @@ export default {
   /* Color set by theme classes */
 }
 
-/* On smaller screens, adjust font size but keep container size */
+/* On main-page mobile (≤768px), smaller logo in sticky header */
 @media (max-width: 767px) {
   .sticky-logo-link {
     width: 120px;
@@ -478,61 +414,10 @@ export default {
   /* Background set by theme classes */
 }
 
-/* Mobile adjustments */
 @media (max-width: 767px) {
-  .sticky-header-content {
-    width: 100%;
-    padding: 8px 15px;
-    max-width: 100%;
-    flex-wrap: wrap;
-  }
-
-  .sticky-logo {
-    height: 35px;
-  }
-
+  /* Keep same height as desktop: same padding (1em) and logo height (40px) in base styles */
   .sticky-controls {
     margin-right: 0;
-  }
-
-  .theme-toggle-btn {
-    padding: 8px 12px;
-    font-size: 18px;
-  }
-
-  .refresh-btn {
-    padding: 8px 12px;
-    font-size: 18px;
-  }
-
-  .admin-btn {
-    padding: 8px 12px;
-    font-size: 18px;
-  }
-
-  .logout-btn,
-  .back-btn {
-    padding: 8px 12px;
-    font-size: 18px;
-  }
-
-  .sticky-nav {
-    order: 3;
-    width: 100%;
-    margin: 10px 0 0 0;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 2px;
-  }
-
-  .sticky-nav .nav-link {
-    font-size: 12px;
-    padding: 4px 8px;
-  }
-
-  .sticky-header-left,
-  .sticky-header-right {
-    width: auto;
   }
 }
 </style>

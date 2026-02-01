@@ -41,11 +41,18 @@
       }
     },
     created() {
-      // Apply theme immediately on app creation
+      // Apply theme immediately on app creation (html + body so no white strip at bottom)
       const darkTheme = localStorage.getItem('darkTheme') === 'true'
+      const html = document.documentElement
       if (darkTheme) {
+        html.classList.remove('light-theme')
+        html.classList.add('dark-theme')
+        document.body.classList.remove('light-theme')
         document.body.classList.add('dark-theme')
       } else {
+        html.classList.remove('dark-theme')
+        html.classList.add('light-theme')
+        document.body.classList.remove('dark-theme')
         document.body.classList.add('light-theme')
       }
     },

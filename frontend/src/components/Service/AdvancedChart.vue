@@ -38,7 +38,8 @@
           main_data: null,
           ping_data: null,
           expanded_data: null,
-          main_chart_options: {
+          isMobile: false,
+          base_chart_options: {
             noData: {
               text: "Loading...",
               align: 'center',
@@ -77,7 +78,7 @@
                   window.console.log(xaxis)
                 },
               },
-              height: 500,
+              height: 350,
               width: "100%",
               type: "area",
               animations: {
@@ -100,6 +101,16 @@
                 curve: 'stepline',
                 lineCap: 'butt',
               },
+            },
+            grid: {
+              show: true,
+              borderColor: 'transparent',
+              padding: {
+                left: 24,
+                right: 16,
+                bottom: 28,
+                top: 12
+              }
             },
             xaxis: {
               type: "datetime",
@@ -226,9 +237,21 @@
         }
       },
       async mounted() {
+        this.updateMobile()
+        window.addEventListener('resize', this.updateMobile)
         await this.update_data();
       },
+      beforeDestroy() {
+        window.removeEventListener('resize', this.updateMobile)
+      },
       computed: {
+        main_chart_options () {
+          const opts = { ...this.base_chart_options }
+          if (this.isMobile) {
+            opts.chart = { ...opts.chart, height: 280 }
+          }
+          return opts
+        },
         main_chart () {
           return [{
             name: "latency",
@@ -257,6 +280,9 @@
         },
       },
       methods: {
+          updateMobile() {
+            this.isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+          },
           async update_data() {
             this.loading = true
             await this.chartHits()

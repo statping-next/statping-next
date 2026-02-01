@@ -1,4 +1,9 @@
 /* Light Theme */
+html.light-theme {
+  background-color: #EAEAEA !important;
+  min-height: 100%;
+}
+
 body.light-theme {
   background-color: #EAEAEA;
   color: #2a2a2a;
@@ -62,6 +67,10 @@ body.light-theme {
   }
 
   /* Sticky Header - override scoped styles */
+  .dashboard-nav--fixed {
+    background-color: #ffffff !important;
+  }
+
   .sticky-header.active,
   .sticky-header.admin-mode {
     background-color: #ffffff !important;
@@ -74,7 +83,7 @@ body.light-theme {
   }
 
   .theme-toggle-btn {
-    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
     color: #2a2a2a !important;
   }
 
@@ -83,7 +92,7 @@ body.light-theme {
   }
 
   .refresh-btn {
-    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
     color: #2a2a2a !important;
   }
 
@@ -99,7 +108,7 @@ body.light-theme {
   }
 
   .admin-btn {
-    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
     color: #2a2a2a !important;
   }
 
@@ -109,7 +118,7 @@ body.light-theme {
 
   .logout-btn,
   .back-btn {
-    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
     color: #2a2a2a !important;
   }
 
@@ -118,15 +127,18 @@ body.light-theme {
     background: rgba(0, 0, 0, 0.05) !important;
   }
 
-  .sticky-nav .nav-link {
+  .sticky-nav .nav-link,
+  .dashboard-nav .nav-link {
     color: #2a2a2a !important;
   }
 
-  .sticky-nav .nav-link:hover {
+  .sticky-nav .nav-link:hover,
+  .dashboard-nav .nav-link:hover {
     background: rgba(0, 0, 0, 0.05) !important;
   }
 
-  .sticky-nav .nav-link.active {
+  .sticky-nav .nav-link.active,
+  .dashboard-nav .nav-link.active {
     background: rgba(0, 0, 0, 0.1) !important;
     color: #2a2a2a !important;
   }
