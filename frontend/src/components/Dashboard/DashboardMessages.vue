@@ -9,7 +9,7 @@
         </button>
       </div>
       <div class="card-body pt-0">
-        <div v-if="messages.length === 0" class="alert alert-dark d-block mt-3 mb-0">
+        <div v-if="messages.length === 0" class="alert alert-dark d-block mt-3 mb-3">
           No announcements. Create a global or service-specific announcement.
         </div>
         <table v-else class="table table-striped">
@@ -498,6 +498,21 @@
   .incidents-create-btn {
     padding: 0.25rem 0.5rem;
     min-width: 32px;
+    color: #6c757d;
+    border-color: #6c757d;
+  }
+  .incidents-create-btn:hover {
+    color: #495057;
+    border-color: #495057;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  .dark-theme .incidents-create-btn {
+    color: rgba(255, 255, 255, 0.8);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  .dark-theme .incidents-create-btn:hover {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.7);
   }
 
   .incident-card {
