@@ -219,7 +219,11 @@ router.beforeEach((to, from, next) => {
   const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
   const nearestWithMeta = to.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
   const previousNearestWithMeta = from.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
-  if (nearestWithTitle) document.title = nearestWithTitle.meta.title;
+  if (nearestWithTitle) {
+    document.title = nearestWithTitle.meta.title;
+  } else if (to.path === '/' || to.name === 'Index') {
+    document.title = (store.getters.core && store.getters.core.name) ? store.getters.core.name : 'Statping';
+  }
   Array.from(document.querySelectorAll('[data-vue-router-controlled]')).map(el => el.parentNode.removeChild(el));
   if (!nearestWithMeta) return next();
   nearestWithMeta.meta.metaTags.map(tagDef => {
