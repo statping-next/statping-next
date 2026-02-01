@@ -4,8 +4,8 @@
             <!-- Left side: Logo (always on left) -->
             <div class="sticky-header-left">
                 <router-link to="/" class="sticky-logo-link" :class="{ 'visible': visible || adminMode }">
-                    <img v-if="currentLogo" :src="currentLogo" :alt="core.name" class="sticky-logo">
-                    <span v-else class="sticky-title">{{core.name}}</span>
+                    <div v-if="!brandingReady" class="sticky-logo-placeholder" aria-hidden="true"></div>
+                    <img v-else :src="currentLogo || DEFAULT_LOGO" :alt="core.name" class="sticky-logo">
                 </router-link>
             </div>
 
@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import { DEFAULT_LOGO } from '@/constants/branding'
+
 export default {
   name: 'StickyHeader',
   props: {
@@ -77,6 +79,9 @@ export default {
     }
   },
   computed: {
+    brandingReady() {
+      return this.$store.getters.brandingReady
+    },
     core() {
       return this.$store.getters.core
     },
@@ -359,6 +364,12 @@ export default {
   width: auto;
   max-width: 140px;
   object-fit: contain;
+}
+
+.sticky-logo-placeholder {
+  width: 100%;
+  height: 40px;
+  background: transparent;
 }
 
 .sticky-title {

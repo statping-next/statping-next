@@ -1,6 +1,7 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
 import Api from "./API"
+import { DEFAULT_FAVICON } from './constants/branding'
 
 Vue.use(Vuex)
 
@@ -14,16 +15,16 @@ function applyBranding(core) {
     document.title = core.name
   }
 
-  // Update favicon if a custom one is configured
-  if (core.favicon) {
-    let link = document.querySelector("link[rel='shortcut icon']") || document.querySelector("link[rel='icon']")
-    if (!link) {
-      link = document.createElement("link")
-      link.rel = "shortcut icon"
-      document.head.appendChild(link)
-    }
-    link.href = core.favicon
+  // Set favicon once: user's or default (never show default then replace with user's)
+  const href = core.favicon || DEFAULT_FAVICON
+  let link = document.getElementById('app-favicon') || document.querySelector("link[rel='shortcut icon']") || document.querySelector("link[rel='icon']")
+  if (!link) {
+    link = document.createElement("link")
+    link.rel = "shortcut icon"
+    link.id = "app-favicon"
+    document.head.appendChild(link)
   }
+  link.href = href
 }
 
 export const HAS_ALL_DATA = 'HAS_ALL_DATA'
@@ -85,6 +86,8 @@ export default new Vuex.Store({
     modal: state => state.modal,
     darkTheme: state => state.darkTheme,
     refreshInterval: state => state.refreshInterval,
+    // True once core has been loaded from API - use to avoid showing default logo/favicon then replacing with theme
+    brandingReady: state => !!(state.core && (state.core.name !== undefined && state.core.name !== null)),
 
     isAdmin: state => state.admin,
     isUser: state => state.user,

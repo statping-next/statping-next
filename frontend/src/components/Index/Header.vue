@@ -1,17 +1,22 @@
 <template>
     <div id="header">
         <router-link to="/" class="header-logo-link">
-            <img v-if="currentLogo" id="logo" style="max-height: 200px;" class="col-12 text-center pt-4 mb-3 header-title font-6" :src="currentLogo" :alt="core.name" :title="core.name">
-            <h1 v-if="!currentLogo" id="title" class="col-12 text-center pt-4 mt-4 mb-3 header-title font-6">{{core.name}}</h1>
+            <div v-if="!brandingReady" class="header-logo-placeholder" aria-hidden="true"></div>
+            <img v-else id="logo" style="max-height: 200px;" class="col-12 text-center pt-4 mb-3 header-title font-6" :src="currentLogo || DEFAULT_LOGO" :alt="core.name" :title="core.name">
         </router-link>
         <h5 id="description" class="col-12 text-center mb-5 header-desc font-3">{{core.description}}</h5>
     </div>
 </template>
 
 <script>
+import { DEFAULT_LOGO } from '@/constants/branding'
+
 export default {
   name: 'Header',
     computed: {
+      brandingReady() {
+        return this.$store.getters.brandingReady
+      },
       core() {
           return this.$store.getters.core
       },
@@ -52,5 +57,11 @@ export default {
 
 .header-logo-link:hover {
   opacity: 0.9;
+}
+
+.header-logo-placeholder {
+  width: 100%;
+  min-height: 80px;
+  background: transparent;
 }
 </style>
