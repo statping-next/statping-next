@@ -11,7 +11,7 @@
     </p>
 
     <p class="mt-2">
-        {{ $t('variables_for_example', { template: '{{.Service.Name}}' }) }}
+        {{ $t('variables_for_example', { template: '\{\{.Service.Name\}\}' }) }}
     </p>
 
     <h2 class="mt-3">{{ $t('service_variables') }}</h2>
