@@ -212,11 +212,14 @@
     }
   },
   watch: {
-    in_message(val) {
-      if (val && (val.id || Object.keys(val).length > 0)) {
-        this.message = { ...this.getDefaultMessage(), ...val }
-      } else {
-        this.message = this.getDefaultMessage()
+    in_message: {
+      immediate: true,
+      handler(val) {
+        if (val && (val.id || Object.keys(val).length > 0)) {
+          this.message = { ...this.getDefaultMessage(), ...val }
+        } else {
+          this.message = this.getDefaultMessage()
+        }
       }
     }
   },
