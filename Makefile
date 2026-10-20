@@ -143,7 +143,7 @@ frontend-build:
 	@echo "Removing old frontend distributions..."
 	@rm -rf source/dist && rm -rf frontend/dist
 	@echo "yarn install and build static frontend"
-	cd frontend && yarn && NODE_OPTIONS=--openssl-legacy-provider yarn build
+	cd frontend && corepack yarn install --immutable && NODE_OPTIONS=--openssl-legacy-provider corepack yarn build
 	@cp -r frontend/dist source/
 	@cp -r frontend/src/assets/scss source/dist/
 	@cp frontend/public/robots.txt source/dist/
@@ -152,7 +152,7 @@ frontend-build:
 
 yarn:
 	rm -rf source/dist && rm -rf frontend/dist
-	cd frontend && yarn
+	cd frontend && corepack yarn install --immutable
 
 compile: frontend-build
 	@echo "Installing rice tool..."
