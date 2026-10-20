@@ -8,6 +8,13 @@ import (
 func TestUnAuthenticatedCheckinRoutes(t *testing.T) {
 	tests := []HTTPTest{
 		{
+			Name:           "No Authentication - All Checkins",
+			URL:            "/api/checkins",
+			Method:         "GET",
+			ExpectedStatus: 401,
+			BeforeTest:     UnsetTestENV,
+		},
+		{
 			Name:           "No Authentication - New Checkin",
 			URL:            "/api/checkins",
 			Method:         "POST",

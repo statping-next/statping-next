@@ -169,7 +169,7 @@ func Router() *mux.Router {
 	api.Handle("/api/incidents/{id}/updates/{uid}", authenticated(apiDeleteIncidentUpdateHandler, false)).Methods("DELETE")
 
 	// API USER Routes
-	api.Handle("/api/users", scoped(apiAllUsersHandler)).Methods("GET")
+	api.Handle("/api/users", authenticated(scoped(apiAllUsersHandler).ServeHTTP, false)).Methods("GET")
 	api.Handle("/api/users", authenticated(apiCreateUsersHandler, false)).Methods("POST")
 	api.Handle("/api/users/token", http.HandlerFunc(apiCheckUserTokenHandler)).Methods("POST")
 	api.Handle("/api/users/{id}", authenticated(apiUserHandler, false)).Methods("GET")
@@ -177,7 +177,7 @@ func Router() *mux.Router {
 	api.Handle("/api/users/{id}", authenticated(apiUserDeleteHandler, false)).Methods("DELETE")
 
 	// API NOTIFIER Routes
-	api.Handle("/api/notifiers", scoped(apiAllNotifiersHandler)).Methods("GET")
+	api.Handle("/api/notifiers", authenticated(scoped(apiAllNotifiersHandler).ServeHTTP, false)).Methods("GET")
 	api.Handle("/api/notifier/{notifier}", authenticated(apiNotifierGetHandler, false)).Methods("GET")
 	api.Handle("/api/notifier/{notifier}", authenticated(apiNotifierUpdateHandler, false)).Methods("POST")
 	api.Handle("/api/notifier/{notifier}/test", authenticated(testNotificationHandler, false)).Methods("POST")
@@ -190,7 +190,7 @@ func Router() *mux.Router {
 	api.Handle("/api/messages/{id}", authenticated(apiMessageDeleteHandler, false)).Methods("DELETE")
 
 	// API CHECKIN Routes
-	api.Handle("/api/checkins", scoped(apiAllCheckinsHandler)).Methods("GET")
+	api.Handle("/api/checkins", authenticated(scoped(apiAllCheckinsHandler).ServeHTTP, false)).Methods("GET")
 	api.Handle("/api/checkins", authenticated(checkinCreateHandler, false)).Methods("POST")
 	api.Handle("/api/checkins/{api}", authenticated(apiCheckinHandler, false)).Methods("GET")
 	api.Handle("/api/checkins/{api}", authenticated(checkinDeleteHandler, false)).Methods("DELETE")

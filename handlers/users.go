@@ -78,6 +78,9 @@ func apiUserDeleteHandler(w http.ResponseWriter, r *http.Request) {
 
 func apiAllUsersHandler(r *http.Request) interface{} {
 	allUsers := users.All()
+	for _, u := range allUsers {
+		u.Password = ""
+	}
 	return allUsers
 }
 
@@ -111,5 +114,6 @@ func apiCreateUsersHandler(w http.ResponseWriter, r *http.Request) {
 		sendErrorJson(err, w, r)
 		return
 	}
+	user.Password = ""
 	sendJsonAction(user, "create", w, r)
 }

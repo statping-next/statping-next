@@ -39,6 +39,9 @@ func hasAPIQuery(r *http.Request) bool {
 	if err != nil {
 		return false
 	}
+	if !user.Admin.Bool {
+		return false
+	}
 	if subtle.ConstantTimeCompare([]byte(key), []byte(user.ApiKey)) == 1 {
 		return true
 	}

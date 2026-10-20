@@ -11,6 +11,13 @@ import (
 func TestUnAuthenticatedUserRoutes(t *testing.T) {
 	tests := []HTTPTest{
 		{
+			Name:           "No Authentication - All Users",
+			URL:            "/api/users",
+			Method:         "GET",
+			ExpectedStatus: 401,
+			BeforeTest:     UnsetTestENV,
+		},
+		{
 			Name:           "No Authentication - New User",
 			URL:            "/api/users",
 			Method:         "POST",
